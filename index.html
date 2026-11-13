@@ -81,7 +81,28 @@
             overflow: hidden;
         }
 
-        /* Welcome Screen Card Layout matching your draft */
+        /* Header for active game screens */
+        .game-header {
+            position: absolute;
+            top: 15px;
+            text-align: center;
+            width: 100%;
+            display: none;
+            z-index: 10;
+        }
+
+        h1 {
+            color: var(--primary);
+            margin: 0 0 2px 0;
+            font-size: 1.5rem;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 0.8rem;
+        }
+
+        /* Full-Window Welcome Screen with Overlapping Button */
         #welcome-screen {
             display: flex;
             flex-direction: column;
@@ -89,47 +110,34 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            padding: 20px;
+            padding: 10px;
             box-sizing: border-box;
             position: relative;
             z-index: 2;
         }
 
-        .welcome-card-wrapper {
-            background: #ffffff;
-            padding: 20px 20px 10px 20px;
-            border-radius: 20px;
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 750px;
-            width: 90%;
-            box-sizing: border-box;
-        }
-
         .hero-banner {
             width: 100%;
-            height: auto;
-            max-height: 65vh;
+            max-width: 850px;
+            max-height: 78vh;
             object-fit: contain;
-            display: block;
         }
 
         .enter-btn {
             background-color: #ffffff;
             color: var(--text-color);
             border: 2px solid var(--border-color);
-            padding: 12px 60px;
+            padding: 12px 50px;
             font-size: 1.1rem;
             font-weight: bold;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-            /* Pulls the button down to neatly overlap the bottom border of the white card */
-            margin-top: -26px;
-            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            /* Pulls the button up to neatly overlap the bottom of the banner */
+            margin-top: -35px;
+            z-index: 5;
+            flex-shrink: 0;
         }
 
         .enter-btn:hover {
@@ -137,80 +145,61 @@
             border-color: var(--primary);
             color: var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
         }
 
-        /* Companion Selection Screen (Centered, Large, Card-Free Layout) */
+        /* Companion Selection Screen */
         #setup-screen {
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            flex-grow: 1;
+            gap: 25px;
             width: 100%;
             height: 100%;
-            gap: 25px;
             z-index: 2;
-            box-sizing: border-box;
-        }
-
-        .setup-title {
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: #1f2937;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
-            margin: 0;
         }
 
         .companion-choices {
             display: flex;
-            gap: 80px;
+            gap: 40px;
             justify-content: center;
-            align-items: center;
         }
 
         .companion-card {
+            border: 3px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px 30px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
+            background: #fafafa;
+            width: 180px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
         }
 
         .companion-card:hover {
-            transform: translateY(-8px);
+            border-color: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
         }
 
         .companion-card img {
-            width: 220px;
-            height: 280px;
+            width: 100px;
+            height: 100px;
             object-fit: contain;
-            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15));
-            transition: transform 0.25s ease;
-        }
-
-        .companion-card:hover img {
-            transform: scale(1.05);
-        }
-
-        .companion-name {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: #1f2937;
-            letter-spacing: 1px;
-            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
         }
 
         /* Main Game Screen */
         #game-screen {
             display: none;
             flex-direction: column;
+            flex-grow: 1;
             width: 100%;
             height: 100%;
             justify-content: space-between;
-            padding: 30px 20px 20px 20px;
+            padding: 70px 20px 20px 20px;
             box-sizing: border-box;
             z-index: 2;
         }
@@ -240,8 +229,8 @@
         }
 
         .companion-box img {
-            width: 150px;
-            height: 180px;
+            width: 130px;
+            height: 130px;
             object-fit: contain;
         }
 
@@ -271,25 +260,29 @@
     </div>
 
     <div class="game-container">
-        <!-- STEP 1: FULL-WINDOW WELCOME SCREEN MATCHING DRAFT -->
+        <!-- Header for active game screens -->
+        <header id="top-header" class="game-header">
+            <h1>Jackson and Emily's Word Blasters</h1>
+            <div class="subtitle">Word Craft & Grammar Arena</div>
+        </header>
+
+        <!-- STEP 1: FULL-WINDOW WELCOME SCREEN WITH SVG AND OVERLAPPING BUTTON -->
         <div id="welcome-screen">
-            <div class="welcome-card-wrapper">
-                <img src="wordblasters-welcome_20261113_193006_0000.svg" alt="Jackson and Emily Welcome" class="hero-banner">
-            </div>
+            <img src="wordblasters-welcome_20261113_193006_0000.svg" alt="Jackson and Emily Welcome" class="hero-banner">
             <button class="enter-btn" onclick="startGame()">ENTER</button>
         </div>
 
         <!-- STEP 2: COMPANION SELECTION SCREEN -->
         <div id="setup-screen">
-            <h2 class="setup-title">CHOOSE YOUR COMPANION</h2>
+            <h2 style="color: #374151; margin: 0;">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
                 <div class="companion-card" onclick="selectCompanion('jackson')">
-                    <img src="3336-removebg-preview.png" alt="Jackson">
-                    <div class="companion-name">JACKSON</div>
+                    <img src="3381.png" alt="Jackson">
+                    <div style="font-size: 1rem;"><strong>JACKSON</strong></div>
                 </div>
                 <div class="companion-card" onclick="selectCompanion('emily')">
-                    <img src="3349-removebg-preview.png" alt="Emily">
-                    <div class="companion-name">EMILY</div>
+                    <img src="3372.png" alt="Emily">
+                    <div style="font-size: 1rem;"><strong>EMILY</strong></div>
                 </div>
             </div>
         </div>
@@ -317,8 +310,8 @@
 
     <script>
         const assets = {
-            jackson: { idle: "3336-removebg-preview.png", happy: "3384.png", angry: "3386.png" },
-            emily: { idle: "3349-removebg-preview.png", happy: "3378.png", sad: "3377.png" }
+            jackson: { idle: "3381.png", happy: "3384.png", angry: "3386.png" },
+            emily: { idle: "3372.png", happy: "3378.png", sad: "3377.png" }
         };
 
         let gameState = { companion: 'jackson', score: 0, life: 3, level: 1 };
@@ -331,8 +324,9 @@
                 console.log("Audio autoplay restricted until interaction.");
             });
 
-            // Hide welcome screen, show companion setup screen cleanly
+            // Hide welcome screen, show header and companion setup screen
             document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('top-header').style.display = 'block';
             document.getElementById('setup-screen').style.display = 'flex';
         }
 
