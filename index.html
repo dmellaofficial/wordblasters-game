@@ -64,7 +64,7 @@
             }
         }
 
-        /* Full Window Container */
+        /* Full Window Container with Wallpaper Background */
         .game-container {
             width: 100vw;
             height: 100vh;
@@ -74,8 +74,27 @@
             justify-content: center;
             align-items: center;
             position: relative;
-            background: #ffffff;
+            background-color: #ffffff;
+            background-image: url('Hearbeats and Homework Wallpaper_20261112_201528_0000.png');
+            background-size: cover;
+            background-position: center;
             overflow: hidden;
+        }
+
+        /* Optional: 10% opacity overlay layer for the background wallpaper */
+        .game-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('Hearbeats and Homework Wallpaper_20261112_201528_0000.png');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.10; /* Set transparency to 10% */
+            pointer-events: none;
+            z-index: 1;
         }
 
         /* Header for active game screens */
@@ -109,8 +128,8 @@
             height: 100%;
             padding: 10px;
             box-sizing: border-box;
-            background: #ffffff;
             position: relative;
+            z-index: 2; /* Sits above the background wallpaper layer */
         }
 
         .hero-banner {
@@ -155,6 +174,7 @@
             gap: 25px;
             width: 100%;
             height: 100%;
+            z-index: 2;
         }
 
         .companion-choices {
@@ -197,6 +217,7 @@
             justify-content: space-between;
             padding: 70px 20px 20px 20px;
             box-sizing: border-box;
+            z-index: 2;
         }
 
         .game-stats {
