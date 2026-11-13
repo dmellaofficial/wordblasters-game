@@ -68,7 +68,7 @@
             }
         }
 
-        /* Main Game Wrapper Card */
+        /* Main Game Wrapper Card - Becomes transparent on Welcome Screen */
         .game-container {
             background-color: #ffffff;
             border-radius: 20px;
@@ -85,42 +85,54 @@
             position: relative;
         }
 
-        /* Welcome Splash Screen - Adjusted to move higher up */
+        /* Transparent container style specifically for the Welcome screen */
+        .game-container.welcome-mode {
+            background-color: transparent !important;
+            box-shadow: none !important;
+            width: 100vw;
+            height: 100vh;
+            max-width: none;
+            max-height: none;
+            padding: 10px;
+        }
+
+        /* Welcome Splash Screen */
         #welcome-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Aligns content to the top */
+            justify-content: center;
             flex-grow: 1;
             position: relative;
-            padding-top: 5px; /* Pulls image up closer to the top edge */
+            width: 100%;
+            height: 100%;
         }
 
         .hero-banner {
             width: 100%;
-            max-width: 630px;
+            max-width: 850px;
             height: auto;
-            max-height: 60vh;
+            max-height: 75vh;
             object-fit: contain;
-            border-radius: 12px;
-            border: 2px solid var(--border-color);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-            background: #ffffff;
+            /* Removes solid borders/shadows so it blends natively */
+            border: none;
+            box-shadow: none;
+            background: transparent;
         }
 
         .enter-btn {
             background-color: #ffffff;
             color: var(--text-color);
             border: 2px solid var(--border-color);
-            padding: 10px 48px;
-            font-size: 1.05rem;
+            padding: 12px 55px;
+            font-size: 1.1rem;
             font-weight: bold;
             border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
             position: absolute;
-            bottom: 25px; /* Adjusted position to match the card shift */
+            bottom: 5vh;
             z-index: 10;
         }
 
@@ -292,7 +304,8 @@
         <p>Jackson and Emily's Word Blasters is optimized for landscape mode for the best gaming experience!</p>
     </div>
 
-    <div class="game-container">
+    <!-- Container starts with welcome-mode class so the outer white card is transparent -->
+    <div class="game-container welcome-mode" id="main-container">
         <!-- STEP 1: WELCOME SCREEN WITH SVG AND ENTER BUTTON -->
         <div id="welcome-screen">
             <img src="wordblasters-welcome_20261113_193006_0000.svg" alt="Jackson and Emily Welcome" class="hero-banner">
@@ -373,6 +386,8 @@
         };
 
         function goToSetup() {
+            // Remove transparent welcome mode so the clean white card background reappears for the game screens
+            document.getElementById('main-container').classList.remove('welcome-mode');
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('setup-screen').style.display = 'flex';
         }
