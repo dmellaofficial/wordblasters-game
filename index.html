@@ -68,7 +68,7 @@
             }
         }
 
-        /* Main Game Wrapper Card - Becomes transparent on Welcome Screen */
+        /* Main Game Wrapper Card */
         .game-container {
             background-color: #ffffff;
             border-radius: 20px;
@@ -94,6 +94,9 @@
             max-width: none;
             max-height: none;
             padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         /* Welcome Splash Screen */
@@ -102,19 +105,18 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex-grow: 1;
-            position: relative;
             width: 100%;
             height: 100%;
+            position: relative;
+            gap: 15px;
         }
 
         .hero-banner {
             width: 100%;
             max-width: 850px;
             height: auto;
-            max-height: 75vh;
+            max-height: 72vh;
             object-fit: contain;
-            /* Removes solid borders/shadows so it blends natively */
             border: none;
             box-shadow: none;
             background: transparent;
@@ -131,8 +133,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            position: absolute;
-            bottom: 5vh;
             z-index: 10;
         }
 
@@ -304,7 +304,7 @@
         <p>Jackson and Emily's Word Blasters is optimized for landscape mode for the best gaming experience!</p>
     </div>
 
-    <!-- Container starts with welcome-mode class so the outer white card is transparent -->
+    <!-- Container starts with welcome-mode so background blends seamlessly -->
     <div class="game-container welcome-mode" id="main-container">
         <!-- STEP 1: WELCOME SCREEN WITH SVG AND ENTER BUTTON -->
         <div id="welcome-screen">
