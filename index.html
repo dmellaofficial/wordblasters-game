@@ -6,7 +6,7 @@
     <title>Jackson and Emily's Word Blasters</title>
     <style>
         :root {
-            --bg-color: #f4f7f6;
+            --bg-color: #1f2937;
             --card-bg: #ffffff;
             --primary: #4f46e5;
             --primary-hover: #4338ca;
@@ -16,17 +16,17 @@
             --error: #ef4444;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+        html, body {
             margin: 0;
             padding: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
         }
 
         /* Landscape Orientation Lock Overlay */
@@ -37,7 +37,7 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(31, 41, 55, 0.95);
+            background: rgba(31, 41, 55, 0.98);
             color: white;
             z-index: 9999;
             flex-direction: column;
@@ -60,39 +60,42 @@
             100% { transform: rotate(0deg); }
         }
 
-        @media screen and (max-height: 550px) and (orientation: portrait), 
+        @media screen and (max-height: 500px) and (orientation: portrait), 
                screen and (max-width: 767px) and (orientation: portrait) {
             #orientation-warning {
                 display: flex;
             }
         }
 
+        /* Full Screen Container */
         .game-container {
             background-color: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            width: 90vw;
-            max-width: 800px;
-            height: 90vh;
-            max-height: 540px;
-            padding: 20px;
+            width: 100vw;
+            height: 100vh;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
             position: relative;
+        }
+
+        header {
+            text-align: center;
+            margin-top: 10px;
         }
 
         h1 {
             color: var(--primary);
-            margin: 0 0 3px 0;
-            font-size: 1.4rem;
+            margin: 0 0 5px 0;
+            font-size: 2.2rem;
+            letter-spacing: 1px;
         }
 
         .subtitle {
             color: #6b7280;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
+            font-size: 1rem;
         }
 
         /* Welcome Splash Screen */
@@ -102,34 +105,37 @@
             align-items: center;
             justify-content: center;
             flex-grow: 1;
-            gap: 12px;
+            gap: 20px;
+            width: 100%;
         }
 
         .hero-banner {
             width: 100%;
-            max-width: 320px;
-            height: 125px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid var(--border-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            max-width: 600px;
+            height: auto;
+            max-height: 55vh;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 3px solid var(--border-color);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
         }
 
         .enter-btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 10px 32px;
-            font-size: 1rem;
+            padding: 14px 48px;
+            font-size: 1.2rem;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
         }
 
         .enter-btn:hover {
             background-color: var(--primary-hover);
+            transform: translateY(-2px);
         }
 
         /* Companion Selection Screen */
@@ -139,45 +145,48 @@
             align-items: center;
             justify-content: center;
             flex-grow: 1;
-            gap: 10px;
+            gap: 25px;
         }
 
         .companion-choices {
             display: flex;
-            gap: 20px;
+            gap: 40px;
             justify-content: center;
         }
 
         .companion-card {
-            border: 2px solid var(--border-color);
-            border-radius: 10px;
-            padding: 8px 12px;
+            border: 3px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px 30px;
             cursor: pointer;
             transition: all 0.2s ease;
             background: #fafafa;
-            width: 120px;
+            width: 180px;
             text-align: center;
         }
 
         .companion-card:hover {
             border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
         }
 
         .companion-card img {
-            width: 60px;
-            height: 60px;
+            width: 100px;
+            height: 100px;
             object-fit: contain;
-            margin-bottom: 4px;
+            margin-bottom: 10px;
         }
 
-        /* Main Game Screen */
+        /* Main Game Screen (Placeholder for your puzzle progression) */
         #game-screen {
             display: none;
             flex-direction: column;
             flex-grow: 1;
+            width: 100%;
             justify-content: space-between;
+            padding: 10px 20px;
+            box-sizing: border-box;
         }
 
         .game-stats {
@@ -185,104 +194,53 @@
             justify-content: space-between;
             font-weight: bold;
             color: #4b5563;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 6px;
+            font-size: 1.1rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 10px;
+            width: 100%;
         }
 
         .arena-layout {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: space-around;
             flex-grow: 1;
-            margin: 8px 0;
+            width: 100%;
         }
 
         .companion-box {
-            width: 120px;
+            width: 180px;
             text-align: center;
         }
 
         .companion-box img {
-            width: 85px;
-            height: 85px;
+            width: 130px;
+            height: 130px;
             object-fit: contain;
         }
 
         .companion-speech {
-            font-size: 0.7rem;
+            font-size: 0.9rem;
             color: #4b5563;
             background: #f3f4f6;
-            padding: 4px 6px;
-            border-radius: 6px;
-            margin-top: 3px;
-            min-height: 26px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            min-height: 36px;
         }
 
-        .ladder-area {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            align-items: center;
-            padding: 0 10px;
-        }
-
-        .word-row {
-            display: flex;
-            gap: 6px;
-            justify-content: center;
-        }
-
-        .letter-input {
-            width: 36px;
-            height: 36px;
-            border: 2px solid var(--primary);
-            border-radius: 6px;
+        footer {
             text-align: center;
-            font-size: 1.1rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            outline: none;
-            background: #fff;
-        }
-
-        .letter-input:focus {
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-        }
-
-        .action-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .submit-btn {
-            background-color: var(--success);
-            color: white;
-            border: none;
-            padding: 6px 18px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .submit-btn:hover {
-            background-color: #059669;
-        }
-
-        .message-box {
-            font-weight: 500;
+            color: #9ca3af;
             font-size: 0.8rem;
-            min-height: 18px;
-            text-align: center;
+            padding-bottom: 5px;
         }
-
-        .error-text { color: var(--error); }
-        .success-text { color: var(--success); }
     </style>
 </head>
 <body>
+
+    <!-- Background Music Audio Loop -->
+    <audio id="game-audio" src="bgm.mp3" loop></audio>
 
     <!-- Landscape Warning Overlay -->
     <div id="orientation-warning">
@@ -294,92 +252,75 @@
     </div>
 
     <div class="game-container">
-        <div>
+        <header>
             <h1>Jackson and Emily's Word Blasters</h1>
-            <div class="subtitle">Word Bridge Arena: Change one letter at a time to build your path!</div>
-        </div>
+            <div class="subtitle">Word Craft & Grammar Arena</div>
+        </header>
 
-        <!-- STEP 1: WELCOME SCREEN WITH ENTER BUTTON -->
+        <!-- STEP 1: WELCOME SCREEN WITH ANIMATED GIF -->
         <div id="welcome-screen">
-            <img src="3344.jpg" alt="Jackson and Emily" class="hero-banner">
-            <p style="margin: 4px 0; font-size: 0.85rem; color: #4b5563;">Ready to test your word ladder skills?</p>
-            <button class="enter-btn" onclick="goToSetup()">Enter</button>
+            <img src="wordblasters-welcome_20261113_165857_0000.gif" alt="Jackson and Emily Welcome" class="hero-banner">
+            <button class="enter-btn" onclick="startGame()">ENTER</button>
         </div>
 
         <!-- STEP 2: COMPANION SELECTION SCREEN -->
         <div id="setup-screen">
-            <p style="margin: 4px 0; font-size: 0.85rem;">Choose your companion to start building the bridge:</p>
+            <h2 style="color: #374151; margin: 0;">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
                 <div class="companion-card" onclick="selectCompanion('jackson')">
-                    <img src="3384.png" alt="Jackson">
-                    <div style="font-size: 0.85rem;"><strong>Jackson</strong></div>
+                    <img src="3381.png" alt="Jackson">
+                    <div style="font-size: 1rem;"><strong>JACKSON</strong></div>
                 </div>
                 <div class="companion-card" onclick="selectCompanion('emily')">
-                    <img src="3373.png" alt="Emily">
-                    <div style="font-size: 0.85rem;"><strong>Emily</strong></div>
+                    <img src="3372.png" alt="Emily">
+                    <div style="font-size: 1rem;"><strong>EMILY</strong></div>
                 </div>
             </div>
         </div>
 
-        <!-- STEP 3: MAIN GAME INTERFACE -->
+        <!-- STEP 3: MAIN GAME SCREEN (Ready for your advanced word puzzle logic) -->
         <div id="game-screen">
             <div class="game-stats">
-                <span id="stat-level">LEVEL: 1</span>
+                <span id="stat-life">LIFE: ❤️❤️❤️</span>
                 <span id="stat-score">SCORE: 0</span>
-                <span id="stat-lives">LIVES: ❤️❤️❤️</span>
+                <span id="stat-level">LEVEL: 1</span>
             </div>
 
             <div class="arena-layout">
-                <!-- Companion Visual Reaction Box -->
                 <div class="companion-box">
                     <img id="companion-img" src="" alt="Companion">
-                    <div id="companion-speech" class="companion-speech">Let's build this bridge!</div>
+                    <div id="companion-speech" class="companion-speech">Let's get started!</div>
                 </div>
-
-                <!-- Word Ladder Play Area -->
-                <div class="ladder-area">
-                    <div style="font-size: 0.85rem; font-weight: bold; color: #374151;">Start: <span id="start-word-label" style="color:var(--primary);">COLD</span></div>
-                    
-                    <div class="word-row" id="active-row">
-                        <!-- Dynamic letter inputs generated via JS -->
-                    </div>
-
-                    <div style="font-size: 0.85rem; font-weight: bold; color: #374151;">Target: <span id="target-word-label" style="color:var(--primary);">WARM</span></div>
-                    
-                    <div class="action-row">
-                        <button class="submit-btn" onclick="checkStep()">Submit Step</button>
-                    </div>
+                <!-- Puzzle board placeholder -->
+                <div style="text-align: center; color: #4b5563;">
+                    <h3>Word Bridge Puzzle Arena Ready!</h3>
+                    <p>Your custom rules and mechanics go here.</p>
                 </div>
             </div>
-
-            <div id="game-message" class="message-box"></div>
         </div>
+
+        <footer>
+            WordCraft & Grammar Arena &copy; 2026
+        </footer>
     </div>
 
     <script>
         const assets = {
-            jackson: {
-                idle: "3381.png",
-                happy: "3384.png",
-                angry: "3386.png"
-            },
-            emily: {
-                idle: "3372.png",
-                happy: "3378.png",
-                sad: "3377.png"
-            }
+            jackson: { idle: "3381.png", happy: "3384.png", angry: "3386.png" },
+            emily: { idle: "3372.png", happy: "3378.png", sad: "3377.png" }
         };
 
-        let gameState = {
-            companion: 'jackson',
-            score: 0,
-            lives: 3,
-            level: 1,
-            currentStepWord: "CORD",
-            targetWord: "WARM"
-        };
+        let gameState = { companion: 'jackson', score: 0, life: 3, level: 1 };
 
-        function goToSetup() {
+        function startGame() {
+            // Play Background Music (loops endlessly)
+            const bgm = document.getElementById('game-audio');
+            bgm.volume = 0.4;
+            bgm.play().catch(error => {
+                console.log("Audio autoplay restricted until interaction.");
+            });
+
+            // Switch to Companion Selection screen
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('setup-screen').style.display = 'flex';
         }
@@ -389,77 +330,12 @@
             document.getElementById('setup-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'flex';
 
-            updateCompanionExpression('idle', choice === 'jackson' ? "Let's crack this word ladder!" : "Take your time, we've got this!");
-            renderPuzzle();
-        }
-
-        function updateCompanionExpression(mood, dialogue) {
-            const imgEl = document.getElementById('companion-img');
-            const speechEl = document.getElementById('companion-speech');
+            // Set companion initial image
+            const compImg = document.getElementById('companion-img');
+            compImg.src = assets[choice].idle;
             
-            const comp = gameState.companion;
-            if (mood === 'happy') {
-                imgEl.src = assets[comp].happy;
-            } else if (mood === 'error') {
-                imgEl.src = comp === 'jackson' ? assets.jackson.angry : assets.emily.sad;
-            } else {
-                imgEl.src = assets[comp].idle;
-            }
-
-            speechEl.textContent = dialogue;
-        }
-
-        function renderPuzzle() {
-            const row = document.getElementById('active-row');
-            row.innerHTML = '';
-            
-            for (let i = 0; i < 4; i++) {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.maxLength = 1;
-                input.className = 'letter-input';
-                input.id = `letter-${i}`;
-                row.appendChild(input);
-            }
-        }
-
-        function checkStep() {
-            let typedWord = "";
-            for (let i = 0; i < 4; i++) {
-                const val = document.getElementById(`letter-${i}`).value.toUpperCase();
-                typedWord += val;
-            }
-
-            const msgBox = document.getElementById('game-message');
-
-            if (typedWord.length < 4) {
-                msgBox.className = "message-box error-text";
-                msgBox.textContent = "Please fill in all 4 letters!";
-                return;
-            }
-
-            if (typedWord === gameState.currentStepWord) {
-                gameState.score += 10;
-                document.getElementById('stat-score').textContent = `SCORE: ${gameState.score}`;
-                msgBox.className = "message-box success-text";
-                msgBox.textContent = "Wonderful! You bridged a step!";
-                
-                updateCompanionExpression('happy', gameState.companion === 'jackson' ? "Boom! Nailed it!" : "Brilliant work, wonderful step!");
-            } else {
-                gameState.lives--;
-                let hearts = "❤️".repeat(Math.max(0, gameState.lives));
-                document.getElementById('stat-lives').textContent = `LIVES: ${hearts}`;
-                
-                msgBox.className = "message-box error-text";
-                msgBox.textContent = `Incorrect! Remember: change only one letter. (Hint: Try CORD)`;
-                
-                updateCompanionExpression('error', gameState.companion === 'jackson' ? "Argh, watch the letters!" : "Oh no... let's try that again.");
-
-                if (gameState.lives <= 0) {
-                    alert("Game Over! Great effort, Dia!");
-                    location.reload();
-                }
-            }
+            const speech = document.getElementById('companion-speech');
+            speech.textContent = choice === 'jackson' ? "Ready to crush this puzzle?" : "Let's solve these words carefully!";
         }
     </script>
 </body>
