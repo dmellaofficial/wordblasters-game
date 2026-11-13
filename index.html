@@ -134,7 +134,6 @@
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            /* Pulls the button up to neatly overlap the bottom of the banner */
             margin-top: -35px;
             z-index: 5;
             flex-shrink: 0;
@@ -148,47 +147,68 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
         }
 
-        /* Companion Selection Screen */
+        /* Companion Selection Screen (Enlarged & Clean Layout) */
         #setup-screen {
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             flex-grow: 1;
-            gap: 25px;
+            gap: 30px;
             width: 100%;
             height: 100%;
             z-index: 2;
+            padding-top: 20px;
+        }
+
+        .setup-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1f2937;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+            margin: 0;
         }
 
         .companion-choices {
             display: flex;
-            gap: 40px;
+            gap: 80px;
             justify-content: center;
+            align-items: center;
         }
 
         .companion-card {
-            border: 3px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px 30px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            background: #fafafa;
-            width: 180px;
+            transition: all 0.25s ease;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
 
         .companion-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2);
+            transform: translateY(-8px);
         }
 
         .companion-card img {
-            width: 100px;
-            height: 100px;
+            width: 220px;
+            height: 280px;
             object-fit: contain;
-            margin-bottom: 10px;
+            filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.15));
+            transition: transform 0.25s ease;
+        }
+
+        .companion-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .companion-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #1f2937;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
         }
 
         /* Main Game Screen */
@@ -229,8 +249,8 @@
         }
 
         .companion-box img {
-            width: 130px;
-            height: 130px;
+            width: 150px;
+            height: 180px;
             object-fit: contain;
         }
 
@@ -272,17 +292,17 @@
             <button class="enter-btn" onclick="startGame()">ENTER</button>
         </div>
 
-        <!-- STEP 2: COMPANION SELECTION SCREEN -->
+        <!-- STEP 2: COMPANION SELECTION SCREEN (ENLARGED & CLEAN) -->
         <div id="setup-screen">
-            <h2 style="color: #374151; margin: 0;">CHOOSE YOUR COMPANION</h2>
+            <h2 class="setup-title">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
                 <div class="companion-card" onclick="selectCompanion('jackson')">
                     <img src="3336-removebg-preview.png" alt="Jackson">
-                    <div style="font-size: 1rem;"><strong>JACKSON</strong></div>
+                    <div class="companion-name">JACKSON</div>
                 </div>
                 <div class="companion-card" onclick="selectCompanion('emily')">
                     <img src="3349-removebg-preview.png" alt="Emily">
-                    <div style="font-size: 1rem;"><strong>EMILY</strong></div>
+                    <div class="companion-name">EMILY</div>
                 </div>
             </div>
         </div>
