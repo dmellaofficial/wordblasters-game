@@ -102,7 +102,7 @@
             font-size: 0.8rem;
         }
 
-        /* Full-Window Welcome Screen with Overlapping Button */
+        /* Full-Window Welcome Screen with SVG and Overlapping Button */
         #welcome-screen {
             display: flex;
             flex-direction: column;
@@ -277,11 +277,11 @@
             <h2 style="color: #374151; margin: 0;">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
                 <div class="companion-card" onclick="selectCompanion('jackson')">
-                    <img src="3381.png" alt="Jackson">
+                    <img src="3336-removebg-preview.png" alt="Jackson">
                     <div style="font-size: 1rem;"><strong>JACKSON</strong></div>
                 </div>
                 <div class="companion-card" onclick="selectCompanion('emily')">
-                    <img src="3372.png" alt="Emily">
+                    <img src="3349-removebg-preview.png" alt="Emily">
                     <div style="font-size: 1rem;"><strong>EMILY</strong></div>
                 </div>
             </div>
@@ -310,8 +310,8 @@
 
     <script>
         const assets = {
-            jackson: { idle: "3381.png", happy: "3384.png", angry: "3386.png" },
-            emily: { idle: "3372.png", happy: "3378.png", sad: "3377.png" }
+            jackson: { idle: "3336-removebg-preview.png", happy: "3384.png", angry: "3386.png" },
+            emily: { idle: "3349-removebg-preview.png", happy: "3378.png", sad: "3377.png" }
         };
 
         let gameState = { companion: 'jackson', score: 0, life: 3, level: 1 };
