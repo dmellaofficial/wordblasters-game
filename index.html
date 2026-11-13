@@ -77,60 +77,62 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 40px;
+            padding: 20px;
             position: relative;
         }
 
-        header {
+        /* Header for active game screens */
+        .game-header {
             text-align: center;
-            margin-top: 10px;
+            width: 100%;
+            display: none;
         }
 
         h1 {
             color: var(--primary);
-            margin: 0 0 5px 0;
-            font-size: 2.2rem;
-            letter-spacing: 1px;
+            margin: 0 0 2px 0;
+            font-size: 1.6rem;
         }
 
         .subtitle {
             color: #6b7280;
-            font-size: 1rem;
+            font-size: 0.85rem;
         }
 
-        /* Welcome Splash Screen */
+        /* Full-Window Welcome Screen */
         #welcome-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             flex-grow: 1;
-            gap: 20px;
             width: 100%;
+            height: 100%;
+            gap: 15px;
+            box-sizing: border-box;
         }
 
         .hero-banner {
             width: 100%;
-            max-width: 600px;
-            height: auto;
-            max-height: 55vh;
+            max-width: 850px;
+            height: 100%;
+            max-height: 78vh;
             object-fit: contain;
             border-radius: 12px;
-            border: 3px solid var(--border-color);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
         }
 
         .enter-btn {
             background-color: var(--primary);
             color: white;
             border: none;
-            padding: 14px 48px;
-            font-size: 1.2rem;
+            padding: 12px 48px;
+            font-size: 1.1rem;
             font-weight: bold;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            margin-bottom: 10px;
         }
 
         .enter-btn:hover {
@@ -178,7 +180,7 @@
             margin-bottom: 10px;
         }
 
-        /* Main Game Screen (Placeholder for your puzzle progression) */
+        /* Main Game Screen */
         #game-screen {
             display: none;
             flex-direction: column;
@@ -232,8 +234,8 @@
         footer {
             text-align: center;
             color: #9ca3af;
-            font-size: 0.8rem;
-            padding-bottom: 5px;
+            font-size: 0.75rem;
+            padding-bottom: 2px;
         }
     </style>
 </head>
@@ -252,12 +254,13 @@
     </div>
 
     <div class="game-container">
-        <header>
+        <!-- Optional Header for later screens -->
+        <header id="top-header" class="game-header">
             <h1>Jackson and Emily's Word Blasters</h1>
             <div class="subtitle">Word Craft & Grammar Arena</div>
         </header>
 
-        <!-- STEP 1: WELCOME SCREEN WITH ANIMATED GIF -->
+        <!-- STEP 1: FULL-WINDOW WELCOME SCREEN WITH ANIMATED GIF -->
         <div id="welcome-screen">
             <img src="wordblasters-welcome_20261113_165857_0000.gif" alt="Jackson and Emily Welcome" class="hero-banner">
             <button class="enter-btn" onclick="startGame()">ENTER</button>
@@ -278,7 +281,7 @@
             </div>
         </div>
 
-        <!-- STEP 3: MAIN GAME SCREEN (Ready for your advanced word puzzle logic) -->
+        <!-- STEP 3: MAIN GAME SCREEN -->
         <div id="game-screen">
             <div class="game-stats">
                 <span id="stat-life">LIFE: ❤️❤️❤️</span>
@@ -291,7 +294,6 @@
                     <img id="companion-img" src="" alt="Companion">
                     <div id="companion-speech" class="companion-speech">Let's get started!</div>
                 </div>
-                <!-- Puzzle board placeholder -->
                 <div style="text-align: center; color: #4b5563;">
                     <h3>Word Bridge Puzzle Arena Ready!</h3>
                     <p>Your custom rules and mechanics go here.</p>
@@ -320,8 +322,9 @@
                 console.log("Audio autoplay restricted until interaction.");
             });
 
-            // Switch to Companion Selection screen
+            // Hide welcome screen, show header and companion setup screen
             document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('top-header').style.display = 'block';
             document.getElementById('setup-screen').style.display = 'flex';
         }
 
