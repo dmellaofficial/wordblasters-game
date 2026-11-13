@@ -6,8 +6,6 @@
     <title>Jackson and Emily's Word Blasters</title>
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
             --primary: #4f46e5;
             --primary-hover: #4338ca;
             --text-color: #1f2937;
@@ -16,17 +14,20 @@
             --error: #ef4444;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+        html, body {
             margin: 0;
             padding: 0;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
+            background-image: url('Heartbeats and Homework Wallpaper Transparent_20261113_182651_0000.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
 
         /* Landscape Orientation Lock Overlay */
@@ -60,39 +61,28 @@
             100% { transform: rotate(0deg); }
         }
 
-        @media screen and (max-height: 550px) and (orientation: portrait), 
+        @media screen and (max-height: 500px) and (orientation: portrait), 
                screen and (max-width: 767px) and (orientation: portrait) {
             #orientation-warning {
                 display: flex;
             }
         }
 
+        /* Main Game Wrapper Card */
         .game-container {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             width: 90vw;
-            max-width: 800px;
-            height: 90vh;
-            max-height: 540px;
-            padding: 20px;
+            max-width: 780px;
+            height: 85vh;
+            max-height: 500px;
+            padding: 25px;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
-        }
-
-        h1 {
-            color: var(--primary);
-            margin: 0 0 3px 0;
-            font-size: 1.4rem;
-        }
-
-        .subtitle {
-            color: #6b7280;
-            font-size: 0.8rem;
-            margin-bottom: 10px;
         }
 
         /* Welcome Splash Screen */
@@ -102,34 +92,42 @@
             align-items: center;
             justify-content: center;
             flex-grow: 1;
-            gap: 12px;
+            position: relative;
         }
 
         .hero-banner {
             width: 100%;
-            max-width: 320px;
-            height: 125px;
-            object-fit: cover;
-            border-radius: 10px;
+            max-width: 650px;
+            height: auto;
+            max-height: 65vh;
+            object-fit: contain;
+            border-radius: 12px;
             border: 2px solid var(--border-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+            background: #ffffff;
         }
 
         .enter-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px 32px;
-            font-size: 1rem;
+            background-color: #ffffff;
+            color: var(--text-color);
+            border: 2px solid var(--border-color);
+            padding: 10px 48px;
+            font-size: 1.05rem;
             font-weight: bold;
-            border-radius: 8px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 5px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            position: absolute;
+            bottom: 12px;
+            z-index: 10;
         }
 
         .enter-btn:hover {
-            background-color: var(--primary-hover);
+            background-color: #f3f4f6;
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
         }
 
         /* Companion Selection Screen */
@@ -139,37 +137,37 @@
             align-items: center;
             justify-content: center;
             flex-grow: 1;
-            gap: 10px;
+            gap: 15px;
         }
 
         .companion-choices {
             display: flex;
-            gap: 20px;
+            gap: 30px;
             justify-content: center;
         }
 
         .companion-card {
             border: 2px solid var(--border-color);
-            border-radius: 10px;
-            padding: 8px 12px;
+            border-radius: 12px;
+            padding: 12px 18px;
             cursor: pointer;
             transition: all 0.2s ease;
             background: #fafafa;
-            width: 120px;
+            width: 140px;
             text-align: center;
         }
 
         .companion-card:hover {
             border-color: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.2);
         }
 
         .companion-card img {
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             object-fit: contain;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         /* Main Game Screen */
@@ -185,9 +183,9 @@
             justify-content: space-between;
             font-weight: bold;
             color: #4b5563;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #e5e7eb;
-            padding-bottom: 6px;
+            font-size: 0.95rem;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
         }
 
         .arena-layout {
@@ -195,52 +193,52 @@
             align-items: center;
             justify-content: space-between;
             flex-grow: 1;
-            margin: 8px 0;
+            margin: 10px 0;
         }
 
         .companion-box {
-            width: 120px;
+            width: 130px;
             text-align: center;
         }
 
         .companion-box img {
-            width: 85px;
-            height: 85px;
+            width: 95px;
+            height: 95px;
             object-fit: contain;
         }
 
         .companion-speech {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: #4b5563;
             background: #f3f4f6;
-            padding: 4px 6px;
+            padding: 6px 8px;
             border-radius: 6px;
-            margin-top: 3px;
-            min-height: 26px;
+            margin-top: 5px;
+            min-height: 28px;
         }
 
         .ladder-area {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
-            padding: 0 10px;
+            padding: 0 15px;
         }
 
         .word-row {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             justify-content: center;
         }
 
         .letter-input {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border: 2px solid var(--primary);
-            border-radius: 6px;
+            border-radius: 8px;
             text-align: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             text-transform: uppercase;
             outline: none;
@@ -260,8 +258,8 @@
             background-color: var(--success);
             color: white;
             border: none;
-            padding: 6px 18px;
-            font-size: 0.85rem;
+            padding: 8px 20px;
+            font-size: 0.9rem;
             font-weight: bold;
             border-radius: 6px;
             cursor: pointer;
@@ -273,8 +271,8 @@
 
         .message-box {
             font-weight: 500;
-            font-size: 0.8rem;
-            min-height: 18px;
+            font-size: 0.85rem;
+            min-height: 20px;
             text-align: center;
         }
 
@@ -294,29 +292,23 @@
     </div>
 
     <div class="game-container">
-        <div>
-            <h1>Jackson and Emily's Word Blasters</h1>
-            <div class="subtitle">Word Bridge Arena: Change one letter at a time to build your path!</div>
-        </div>
-
-        <!-- STEP 1: WELCOME SCREEN WITH ENTER BUTTON -->
+        <!-- STEP 1: WELCOME SCREEN WITH SVG AND ENTER BUTTON -->
         <div id="welcome-screen">
-            <img src="3344.jpg" alt="Jackson and Emily" class="hero-banner">
-            <p style="margin: 4px 0; font-size: 0.85rem; color: #4b5563;">Ready to test your word ladder skills?</p>
-            <button class="enter-btn" onclick="goToSetup()">Enter</button>
+            <img src="wordblasters-welcome_20261113_193006_0000.svg" alt="Jackson and Emily Welcome" class="hero-banner">
+            <button class="enter-btn" onclick="goToSetup()">ENTER</button>
         </div>
 
         <!-- STEP 2: COMPANION SELECTION SCREEN -->
         <div id="setup-screen">
-            <p style="margin: 4px 0; font-size: 0.85rem;">Choose your companion to start building the bridge:</p>
+            <h2 style="margin: 0 0 10px 0; font-size: 1.3rem; color: #374151;">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
                 <div class="companion-card" onclick="selectCompanion('jackson')">
                     <img src="3384.png" alt="Jackson">
-                    <div style="font-size: 0.85rem;"><strong>Jackson</strong></div>
+                    <div style="font-size: 0.9rem;"><strong>Jackson</strong></div>
                 </div>
                 <div class="companion-card" onclick="selectCompanion('emily')">
                     <img src="3373.png" alt="Emily">
-                    <div style="font-size: 0.85rem;"><strong>Emily</strong></div>
+                    <div style="font-size: 0.9rem;"><strong>Emily</strong></div>
                 </div>
             </div>
         </div>
@@ -338,13 +330,13 @@
 
                 <!-- Word Ladder Play Area -->
                 <div class="ladder-area">
-                    <div style="font-size: 0.85rem; font-weight: bold; color: #374151;">Start: <span id="start-word-label" style="color:var(--primary);">COLD</span></div>
+                    <div style="font-size: 0.9rem; font-weight: bold; color: #374151;">Start: <span id="start-word-label" style="color:var(--primary);">COLD</span></div>
                     
                     <div class="word-row" id="active-row">
                         <!-- Dynamic letter inputs generated via JS -->
                     </div>
 
-                    <div style="font-size: 0.85rem; font-weight: bold; color: #374151;">Target: <span id="target-word-label" style="color:var(--primary);">WARM</span></div>
+                    <div style="font-size: 0.9rem; font-weight: bold; color: #374151;">Target: <span id="target-word-label" style="color:var(--primary);">WARM</span></div>
                     
                     <div class="action-row">
                         <button class="submit-btn" onclick="checkStep()">Submit Step</button>
