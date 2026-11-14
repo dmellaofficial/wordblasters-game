@@ -143,44 +143,69 @@
             transform: translateY(-2px);
         }
 
-        /* Companion Selection Screen */
+        /* Companion Selection Screen (Clean, Card-Free Layout matching reference) */
         #setup-screen {
             display: none;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex-grow: 1;
-            gap: 15px;
+            width: 100%;
+            height: 100%;
+            gap: 20px;
+            box-sizing: border-box;
+        }
+
+        .setup-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1f2937;
+            letter-spacing: 1px;
+            margin: 0 0 10px 0;
+            text-align: center;
         }
 
         .companion-choices {
             display: flex;
-            gap: 30px;
+            gap: 60px;
             justify-content: center;
+            align-items: center;
+            width: 100%;
         }
 
         .companion-card {
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 12px 18px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            background: #fafafa;
-            width: 140px;
+            transition: all 0.25s ease;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            background: transparent;
+            border: none;
+            padding: 0;
         }
 
         .companion-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.2);
+            transform: translateY(-6px);
         }
 
         .companion-card img {
-            width: 80px;
-            height: 80px;
+            width: 160px;
+            height: 200px;
             object-fit: contain;
-            margin-bottom: 6px;
+            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.12));
+            transition: transform 0.25s ease;
+        }
+
+        .companion-card:hover img {
+            transform: scale(1.04);
+        }
+
+        .companion-name {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1f2937;
+            letter-spacing: 1px;
         }
 
         /* Main Game Screen */
@@ -306,24 +331,24 @@
 
     <!-- Container starts with welcome-mode so background blends seamlessly -->
     <div class="game-container welcome-mode" id="main-container">
-        <!-- STEP 1: WELCOME SCREEN WITH SVG AND ENTER BUTTON -->
+        <!-- STEP 1: WELCOME SCREEN (INTACT) -->
         <div id="welcome-screen">
             <img src="wordblasters-welcome_20261113_193006_0000.svg" alt="Jackson and Emily Welcome" class="hero-banner">
             <button class="enter-btn" onclick="goToSetup()">ENTER</button>
         </div>
 
-        <!-- STEP 2: COMPANION SELECTION SCREEN -->
+        <!-- STEP 2: COMPANION SELECTION SCREEN (FIXED TO MATCH REFERENCE) -->
         <div id="setup-screen">
-            <h2 style="margin: 0 0 10px 0; font-size: 1.3rem; color: #374151;">CHOOSE YOUR COMPANION</h2>
+            <h2 class="setup-title">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
-                <div class="companion-card" onclick="selectCompanion('jackson')">
-                    <img src="3384.png" alt="Jackson">
-                    <div style="font-size: 0.9rem;"><strong>Jackson</strong></div>
-                </div>
-                <div class="companion-card" onclick="selectCompanion('emily')">
-                    <img src="3373.png" alt="Emily">
-                    <div style="font-size: 0.9rem;"><strong>Emily</strong></div>
-                </div>
+                <button class="companion-card" onclick="selectCompanion('jackson')">
+                    <img src="3336-removebg-preview.png" alt="Jackson">
+                    <div class="companion-name">JACKSON</div>
+                </button>
+                <button class="companion-card" onclick="selectCompanion('emily')">
+                    <img src="3349-removebg-preview.png" alt="Emily">
+                    <div class="companion-name">EMILY</div>
+                </button>
             </div>
         </div>
 
@@ -365,12 +390,12 @@
     <script>
         const assets = {
             jackson: {
-                idle: "3381.png",
+                idle: "3336-removebg-preview.png",
                 happy: "3384.png",
                 angry: "3386.png"
             },
             emily: {
-                idle: "3372.png",
+                idle: "3349-removebg-preview.png",
                 happy: "3378.png",
                 sad: "3377.png"
             }
