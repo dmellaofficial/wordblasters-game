@@ -100,7 +100,7 @@
             align-items: center;
         }
 
-        /* Welcome Splash Screen */
+        /* Welcome Splash Screen (Untouched) */
         #welcome-screen {
             display: flex;
             flex-direction: column;
@@ -144,7 +144,7 @@
             transform: translateY(-2px);
         }
 
-        /* Companion Selection Screen (Directly matching reference image layout) */
+        /* Companion Selection Screen (Scaled large to match your draft) */
         #setup-screen {
             display: none;
             flex-direction: column;
@@ -152,23 +152,23 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            gap: 25px;
+            gap: 20px;
             box-sizing: border-box;
         }
 
         .setup-title {
-            font-size: 2.1rem;
+            font-size: 2.2rem;
             font-weight: 900;
             color: #111827;
             letter-spacing: 1.5px;
-            margin: 0;
+            margin: 0 0 10px 0;
             text-align: center;
-            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
         }
 
         .companion-choices {
             display: flex;
-            gap: 80px;
+            gap: 90px;
             justify-content: center;
             align-items: center;
             width: 100%;
@@ -192,10 +192,10 @@
         }
 
         .companion-card img {
-            width: 180px;
-            height: 220px;
+            width: 240px;
+            height: 280px;
             object-fit: contain;
-            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.18));
             transition: transform 0.25s ease;
         }
 
@@ -204,11 +204,11 @@
         }
 
         .companion-name {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 900;
             color: #111827;
             letter-spacing: 1.5px;
-            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
         }
 
         /* Main Game Screen */
@@ -334,13 +334,13 @@
 
     <!-- Container starts with welcome-mode -->
     <div class="game-container welcome-mode" id="main-container">
-        <!-- STEP 1: WELCOME SCREEN (INTACT) -->
+        <!-- STEP 1: WELCOME SCREEN (UNTOUCHED) -->
         <div id="welcome-screen">
             <img src="wordblasters-welcome_20261113_193006_0000.svg" alt="Jackson and Emily Welcome" class="hero-banner">
             <button class="enter-btn" onclick="goToSetup()">ENTER</button>
         </div>
 
-        <!-- STEP 2: COMPANION SELECTION SCREEN -->
+        <!-- STEP 2: COMPANION SELECTION SCREEN (SCALED LARGE) -->
         <div id="setup-screen">
             <h2 class="setup-title">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
@@ -415,7 +415,6 @@
 
         function goToSetup() {
             const container = document.getElementById('main-container');
-            // Transition from welcome to companion-mode (keeps container transparent and edge-to-edge)
             container.classList.remove('welcome-mode');
             container.classList.add('companion-mode');
             
@@ -425,7 +424,6 @@
 
         function selectCompanion(choice) {
             const container = document.getElementById('main-container');
-            // Remove companion-mode so the main game interface uses the card frame
             container.classList.remove('companion-mode');
             
             document.getElementById('setup-screen').style.display = 'none';
