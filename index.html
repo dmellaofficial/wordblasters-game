@@ -256,33 +256,35 @@
             color: var(--primary);
         }
 
-        /* Bottom Left Chosen Companion Profile Box */
+        /* Bottom-Left Upsized Chosen Companion Profile Box */
         .player-profile-box {
             position: absolute;
-            bottom: 30px;
+            bottom: 25px;
             left: 40px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 6px;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 12px 20px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px 22px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(5px);
+            border: 2px solid #e5e7eb;
         }
 
         .player-profile-box img {
-            width: 90px;
-            height: 105px;
+            width: 150px;
+            height: 180px;
             object-fit: contain;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
         }
 
         .player-profile-name {
-            font-size: 0.95rem;
+            font-size: 1.15rem;
             font-weight: 900;
             color: #111827;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
         }
 
         /* Center Grid of 4 Mini-Games */
@@ -324,11 +326,17 @@
             object-fit: contain;
         }
 
-        /* Bottom Right Audio Toggle */
-        .audio-toggle-btn {
+        /* Bottom Right Controls Group (Email Connect + Audio Toggle) */
+        .controls-bottom-right {
             position: absolute;
             bottom: 30px;
             right: 40px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .control-btn {
             background: rgba(255, 255, 255, 0.9);
             border: 2px solid #9ca3af;
             border-radius: 50%;
@@ -342,19 +350,19 @@
             transition: all 0.2s ease;
         }
 
-        .audio-toggle-btn:hover {
+        .control-btn:hover {
             transform: scale(1.08);
             border-color: var(--primary);
         }
 
-        .audio-toggle-btn svg {
+        .control-btn svg {
             width: 24px;
             height: 24px;
             fill: #374151;
         }
 
-        /* Leaderboard Modal Popup */
-        #leaderboard-modal {
+        /* Leaderboard & Email Modals */
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -423,6 +431,41 @@
         .leaderboard-item.gold { background: #fef3c7; border: 1px solid #f59e0b; }
         .leaderboard-item.silver { background: #f1f5f9; border: 1px solid #cbd5e1; }
         .leaderboard-item.bronze { background: #fff7ed; border: 1px solid #fdba74; }
+
+        /* Email Form Inputs */
+        .email-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .email-input {
+            padding: 10px 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .email-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .submit-email-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .submit-email-btn:hover {
+            background-color: var(--primary-hover);
+        }
     </style>
 </head>
 <body>
@@ -469,7 +512,7 @@
                 </div>
             </div>
 
-            <!-- Lower-Left Chosen Companion Sprite -->
+            <!-- Bottom-Left Upsized Chosen Companion Profile Box -->
             <div class="player-profile-box">
                 <img id="dash-companion-img" src="" alt="Chosen Companion">
                 <div id="dash-companion-name" class="player-profile-name"></div>
@@ -491,17 +534,22 @@
                 </div>
             </div>
 
-            <!-- Lower-Right Audio Toggle -->
-            <button class="audio-toggle-btn" id="audio-toggle" onclick="toggleAudio()" title="Toggle Music">
-                <svg id="audio-icon" viewBox="0 0 24 24">
-                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                </svg>
-            </button>
+            <!-- Bottom Right Controls: Email Connect & Audio Toggle -->
+            <div class="controls-bottom-right">
+                <button class="control-btn" onclick="openEmailModal()" title="Connect Email">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </button>
+                <button class="control-btn" id="audio-toggle" onclick="toggleAudio()" title="Toggle Music">
+                    <svg id="audio-icon" viewBox="0 0 24 24">
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Leaderboard Modal Popup -->
-    <div id="leaderboard-modal">
+    <div id="leaderboard-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Global Leaderboard</h3>
@@ -518,13 +566,29 @@
         </div>
     </div>
 
+    <!-- Email Connect Modal Popup -->
+    <div id="email-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Connect Email</h3>
+                <button class="close-modal-btn" onclick="closeEmailModal()">&times;</button>
+            </div>
+            <p style="font-size: 0.9rem; color: #4b5563; margin: 0;">Link your email to record your progress and secure your spot on the global rankings!</p>
+            <div class="email-form">
+                <input type="email" id="player-email-input" class="email-input" placeholder="Enter your email address...">
+                <button class="submit-email-btn" onclick="submitPlayerEmail()">Link & Save Progress</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Background Audio Element -->
     <audio id="bgm" src="SLOWER2019-01-02_-_8_Bit_Menu_-_David_Renda_-_FesliyanStudios.com.mp3" loop></audio>
 
     <script>
         let gameState = {
             companion: 'jackson',
-            isAudioPlaying: false
+            isAudioPlaying: false,
+            playerEmail: ''
         };
 
         const companionData = {
@@ -533,9 +597,7 @@
         };
 
         function goToSetup() {
-            // Start background music right from the Welcome screen ENTER interaction
             playAudio();
-
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('setup-screen').style.display = 'flex';
         }
@@ -582,6 +644,25 @@
 
         function closeLeaderboard() {
             document.getElementById('leaderboard-modal').style.display = 'none';
+        }
+
+        function openEmailModal() {
+            document.getElementById('email-modal').style.display = 'flex';
+        }
+
+        function closeEmailModal() {
+            document.getElementById('email-modal').style.display = 'none';
+        }
+
+        function submitPlayerEmail() {
+            const emailVal = document.getElementById('player-email-input').value.trim();
+            if (emailVal && emailVal.includes('@')) {
+                gameState.playerEmail = emailVal;
+                alert(`Success! Connected as ${emailVal}. Ready to sync with Firebase.`);
+                closeEmailModal();
+            } else {
+                alert("Please enter a valid email address.");
+            }
         }
 
         function startMiniGame(gameName) {
