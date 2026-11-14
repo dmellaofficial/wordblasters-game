@@ -85,15 +85,16 @@
             position: relative;
         }
 
-        /* Transparent container style specifically for the Welcome screen */
-        .game-container.welcome-mode {
+        /* Transparent container style specifically for the Welcome and Companion screens */
+        .game-container.welcome-mode,
+        .game-container.companion-mode {
             background-color: transparent !important;
             box-shadow: none !important;
             width: 100vw;
             height: 100vh;
             max-width: none;
             max-height: none;
-            padding: 10px;
+            padding: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -143,7 +144,7 @@
             transform: translateY(-2px);
         }
 
-        /* Companion Selection Screen (Clean, Card-Free Layout matching reference) */
+        /* Companion Selection Screen (Directly matching reference image layout) */
         #setup-screen {
             display: none;
             flex-direction: column;
@@ -151,22 +152,23 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            gap: 20px;
+            gap: 25px;
             box-sizing: border-box;
         }
 
         .setup-title {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #1f2937;
-            letter-spacing: 1px;
-            margin: 0 0 10px 0;
+            font-size: 2.1rem;
+            font-weight: 900;
+            color: #111827;
+            letter-spacing: 1.5px;
+            margin: 0;
             text-align: center;
+            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.8);
         }
 
         .companion-choices {
             display: flex;
-            gap: 60px;
+            gap: 80px;
             justify-content: center;
             align-items: center;
             width: 100%;
@@ -190,22 +192,23 @@
         }
 
         .companion-card img {
-            width: 160px;
-            height: 200px;
+            width: 180px;
+            height: 220px;
             object-fit: contain;
-            filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.12));
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
             transition: transform 0.25s ease;
         }
 
         .companion-card:hover img {
-            transform: scale(1.04);
+            transform: scale(1.05);
         }
 
         .companion-name {
-            font-size: 1.25rem;
-            font-weight: 800;
-            color: #1f2937;
-            letter-spacing: 1px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #111827;
+            letter-spacing: 1.5px;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
         }
 
         /* Main Game Screen */
@@ -329,7 +332,7 @@
         <p>Jackson and Emily's Word Blasters is optimized for landscape mode for the best gaming experience!</p>
     </div>
 
-    <!-- Container starts with welcome-mode so background blends seamlessly -->
+    <!-- Container starts with welcome-mode -->
     <div class="game-container welcome-mode" id="main-container">
         <!-- STEP 1: WELCOME SCREEN (INTACT) -->
         <div id="welcome-screen">
@@ -337,7 +340,7 @@
             <button class="enter-btn" onclick="goToSetup()">ENTER</button>
         </div>
 
-        <!-- STEP 2: COMPANION SELECTION SCREEN (FIXED TO MATCH REFERENCE) -->
+        <!-- STEP 2: COMPANION SELECTION SCREEN -->
         <div id="setup-screen">
             <h2 class="setup-title">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
@@ -411,17 +414,24 @@
         };
 
         function goToSetup() {
-            // Remove transparent welcome mode so the clean white card background reappears for the game screens
-            document.getElementById('main-container').classList.remove('welcome-mode');
+            const container = document.getElementById('main-container');
+            // Transition from welcome to companion-mode (keeps container transparent and edge-to-edge)
+            container.classList.remove('welcome-mode');
+            container.classList.add('companion-mode');
+            
             document.getElementById('welcome-screen').style.display = 'none';
             document.getElementById('setup-screen').style.display = 'flex';
         }
 
         function selectCompanion(choice) {
-            gameState.companion = choice;
+            const container = document.getElementById('main-container');
+            // Remove companion-mode so the main game interface uses the card frame
+            container.classList.remove('companion-mode');
+            
             document.getElementById('setup-screen').style.display = 'none';
             document.getElementById('game-screen').style.display = 'flex';
 
+            gameState.companion = choice;
             updateCompanionExpression('idle', choice === 'jackson' ? "Let's crack this word ladder!" : "Take your time, we've got this!");
             renderPuzzle();
         }
