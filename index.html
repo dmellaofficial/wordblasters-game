@@ -144,7 +144,7 @@
             transform: translateY(-2px);
         }
 
-        /* Companion Selection Screen (Scaled large to match your draft) */
+        /* Companion Selection Screen (Upsized significantly) */
         #setup-screen {
             display: none;
             flex-direction: column;
@@ -152,23 +152,23 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            gap: 20px;
+            gap: 15px;
             box-sizing: border-box;
         }
 
         .setup-title {
-            font-size: 2.2rem;
+            font-size: 2.3rem;
             font-weight: 900;
             color: #111827;
             letter-spacing: 1.5px;
-            margin: 0 0 10px 0;
+            margin: 0;
             text-align: center;
             text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
         }
 
         .companion-choices {
             display: flex;
-            gap: 90px;
+            gap: 100px;
             justify-content: center;
             align-items: center;
             width: 100%;
@@ -181,7 +181,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             background: transparent;
             border: none;
             padding: 0;
@@ -192,19 +192,19 @@
         }
 
         .companion-card img {
-            width: 240px;
-            height: 280px;
+            width: 310px;
+            height: 350px;
             object-fit: contain;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.18));
+            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.2));
             transition: transform 0.25s ease;
         }
 
         .companion-card:hover img {
-            transform: scale(1.05);
+            transform: scale(1.04);
         }
 
         .companion-name {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: 900;
             color: #111827;
             letter-spacing: 1.5px;
@@ -340,7 +340,7 @@
             <button class="enter-btn" onclick="goToSetup()">ENTER</button>
         </div>
 
-        <!-- STEP 2: COMPANION SELECTION SCREEN (SCALED LARGE) -->
+        <!-- STEP 2: COMPANION SELECTION SCREEN (UPSIZED) -->
         <div id="setup-screen">
             <h2 class="setup-title">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
