@@ -279,16 +279,17 @@ html, body {
 
 .minigame-card {
     background: rgba(255, 255, 255, 0.95);
-    border: 0;
-    border-radius: 0;
-    height: 0;
-    display: inline;
+    border: 3px solid #d1d5db;
+    border-radius: 16px;
+    height: 135px;
+    display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
     transition: all 0.25s ease;
-    padding: 0;
+    padding: 6px;
+    box-sizing: border-box;
 }
 
 .minigame-card:hover {
