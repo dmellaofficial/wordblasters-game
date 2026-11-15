@@ -52,13 +52,13 @@
                 <button class="view-ranks-btn" onclick="openLeaderboard()">VIEW RANKS</button>
             </div>
 
-            <!-- Bottom-Left Enlarge Companion Profile Area -->
+            <!-- Left Side: Prominent Companion Profile Area -->
             <div class="player-profile-area">
                 <img id="dash-companion-img" src="" alt="Chosen Companion">
                 <div id="dash-companion-name" class="player-profile-name"></div>
             </div>
 
-            <!-- Center Grid Area containing Mini-Games -->
+            <!-- Right Side: Mini-Games Grid Area -->
             <div class="center-grid-area">
                 <div class="minigames-grid">
                     <div class="minigame-card" onclick="startMiniGame('break-n-crash')" title="Break N' Crash">
@@ -76,7 +76,7 @@
                 </div>
             </div>
 
-            <!-- Bottom Right Controls Group (Email Connect + Audio Toggle) - Pinned & Fully Visible -->
+            <!-- Bottom Right Controls Group (Email Connect + Audio Toggle) -->
             <div class="controls-bottom-right">
                 <button class="control-btn" onclick="openEmailModal()" title="Connect Email & Username">
                     <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
@@ -124,8 +124,8 @@
         </div>
     </div>
 
-    <!-- Background Audio Element -->
-    <audio id="bgm" src="SLOWER2019-01-02_-_8_Bit_Menu_-_David_Renda_-_FesliyanStudios.com.mp3" loop></audio>
+    <!-- Background Audio Element (Paused until toggled) -->
+    <audio id="bgm" src="SLOWER2019-01-02_-_8_Bit_Menu_-_David_Renda_-_FesliyanStudios.com.mp3" loop preload="auto"></audio>
 
     <script src="script.js"></script>
 </body>
