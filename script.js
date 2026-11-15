@@ -10,28 +10,7 @@ const companionData = {
     emily: { name: 'EMILY', sprite: '3349-removebg-preview.png' }
 };
 
-// Attempt to play music on page load, and ensure it fires on the very first click/tap anywhere on the Welcome screen
-window.addEventListener('DOMContentLoaded', () => {
-    playAudio();
-});
-
-document.addEventListener('click', () => {
-    playAudio();
-}, { once: true });
-
-function playAudio() {
-    const audio = document.getElementById('bgm');
-    if (!gameState.isAudioPlaying) {
-        audio.play().then(() => {
-            gameState.isAudioPlaying = true;
-        }).catch(e => {
-            console.log("Audio waiting for user gesture - click anywhere to start music!");
-        });
-    }
-}
-
 function goToSetup() {
-    playAudio(); // Ensures music is flowing smoothly into setup
     document.getElementById('welcome-screen').classList.remove('active');
     document.getElementById('setup-screen').classList.add('active');
 }
@@ -39,7 +18,7 @@ function goToSetup() {
 function selectCompanion(choice) {
     gameState.companion = choice;
     
-    // Update Dashboard Profile Area with the enlarged companion sprite
+    // Update Dashboard Profile Area with the enlarged companion sprite on the left
     const profile = companionData[choice];
     document.getElementById('dash-companion-img').src = profile.sprite;
     document.getElementById('dash-companion-name').textContent = profile.name;
@@ -53,8 +32,9 @@ function toggleAudio() {
     const audio = document.getElementById('bgm');
     const icon = document.getElementById('audio-icon');
     if (audio.paused) {
-        audio.play();
-        gameState.isAudioPlaying = true;
+        audio.play().then(() => {
+            gameState.isAudioPlaying = true;
+        }).catch(err => console.log("Audio play error:", err));
         icon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
     } else {
         audio.pause();
