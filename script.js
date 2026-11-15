@@ -10,7 +10,11 @@ const companionData = {
     emily: { name: 'EMILY', sprite: '3349-removebg-preview.png' }
 };
 
-// Listen for the first user interaction anywhere on the page to trigger audio as early as allowed
+// Attempt to play music on page load, and ensure it fires on the very first click/tap anywhere on the Welcome screen
+window.addEventListener('DOMContentLoaded', () => {
+    playAudio();
+});
+
 document.addEventListener('click', () => {
     playAudio();
 }, { once: true });
@@ -20,12 +24,14 @@ function playAudio() {
     if (!gameState.isAudioPlaying) {
         audio.play().then(() => {
             gameState.isAudioPlaying = true;
-        }).catch(e => console.log("Audio waiting for user interaction"));
+        }).catch(e => {
+            console.log("Audio waiting for user gesture - click anywhere to start music!");
+        });
     }
 }
 
 function goToSetup() {
-    playAudio();
+    playAudio(); // Ensures music is flowing smoothly into setup
     document.getElementById('welcome-screen').classList.remove('active');
     document.getElementById('setup-screen').classList.add('active');
 }
