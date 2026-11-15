@@ -4,505 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jackson and Emily's Word Blasters</title>
-    <style>
-        :root {
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
-            --text-color: #1f2937;
-            --border-color: #d1d5db;
-            --success: #10b981;
-            --error: #ef4444;
-        }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100vw;
-            height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-image: url('Heartbeats and Homework Wallpaper Transparent_20261113_182651_0000.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        /* Landscape Orientation Lock Overlay */
-        #orientation-warning {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(31, 41, 55, 0.95);
-            color: white;
-            z-index: 9999;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-
-        #orientation-warning svg {
-            width: 64px;
-            height: 64px;
-            margin-bottom: 20px;
-            animation: rotatePhone 2s infinite ease-in-out;
-        }
-
-        @keyframes rotatePhone {
-            0% { transform: rotate(0deg); }
-            50% { transform: rotate(90deg); }
-            100% { transform: rotate(0deg); }
-        }
-
-        @media screen and (max-height: 500px) and (orientation: portrait), 
-               screen and (max-width: 767px) and (orientation: portrait) {
-            #orientation-warning {
-                display: flex;
-            }
-        }
-
-        /* Main Game Wrapper */
-        .game-container {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        /* Welcome Splash Screen (LOCKED & UNTOUCHED) */
-        #welcome-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            position: relative;
-            gap: 15px;
-        }
-
-        .hero-banner {
-            width: 100%;
-            max-width: 850px;
-            height: auto;
-            max-height: 72vh;
-            object-fit: contain;
-            border: none;
-            box-shadow: none;
-            background: transparent;
-        }
-
-        .enter-btn {
-            background-color: #ffffff;
-            color: var(--text-color);
-            border: 2px solid var(--border-color);
-            padding: 12px 55px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            z-index: 10;
-        }
-
-        .enter-btn:hover {
-            background-color: #f3f4f6;
-            border-color: var(--primary);
-            color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        /* Companion Selection Screen (LOCKED & UNTOUCHED SIZING) */
-        #setup-screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            gap: 10px;
-            box-sizing: border-box;
-        }
-
-        .setup-title {
-            font-size: 2.3rem;
-            font-weight: 900;
-            color: #111827;
-            letter-spacing: 1.5px;
-            margin: 0 0 5px 0;
-            text-align: center;
-            text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
-        }
-
-        .companion-choices {
-            display: flex;
-            gap: 110px;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
-        .companion-card {
-            cursor: pointer;
-            transition: all 0.25s ease;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            background: transparent;
-            border: none;
-            padding: 0;
-        }
-
-        .companion-card:hover {
-            transform: translateY(-6px);
-        }
-
-        .companion-card img {
-            width: 380px;
-            height: 420px;
-            object-fit: contain;
-            filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.22));
-            transition: transform 0.25s ease;
-        }
-
-        .companion-card:hover img {
-            transform: scale(1.03);
-        }
-
-        .companion-name {
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: #111827;
-            letter-spacing: 1.5px;
-            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
-        }
-
-        /* GAME MODE SELECTION DASHBOARD (Strict Fit for Tablets/Phones/PCs) */
-        #dashboard-screen {
-            display: none;
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            left: 0;
-            box-sizing: border-box;
-            padding: 15px 30px;
-            display: none; /* Controlled via JS */
-            grid-template-columns: 280px 1fr;
-            grid-template-rows: 50px 1fr;
-            grid-template-areas: 
-                "top-left top-right"
-                "companion center-grid";
-            align-items: center;
-            justify-items: center;
-        }
-
-        /* Top Bar Header */
-        .dash-header-area {
-            grid-area: top-left;
-            justify-self: start;
-            align-self: center;
-        }
-
-        .game-title-header {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #1e3a8a;
-            letter-spacing: 0.5px;
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
-        }
-
-        /* Top Bar Ranks */
-        .dash-rank-area {
-            grid-area: top-right;
-            justify-self: end;
-            align-self: center;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 2px;
-        }
-
-        .rank-display {
-            font-size: 1rem;
-            font-weight: 900;
-            color: #111827;
-            letter-spacing: 1px;
-            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
-        }
-
-        .view-ranks-btn {
-            background-color: #ffffff;
-            color: #374151;
-            border: 2px solid #9ca3af;
-            padding: 4px 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
-        }
-
-        .view-ranks-btn:hover {
-            background-color: #f3f4f6;
-            border-color: var(--primary);
-            color: var(--primary);
-        }
-
-        /* Bottom-Left Enlarge Companion Area (No Box, Fully Visible) */
-        .player-profile-area {
-            grid-area: companion;
-            justify-self: start;
-            align-self: end;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            padding-bottom: 5px;
-        }
-
-        .player-profile-area img {
-            width: 360px;
-            height: 400px;
-            object-fit: contain;
-            filter: drop-shadow(0 8px 18px rgba(0,0,0,0.25));
-        }
-
-        .player-profile-name {
-            font-size: 1.3rem;
-            font-weight: 900;
-            color: #111827;
-            letter-spacing: 1.5px;
-            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
-        }
-
-        /* Center Grid Area containing Mini-Games and Bottom-Right Controls */
-        .center-grid-area {
-            grid-area: center-grid;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-
-        .minigames-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
-            width: 100%;
-            max-width: 650px;
-        }
-
-        .minigame-card {
-            background: rgba(255, 255, 255, 0.95);
-            border: 3px solid #d1d5db;
-            border-radius: 16px;
-            height: 135px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-            transition: all 0.25s ease;
-            position: relative;
-            overflow: hidden;
-            padding: 6px;
-            box-sizing: border-box;
-        }
-
-        .minigame-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
-        }
-
-        .minigame-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-
-        /* Bottom Right Controls Group (Email Connect + Audio Toggle) - Guaranteed Visible */
-        .controls-bottom-right {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            z-index: 20;
-        }
-
-        .control-btn {
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #9ca3af;
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transition: all 0.2s ease;
-        }
-
-        .control-btn:hover {
-            transform: scale(1.08);
-            border-color: var(--primary);
-        }
-
-        .control-btn svg {
-            width: 20px;
-            height: 20px;
-            fill: #374151;
-        }
-
-        /* Leaderboard & Email Modals */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-content {
-            background: #ffffff;
-            padding: 25px 30px;
-            border-radius: 20px;
-            width: 400px;
-            max-width: 90vw;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 10px;
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            color: #111827;
-            font-size: 1.3rem;
-        }
-
-        .close-modal-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #6b7280;
-        }
-
-        .leaderboard-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 12px;
-            background: #f9fafb;
-            border-radius: 8px;
-            font-weight: bold;
-            color: #374151;
-        }
-
-        .leaderboard-item.gold { background: #fef3c7; border: 1px solid #f59e0b; }
-        .leaderboard-item.silver { background: #f1f5f9; border: 1px solid #cbd5e1; }
-        .leaderboard-item.bronze { background: #fff7ed; border: 1px solid #fdba74; }
-
-        /* Email Form Inputs */
-        .email-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .email-input {
-            padding: 10px 14px;
-            border: 2px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .email-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-        }
-
-        .submit-email-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 10px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .submit-email-btn:hover {
-            background-color: var(--primary-hover);
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Landscape Warning Overlay -->
+    <!-- Landscape Orientation Lock Overlay for Mobile/Tablets -->
     <div id="orientation-warning">
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
         </svg>
         <h2>Please Rotate Your Device</h2>
-        <p>Jackson and Emily's Word Blasters is optimized for landscape mode for the best gaming experience!</p>
+        <p>Jackson and Emily's Word Blasters is optimized for landscape mode for the best experience!</p>
     </div>
 
     <div class="game-container">
-        <!-- STEP 1: WELCOME SCREEN (LOCKED & UNTOUCHED) -->
-        <div id="welcome-screen">
+        <!-- STEP 1: WELCOME SCREEN -->
+        <div id="welcome-screen" class="screen active">
             <img src="wordblasters-welcome_20261113_193006_0000.svg" alt="Jackson and Emily Welcome" class="hero-banner">
             <button class="enter-btn" onclick="goToSetup()">ENTER</button>
         </div>
 
-        <!-- STEP 2: COMPANION SELECTION SCREEN (LOCKED & UNTOUCHED SIZING) -->
-        <div id="setup-screen">
+        <!-- STEP 2: COMPANION SELECTION SCREEN -->
+        <div id="setup-screen" class="screen">
             <h2 class="setup-title">CHOOSE YOUR COMPANION</h2>
             <div class="companion-choices">
                 <button class="companion-card" onclick="selectCompanion('jackson')">
@@ -517,7 +40,7 @@
         </div>
 
         <!-- STEP 3: GAME MODE SELECTION DASHBOARD -->
-        <div id="dashboard-screen">
+        <div id="dashboard-screen" class="screen">
             <!-- Top Bar Header -->
             <div class="dash-header-area">
                 <div class="game-title-header">Jackson and Emily's Word Blasters</div>
@@ -535,7 +58,7 @@
                 <div id="dash-companion-name" class="player-profile-name"></div>
             </div>
 
-            <!-- Center Grid Area containing Mini-Games and Bottom-Right Controls -->
+            <!-- Center Grid Area containing Mini-Games -->
             <div class="center-grid-area">
                 <div class="minigames-grid">
                     <div class="minigame-card" onclick="startMiniGame('break-n-crash')" title="Break N' Crash">
@@ -551,18 +74,18 @@
                         <img src="7.png" alt="Word Bridge">
                     </div>
                 </div>
+            </div>
 
-                <!-- Bottom Right Controls: Email Connect & Audio Toggle -->
-                <div class="controls-bottom-right">
-                    <button class="control-btn" onclick="openEmailModal()" title="Connect Email & Username">
-                        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                    </button>
-                    <button class="control-btn" id="audio-toggle" onclick="toggleAudio()" title="Toggle Music">
-                        <svg id="audio-icon" viewBox="0 0 24 24">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                        </svg>
-                    </button>
-                </div>
+            <!-- Bottom Right Controls Group (Email Connect + Audio Toggle) - Pinned & Fully Visible -->
+            <div class="controls-bottom-right">
+                <button class="control-btn" onclick="openEmailModal()" title="Connect Email & Username">
+                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </button>
+                <button class="control-btn" id="audio-toggle" onclick="toggleAudio()" title="Toggle Music">
+                    <svg id="audio-icon" viewBox="0 0 24 24">
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
@@ -604,103 +127,6 @@
     <!-- Background Audio Element -->
     <audio id="bgm" src="SLOWER2019-01-02_-_8_Bit_Menu_-_David_Renda_-_FesliyanStudios.com.mp3" loop></audio>
 
-    <script>
-        let gameState = {
-            companion: 'jackson',
-            isAudioPlaying: false,
-            playerUsername: 'Dia',
-            playerEmail: ''
-        };
-
-        const companionData = {
-            jackson: { name: 'JACKSON', sprite: '3336-removebg-preview.png' },
-            emily: { name: 'EMILY', sprite: '3349-removebg-preview.png' }
-        };
-
-        function goToSetup() {
-            playAudio();
-            document.getElementById('welcome-screen').style.display = 'none';
-            document.getElementById('setup-screen').style.display = 'flex';
-        }
-
-        function playAudio() {
-            const audio = document.getElementById('bgm');
-            if (!gameState.isAudioPlaying) {
-                audio.play().then(() => {
-                    gameState.isAudioPlaying = true;
-                }).catch(e => console.log("Audio autoplay waiting for user interaction"));
-            }
-        }
-
-        function selectCompanion(choice) {
-            gameState.companion = choice;
-            
-            // Update Game Mode Selection Dashboard Profile Area
-            const profile = companionData[choice];
-            document.getElementById('dash-companion-img').src = profile.sprite;
-            document.getElementById('dash-companion-name').textContent = profile.name;
-
-            // Transition to Dashboard (Using grid layout)
-            document.getElementById('setup-screen').style.display = 'none';
-            document.getElementById('dashboard-screen').style.display = 'grid';
-        }
-
-        function toggleAudio() {
-            const audio = document.getElementById('bgm');
-            const icon = document.getElementById('audio-icon');
-            if (audio.paused) {
-                audio.play();
-                gameState.isAudioPlaying = true;
-                icon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
-            } else {
-                audio.pause();
-                gameState.isAudioPlaying = false;
-                icon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
-            }
-        }
-
-        function openLeaderboard() {
-            document.getElementById('leaderboard-modal').style.display = 'flex';
-        }
-
-        function closeLeaderboard() {
-            document.getElementById('leaderboard-modal').style.display = 'none';
-        }
-
-        function openEmailModal() {
-            document.getElementById('email-modal').style.display = 'flex';
-        }
-
-        function closeEmailModal() {
-            document.getElementById('email-modal').style.display = 'none';
-        }
-
-        function submitPlayerAccount() {
-            const usernameVal = document.getElementById('player-username-input').value.trim();
-            const emailVal = document.getElementById('player-email-input').value.trim();
-            
-            if (!usernameVal) {
-                alert("Please enter a leaderboard username.");
-                return;
-            }
-            if (!emailVal || !emailVal.includes('@')) {
-                alert("Please enter a valid email address.");
-                return;
-            }
-
-            gameState.playerUsername = usernameVal;
-            gameState.playerEmail = emailVal;
-            
-            // Update Leaderboard display name
-            document.getElementById('lb-current-player').textContent = `125. ${usernameVal} (You)`;
-            
-            alert(`Account linked successfully! Welcome, ${usernameVal}.`);
-            closeEmailModal();
-        }
-
-        function startMiniGame(gameName) {
-            alert(`Loading mini-game: ${gameName.toUpperCase()}! Ready to test your focus, Dia.`);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
