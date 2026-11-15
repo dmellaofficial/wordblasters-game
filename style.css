@@ -170,7 +170,7 @@ html, body {
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
 }
 
-/* Dashboard Grid Layout */
+/* EXACT MATCH DASHBOARD GRID LAYOUT (*WHAT IT IS SHOULD BE*) */
 #dashboard-screen {
     padding: 20px 40px;
     display: none;
@@ -234,6 +234,7 @@ html, body {
     color: var(--primary);
 }
 
+/* Left Side: Large Prominent Companion Profile Area */
 .player-profile-area {
     grid-area: companion;
     justify-self: center;
@@ -259,6 +260,7 @@ html, body {
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
 }
 
+/* Right Side: Center Grid Area (2x2 Mini-Games Grid) */
 .center-grid-area {
     grid-area: center-grid;
     width: 100%;
@@ -300,7 +302,7 @@ html, body {
 .minigame-card img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 /* Bottom Right Controls */
