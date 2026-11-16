@@ -8,29 +8,20 @@
 </head>
 <body>
 
-    <!-- Landscape Orientation Lock Overlay for Mobile/Tablets -->
-    <div id="orientation-warning">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-        </svg>
-        <h2>Please Rotate Your Device</h2>
-        <p>Jackson and Emily's Word Blasters is optimized for landscape mode for the best experience!</p>
-    </div>
-
     <div class="game-container">
         <!-- STEP 1: WELCOME SCREEN -->
         <div id="welcome-screen" class="screen active">
-            <img src="wordblasters-welcome_20261113_193006_0000.svg" alt="Jackson and Emily Welcome" class="hero-banner">
-            <button class="enter-btn" onclick="goToSetup()">ENTER</button>
-
-            <!-- Welcome Screen Bottom-Right Audio Button -->
-            <div class="controls-bottom-right">
+            <!-- Top-Left Controls Group (Audio Toggle) -->
+            <div class="controls-top-left">
                 <button class="control-btn" onclick="toggleAudio()" title="Toggle Music">
                     <svg class="audio-icon-svg" viewBox="0 0 24 24">
                         <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                     </svg>
                 </button>
             </div>
+
+            <img src="wordblasters-welcome_20261113_193006_0000.svg" alt="Jackson and Emily Welcome" class="hero-banner">
+            <button class="enter-btn" onclick="goToSetup()">ENTER</button>
         </div>
 
         <!-- STEP 2: COMPANION SELECTION SCREEN -->
@@ -50,8 +41,18 @@
 
         <!-- STEP 3: GAME MODE SELECTION DASHBOARD -->
         <div id="dashboard-screen" class="screen">
-            <!-- Top Bar Header -->
+            <!-- Top Bar Header & Left Controls (Email + Audio) -->
             <div class="dash-header-area">
+                <div class="controls-top-left-dash">
+                    <button class="control-btn" onclick="openEmailModal()" title="Connect Email & Username">
+                        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                    </button>
+                    <button class="control-btn" onclick="toggleAudio()" title="Toggle Music">
+                        <svg class="audio-icon-svg" viewBox="0 0 24 24">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                        </svg>
+                    </button>
+                </div>
                 <div class="game-title-header">Jackson and Emily's Word Blasters</div>
             </div>
 
@@ -83,18 +84,6 @@
                         <img src="7.png" alt="Word Bridge">
                     </div>
                 </div>
-            </div>
-
-            <!-- Bottom Right Controls Group (Email Connect + Audio Toggle) -->
-            <div class="controls-bottom-right">
-                <button class="control-btn" onclick="openEmailModal()" title="Connect Email & Username">
-                    <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-                </button>
-                <button class="control-btn" onclick="toggleAudio()" title="Toggle Music">
-                    <svg class="audio-icon-svg" viewBox="0 0 24 24">
-                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
-                    </svg>
-                </button>
             </div>
         </div>
     </div>
