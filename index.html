@@ -102,40 +102,6 @@
                 </button>
             </div>
         </div>
-
-        <!-- BREAK N' CRASH MINI-GAME SCREEN -->
-        <div id="breakncrash-screen" class="screen">
-            <div class="hud-bar">
-                <div class="hud-life">LIFE: <span id="bnc-life">❤️❤️❤️</span></div>
-                <div class="hud-score">SCORE: <span id="bnc-score">0</span></div>
-                <div class="hud-level">LEVEL: <span id="bnc-level">1</span></div>
-                <button class="back-btn" onclick="exitBreakNCrash()">EXIT</button>
-            </div>
-
-            <div id="breakncrash-arena" class="game-arena">
-                <div class="bottom-danger-line"></div>
-            </div>
-
-            <!-- Start Overlay -->
-            <div id="bnc-start-overlay" class="modal-overlay active" style="position: absolute;">
-                <div class="modal-card">
-                    <h2>BREAK N' CRASH</h2>
-                    <p>Words are raining down in ALL CAPS! Click or tap on the <strong>MISSPELLED</strong> words to blast them before they hit the bottom. Watch out for double-letter challenges!</p>
-                    <button class="action-btn" onclick="startBreakNCrashGame()">START GAME</button>
-                    <button class="secondary-btn" onclick="exitBreakNCrash()">BACK TO DASHBOARD</button>
-                </div>
-            </div>
-
-            <!-- Game Over Modal -->
-            <div id="bnc-gameover-modal" class="modal-overlay" style="position: absolute;">
-                <div class="modal-card">
-                    <h2>GAME OVER</h2>
-                    <p id="bnc-final-score">Your Final Score: 0</p>
-                    <button class="action-btn" onclick="startBreakNCrashGame()">PLAY AGAIN</button>
-                    <button class="secondary-btn" onclick="exitBreakNCrash()">BACK TO DASHBOARD</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Leaderboard Modal Popup -->
@@ -176,6 +142,5 @@
     <audio id="bgm" src="SLOWER2019-01-02_-_8_Bit_Menu_-_David_Renda_-_FesliyanStudios.com.mp3" loop autoplay preload="auto"></audio>
 
     <script src="script.js"></script>
-    <script src="breakNcrash.js"></script>
 </body>
 </html>
