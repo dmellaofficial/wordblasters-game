@@ -84,21 +84,6 @@ html, body {
     transform: translateY(-2px);
 }
 
-/* Specific Phone Viewport Fixes (Ensures Banner & ENTER Button fit perfectly without clipping) */
-@media screen and (max-width: 768px) {
-    #welcome-screen {
-        gap: 10px;
-        padding: 10px;
-    }
-    .hero-banner {
-        max-height: 58vh; /* Leaves plenty of room for the button on mobile phones in landscape/portrait */
-    }
-    .enter-btn {
-        padding: 10px 40px;
-        font-size: 1rem;
-    }
-}
-
 /* Companion Selection Screen */
 #setup-screen {
     flex-direction: column;
@@ -108,7 +93,7 @@ html, body {
     padding: 20px;
     height: 100vh;
     width: 100vw;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .setup-title {
@@ -157,6 +142,68 @@ html, body {
     font-weight: 900;
     color: #111827;
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+/* ========================================================
+   MOBILE LANDSCAPE OPTIMIZATIONS (Phones turned sideways)
+   ======================================================== */
+@media screen and (max-height: 500px) {
+    /* Welcome Screen Landscape Adjustments */
+    #welcome-screen {
+        gap: 6px !important;
+        padding: 5px 10px !important;
+    }
+    .hero-banner {
+        max-height: 52vh !important;
+    }
+    .enter-btn {
+        padding: 8px 30px !important;
+        font-size: 0.95rem !important;
+    }
+
+    /* Choose Your Companion Landscape Adjustments */
+    #setup-screen {
+        gap: 8px !important;
+        padding: 10px !important;
+    }
+    .setup-title {
+        font-size: 1.25rem !important;
+        letter-spacing: 1px !important;
+    }
+    .companion-choices {
+        gap: 30px !important;
+    }
+    .companion-card img {
+        width: 120px !important;
+        height: 140px !important;
+    }
+    .companion-name {
+        font-size: 1.05rem !important;
+    }
+}
+
+/* Responsive adjustments for tablets and smaller screens (Portrait width constraints) */
+@media screen and (max-width: 900px) and (min-height: 501px) {
+    #dashboard-screen {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas: 
+            "top-left"
+            "top-right"
+            "companion"
+            "center-grid";
+        padding: 15px;
+        gap: 15px;
+        justify-items: center;
+    }
+    .dash-header-area {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .dash-rank-area {
+        justify-self: center;
+        align-items: center;
+    }
 }
 
 /* Dashboard Grid Layout */
@@ -336,30 +383,6 @@ html, body {
     width: 18px;
     height: 18px;
     fill: #374151;
-}
-
-/* Responsive adjustments for tablets and smaller screens */
-@media screen and (max-width: 900px) {
-    #dashboard-screen {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
-        grid-template-areas: 
-            "top-left"
-            "top-right"
-            "companion"
-            "center-grid";
-        padding: 15px;
-        gap: 15px;
-        justify-items: center;
-    }
-    .dash-header-area {
-        width: 100%;
-        justify-content: space-between;
-    }
-    .dash-rank-area {
-        justify-self: center;
-        align-items: center;
-    }
 }
 
 /* Modals */
