@@ -148,7 +148,6 @@ html, body {
    MOBILE LANDSCAPE OPTIMIZATIONS (Phones turned sideways)
    ======================================================== */
 @media screen and (max-height: 500px) {
-    /* Leave Welcome Screen untouched since you like it */
     #welcome-screen {
         flex-direction: column;
         align-items: center;
@@ -157,7 +156,6 @@ html, body {
         padding: 2vh 20px;
     }
 
-    /* Choose Your Companion Landscape Adjustments (Nicely proportioned & upsized) */
     #setup-screen {
         gap: 6px !important;
         padding: 10px !important;
@@ -179,7 +177,6 @@ html, body {
         font-size: 1rem !important;
     }
 
-    /* Game Mode Selection Dashboard Landscape Adjustments */
     #dashboard-screen {
         padding: 10px 20px !important;
         grid-template-columns: 240px 1fr !important;
@@ -226,27 +223,105 @@ html, body {
     }
 }
 
-/* Responsive adjustments for tablets and smaller screens (Portrait width constraints) */
+/* ========================================================
+   MOBILE PORTRAIT OPTIMIZATIONS (Phones held upright)
+   ======================================================== */
 @media screen and (max-width: 900px) and (min-height: 501px) {
     #dashboard-screen {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto auto;
+        padding: 15px 15px 20px 15px;
+        display: none;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
         grid-template-areas: 
-            "top-left"
-            "top-right"
-            "companion"
-            "center-grid";
-        padding: 15px;
-        gap: 15px;
-        justify-items: center;
-    }
-    .dash-header-area {
-        width: 100%;
-        justify-content: space-between;
-    }
-    .dash-rank-area {
-        justify-self: center;
+            "top-left top-right"
+            "companion center-grid"
+            "center-grid center-grid";
+        gap: 12px;
         align-items: center;
+        justify-items: center;
+        height: 100vh;
+        width: 100vw;
+        box-sizing: border-box;
+        overflow-y: auto;
+    }
+
+    .dash-header-area {
+        grid-area: top-left;
+        justify-self: start;
+        gap: 8px;
+    }
+
+    .game-title-header {
+        font-size: 0.85rem;
+        font-weight: 700;
+    }
+
+    .dash-rank-area {
+        grid-area: top-right;
+        justify-self: end;
+        align-items: flex-end;
+    }
+
+    .rank-display {
+        font-size: 0.85rem;
+    }
+
+    .view-ranks-btn {
+        padding: 2px 8px;
+        font-size: 0.65rem;
+    }
+
+    .player-profile-area {
+        grid-area: companion;
+        justify-self: center;
+        align-self: center;
+        gap: 2px;
+    }
+
+    .player-profile-area img {
+        width: 145px;
+        height: 175px;
+        object-fit: contain;
+    }
+
+    .player-profile-name {
+        font-size: 1.15rem;
+    }
+
+    .center-grid-area {
+        grid-area: center-grid;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .minigames-grid {
+        display: grid;
+        grid-template-columns: 1fr; /* Stacked cleanly or 2 cols if space allows */
+        gap: 10px;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .minigame-card {
+        height: 80px;
+        border-radius: 12px;
+        border-width: 2px;
+    }
+
+    /* Keep control buttons compact and positioned cleanly */
+    .controls-top-left-dash {
+        gap: 6px;
+    }
+
+    .control-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .control-btn svg {
+        width: 14px;
+        height: 14px;
     }
 }
 
