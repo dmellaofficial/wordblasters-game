@@ -10,7 +10,7 @@ const companionData = {
     emily: { name: 'EMILY', sprite: '3349-removebg-preview.png' }
 };
 
-// Instantly unlock and play audio on the very first tap or click anywhere on the browser window
+// Instantly unlock and play audio on the very first tap, click, or key press on the Welcome Screen
 document.addEventListener('pointerdown', () => {
     tryPlayAudio();
 }, { once: true });
@@ -21,11 +21,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function tryPlayAudio() {
     const audio = document.getElementById('bgm');
+    if (!audio) return;
+    
     audio.play().then(() => {
         gameState.isAudioPlaying = true;
         updateAllAudioIcons(true);
     }).catch(e => {
-        console.log("Autoplay waiting for user gesture.");
+        console.log("Autoplay waiting for initial user interaction on Welcome Screen.");
     });
 }
 
@@ -38,7 +40,7 @@ function goToSetup() {
 function selectCompanion(choice) {
     gameState.companion = choice;
     
-    // Update Dashboard Profile Area with the enlarged companion sprite on the left
+    // Update Dashboard Profile Area with the chosen companion sprite
     const profile = companionData[choice];
     document.getElementById('dash-companion-img').src = profile.sprite;
     document.getElementById('dash-companion-name').textContent = profile.name;
@@ -50,6 +52,7 @@ function selectCompanion(choice) {
 
 function toggleAudio() {
     const audio = document.getElementById('bgm');
+    if (!audio) return;
     
     if (audio.paused) {
         audio.play().then(() => {
