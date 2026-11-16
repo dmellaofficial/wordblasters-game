@@ -1,3 +1,18 @@
+// Firebase Configuration Setup
+const firebaseConfig = {
+    apiKey: "AIzaSyDS4kSp6qzVpVr-roaPoDFWfTZMtrc3ZAM",
+    authDomain: "wordblasters-game.firebaseapp.com",
+    projectId: "wordblasters-game",
+    storageBucket: "wordblasters-game.firebasestorage.app",
+    messagingSenderId: "1351916822",
+    appId: "1:1351916822:web:2ae1f02fa9b5451e314437",
+    measurementId: "G-S7WSX7H47T"
+};
+
+// Initialize Firebase & Firestore database reference
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 let gameState = {
     companion: 'jackson',
     isAudioPlaying: false,
@@ -105,10 +120,22 @@ function submitPlayerAccount() {
     gameState.playerUsername = usernameVal;
     gameState.playerEmail = emailVal;
     
-    document.getElementById('lb-current-player').textContent = `125. ${usernameVal} (You)`;
-    
-    alert(`Account linked successfully! Welcome, ${usernameVal}.`);
-    closeEmailModal();
+    // Save/Sync player account info directly to Firebase Firestore database
+    db.collection("players").add({
+        username: usernameVal,
+        email: emailVal,
+        score: 450,
+        timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(() => {
+        document.getElementById('lb-current-player').textContent = `125. ${usernameVal} (You)`;
+        alert(`Account successfully synced to Firebase, ${usernameVal}!`);
+        closeEmailModal();
+    })
+    .catch((error) => {
+        console.error("Firebase sync error:", error);
+        alert("Could not connect to Firebase database. Check your Firestore rules.");
+    });
 }
 
 function startMiniGame(gameName) {
