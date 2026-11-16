@@ -8,68 +8,31 @@
 html, body {
     margin: 0;
     padding: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     background-image: url('Heartbeats and Homework Wallpaper Transparent_20261113_182651_0000.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-}
-
-/* Landscape Orientation Lock Overlay */
-#orientation-warning {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(31, 41, 55, 0.95);
-    color: white;
-    z-index: 9999;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-}
-
-#orientation-warning svg {
-    width: 64px;
-    height: 64px;
-    margin-bottom: 20px;
-    animation: rotatePhone 2s infinite ease-in-out;
-}
-
-@keyframes rotatePhone {
-    0% { transform: rotate(0deg); }
-    50% { transform: rotate(90deg); }
-    100% { transform: rotate(0deg); }
-}
-
-@media screen and (max-height: 500px) and (orientation: portrait), 
-       screen and (max-width: 767px) and (orientation: portrait) {
-    #orientation-warning {
-        display: flex;
-    }
+    background-attachment: fixed;
 }
 
 /* Main Game Wrapper */
 .game-container {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
     position: relative;
     box-sizing: border-box;
-    overflow: hidden;
 }
 
 /* Screen States Control */
 .screen {
     display: none;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    min-height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
@@ -86,13 +49,14 @@ html, body {
     align-items: center;
     justify-content: center;
     gap: 15px;
+    padding: 40px 20px;
 }
 
 .hero-banner {
     width: 100%;
     max-width: 800px;
     height: auto;
-    max-height: 70vh;
+    max-height: 65vh;
     object-fit: contain;
 }
 
@@ -121,21 +85,24 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 15px;
+    padding: 40px 20px;
 }
 
 .setup-title {
-    font-size: 2.2rem;
+    font-size: clamp(1.8rem, 4vw, 2.2rem);
     font-weight: 900;
     color: #111827;
     letter-spacing: 1.5px;
-    margin: 0 0 10px 0;
+    margin: 0;
+    text-align: center;
     text-shadow: 0 2px 4px rgba(255, 255, 255, 0.9);
 }
 
 .companion-choices {
     display: flex;
-    gap: 80px;
+    flex-wrap: wrap;
+    gap: 40px;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -157,8 +124,8 @@ html, body {
 }
 
 .companion-card img {
-    width: 320px;
-    height: 360px;
+    width: clamp(220px, 30vw, 320px);
+    height: clamp(250px, 35vw, 360px);
     object-fit: contain;
     filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.22));
 }
@@ -175,12 +142,14 @@ html, body {
     padding: 20px 40px;
     display: none;
     grid-template-columns: 360px 1fr;
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: 60px 1fr;
     grid-template-areas: 
         "top-left top-right"
         "companion center-grid";
     align-items: center;
     justify-items: center;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 #dashboard-screen.active {
@@ -191,6 +160,9 @@ html, body {
     grid-area: top-left;
     justify-self: start;
     align-self: center;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .game-title-header {
@@ -245,8 +217,8 @@ html, body {
 }
 
 .player-profile-area img {
-    width: 310px;
-    height: 370px;
+    width: 280px;
+    height: 340px;
     object-fit: contain;
     filter: drop-shadow(0 12px 24px rgba(0,0,0,0.28));
 }
@@ -303,23 +275,26 @@ html, body {
     object-fit: contain;
 }
 
-/* Bottom Right Controls */
-.controls-bottom-right {
-    position: fixed;
-    bottom: 15px;
-    right: 20px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
+/* Top-Left Controls Groups */
+.controls-top-left {
+    position: absolute;
+    top: 20px;
+    left: 20px;
     z-index: 50;
+}
+
+.controls-top-left-dash {
+    display: flex;
+    gap: 8px;
+    align-items: center;
 }
 
 .control-btn {
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid #9ca3af;
     border-radius: 50%;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -334,9 +309,33 @@ html, body {
 }
 
 .control-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     fill: #374151;
+}
+
+/* Responsive adjustments for tablets and smaller screens */
+@media screen and (max-width: 900px) {
+    #dashboard-screen {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+        grid-template-areas: 
+            "top-left"
+            "top-right"
+            "companion"
+            "center-grid";
+        padding: 15px;
+        gap: 15px;
+        justify-items: center;
+    }
+    .dash-header-area {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .dash-rank-area {
+        justify-self: center;
+        align-items: center;
+    }
 }
 
 /* Modals */
