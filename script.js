@@ -10,10 +10,12 @@ const companionData = {
     emily: { name: 'EMILY', sprite: '3349-removebg-preview.png' }
 };
 
-// Instantly unlock and play audio on the very first tap, click, or key press on the Welcome Screen
-document.addEventListener('pointerdown', () => {
-    tryPlayAudio();
-}, { once: true });
+// Universal touch/click listeners for mobile, tablet, and PC to unlock autoplay instantly
+['pointerdown', 'touchstart', 'click'].forEach(eventType => {
+    document.addEventListener(eventType, () => {
+        tryPlayAudio();
+    }, { once: true, passive: true });
+});
 
 window.addEventListener('DOMContentLoaded', () => {
     tryPlayAudio();
@@ -27,7 +29,7 @@ function tryPlayAudio() {
         gameState.isAudioPlaying = true;
         updateAllAudioIcons(true);
     }).catch(e => {
-        console.log("Autoplay waiting for initial user interaction on Welcome Screen.");
+        console.log("Autoplay waiting for initial touch/click interaction.");
     });
 }
 
