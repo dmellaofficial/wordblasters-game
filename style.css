@@ -11,7 +11,7 @@ html, body {
     width: 100vw;
     height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow: hidden; /* Locks body scroll completely for clean screen fit */
+    overflow: hidden;
     background-image: url('Heartbeats and Homework Wallpaper Transparent_20261113_182651_0000.png');
     background-size: cover;
     background-position: center;
@@ -43,7 +43,7 @@ html, body {
     display: flex;
 }
 
-/* Welcome Splash Screen - Perfectly fitted without scrolling on all devices */
+/* Welcome Splash Screen */
 #welcome-screen {
     flex-direction: column;
     align-items: center;
@@ -60,7 +60,7 @@ html, body {
     width: 100%;
     max-width: 750px;
     height: auto;
-    max-height: 72vh; /* Ensures banner scales cleanly on tablets and phones without overflowing */
+    max-height: 70vh;
     object-fit: contain;
 }
 
@@ -68,8 +68,8 @@ html, body {
     background-color: #ffffff;
     color: var(--text-color);
     border: 2px solid var(--border-color);
-    padding: 1.2vh 5vw;
-    font-size: clamp(1rem, 2.2vh, 1.2rem);
+    padding: 12px 50px;
+    font-size: 1.1rem;
     font-weight: bold;
     border-radius: 12px;
     cursor: pointer;
@@ -82,6 +82,21 @@ html, body {
     border-color: var(--primary);
     color: var(--primary);
     transform: translateY(-2px);
+}
+
+/* Specific Phone Viewport Fixes (Ensures Banner & ENTER Button fit perfectly without clipping) */
+@media screen and (max-width: 768px) {
+    #welcome-screen {
+        gap: 10px;
+        padding: 10px;
+    }
+    .hero-banner {
+        max-height: 58vh; /* Leaves plenty of room for the button on mobile phones in landscape/portrait */
+    }
+    .enter-btn {
+        padding: 10px 40px;
+        font-size: 1rem;
+    }
 }
 
 /* Companion Selection Screen */
