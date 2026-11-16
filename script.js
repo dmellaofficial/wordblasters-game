@@ -119,3 +119,17 @@ function submitPlayerAccount() {
 function startMiniGame(gameName) {
     alert(`Loading mini-game: ${gameName.toUpperCase()}! Ready to test your focus, Dia.`);
 }
+
+// --- Welcome Screen Toggle Action ---
+document.getElementById('welcomeToggle').addEventListener('change', function(e) {
+  if (this.checked) {
+    // Hide the Game Mode Selection Dashboard
+    document.getElementById('gameModeDashboard').style.display = 'none';
+    
+    // Show your Welcome Screen element
+    document.getElementById('welcomeScreen').style.display = 'block';
+    
+    // Reset the toggle switch
+    this.checked = false;
+  }
+});
