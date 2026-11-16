@@ -205,13 +205,11 @@ html, body {
         font-size: 1.1rem !important;
     }
     .minigames-grid {
-        gap: 10px !important;
+        gap: 12px !important;
         max-width: 520px !important;
     }
     .minigame-card {
         height: 85px !important;
-        border-radius: 12px !important;
-        border-width: 2px !important;
     }
     .control-btn {
         width: 34px !important;
@@ -297,7 +295,7 @@ html, body {
 
     .minigames-grid {
         display: grid;
-        grid-template-columns: 1fr; /* Stacked cleanly or 2 cols if space allows */
+        grid-template-columns: 1fr;
         gap: 10px;
         width: 100%;
         max-width: 280px;
@@ -305,11 +303,8 @@ html, body {
 
     .minigame-card {
         height: 80px;
-        border-radius: 12px;
-        border-width: 2px;
     }
 
-    /* Keep control buttons compact and positioned cleanly */
     .controls-top-left-dash {
         gap: 6px;
     }
@@ -439,30 +434,32 @@ html, body {
     max-width: 640px;
 }
 
+/* Removed box borders, background fills, and shadows to leave just the clean images */
 .minigame-card {
-    background: rgba(255, 255, 255, 0.95);
-    border: 3px solid #d1d5db;
-    border-radius: 16px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
     height: 135px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    box-shadow: none;
     transition: all 0.25s ease;
-    padding: 6px;
+    padding: 0;
     box-sizing: border-box;
 }
 
 .minigame-card:hover {
     transform: translateY(-4px);
-    border-color: var(--primary);
+    border-color: transparent;
 }
 
 .minigame-card img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.18));
 }
 
 /* Top-Left Controls Groups */
