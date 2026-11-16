@@ -148,37 +148,81 @@ html, body {
    MOBILE LANDSCAPE OPTIMIZATIONS (Phones turned sideways)
    ======================================================== */
 @media screen and (max-height: 500px) {
-    /* Welcome Screen Landscape Adjustments */
+    /* Leave Welcome Screen untouched since you like it */
     #welcome-screen {
-        gap: 6px !important;
-        padding: 5px 10px !important;
-    }
-    .hero-banner {
-        max-height: 52vh !important;
-    }
-    .enter-btn {
-        padding: 8px 30px !important;
-        font-size: 0.95rem !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2vh;
+        padding: 2vh 20px;
     }
 
-    /* Choose Your Companion Landscape Adjustments */
+    /* Choose Your Companion Landscape Adjustments (Nicely proportioned & upsized) */
     #setup-screen {
-        gap: 8px !important;
+        gap: 6px !important;
         padding: 10px !important;
+        justify-content: center !important;
     }
     .setup-title {
-        font-size: 1.25rem !important;
+        font-size: 1.35rem !important;
         letter-spacing: 1px !important;
+        margin-bottom: 0 !important;
     }
     .companion-choices {
-        gap: 30px !important;
+        gap: 40px !important;
     }
     .companion-card img {
-        width: 120px !important;
-        height: 140px !important;
+        width: 135px !important;
+        height: 160px !important;
     }
     .companion-name {
-        font-size: 1.05rem !important;
+        font-size: 1rem !important;
+    }
+
+    /* Game Mode Selection Dashboard Landscape Adjustments */
+    #dashboard-screen {
+        padding: 10px 20px !important;
+        grid-template-columns: 240px 1fr !important;
+        grid-template-rows: 45px 1fr !important;
+        grid-template-areas: 
+            "top-left top-right"
+            "companion center-grid" !important;
+        gap: 8px !important;
+        align-items: center !important;
+    }
+    .game-title-header {
+        font-size: 0.95rem !important;
+    }
+    .rank-display {
+        font-size: 0.85rem !important;
+    }
+    .view-ranks-btn {
+        padding: 2px 8px !important;
+        font-size: 0.65rem !important;
+    }
+    .player-profile-area img {
+        width: 130px !important;
+        height: 155px !important;
+    }
+    .player-profile-name {
+        font-size: 1.1rem !important;
+    }
+    .minigames-grid {
+        gap: 10px !important;
+        max-width: 520px !important;
+    }
+    .minigame-card {
+        height: 85px !important;
+        border-radius: 12px !important;
+        border-width: 2px !important;
+    }
+    .control-btn {
+        width: 34px !important;
+        height: 34px !important;
+    }
+    .control-btn svg {
+        width: 15px !important;
+        height: 15px !important;
     }
 }
 
@@ -206,7 +250,7 @@ html, body {
     }
 }
 
-/* Dashboard Grid Layout */
+/* Dashboard Grid Layout (Default PC / Large screens) */
 #dashboard-screen {
     padding: 20px 40px;
     display: none;
