@@ -17,6 +17,7 @@ document.addEventListener('pointerdown', () => {
 
 window.addEventListener('DOMContentLoaded', () => {
     tryPlayAudio();
+    initExitButton();
 });
 
 function tryPlayAudio() {
@@ -48,6 +49,18 @@ function selectCompanion(choice) {
     // Transition to Dashboard screen
     document.getElementById('setup-screen').classList.remove('active');
     document.getElementById('dashboard-screen').classList.add('active');
+}
+
+// --- Exit Toggle Button Functionality ---
+function initExitButton() {
+    const exitBtn = document.getElementById('exit-to-welcome-btn');
+    if (exitBtn) {
+        exitBtn.addEventListener('click', () => {
+            // Hide Dashboard and return to Welcome Screen safely
+            document.getElementById('dashboard-screen').classList.remove('active');
+            document.getElementById('welcome-screen').classList.add('active');
+        });
+    }
 }
 
 function toggleAudio() {
