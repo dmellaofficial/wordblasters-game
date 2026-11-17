@@ -127,6 +127,19 @@
         </div>
     </div>
 
+    <!-- Exit Confirmation Modal Popup -->
+    <div id="exit-modal" class="modal-overlay">
+        <div class="modal-content" style="text-align: center; gap: 20px; width: 340px;">
+            <div class="modal-header" style="justify-content: center; border-bottom: none; padding-bottom: 0;">
+                <h3 style="font-size: 1.1rem; color: #111827; text-align: center; line-height: 1.4;">You're about to exit the game. Are you sure?</h3>
+            </div>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button onclick="confirmExit()" style="background-color: #ef4444; color: white; border: none; padding: 10px 25px; font-weight: bold; border-radius: 8px; cursor: pointer;">Yes</button>
+                <button onclick="closeExitModal()" style="background-color: #e5e7eb; color: #374151; border: none; padding: 10px 25px; font-weight: bold; border-radius: 8px; cursor: pointer;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Background Audio Element configured with autoplay -->
     <audio id="bgm" src="SLOWER2019-01-02_-_8_Bit_Menu_-_David_Renda_-_FesliyanStudios.com.mp3" loop autoplay preload="auto"></audio>
 
