@@ -335,6 +335,7 @@ html, body {
     width: 100vw;
     box-sizing: border-box;
     overflow-y: auto;
+    position: relative; /* Crucial: anchors absolute child elements to the dashboard screen safely */
 }
 
 #dashboard-screen.active {
@@ -399,7 +400,6 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 5px;
-    position: relative;
 }
 
 .player-profile-area img {
@@ -417,12 +417,12 @@ html, body {
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
 }
 
-/* --- Exit Toggle Button Styles (Positioned on lower left, below companion) --- */
+/* --- Exit Toggle Button Styles (Safely locked to lower-left corner) --- */
 #exit-to-welcome-btn {
     position: absolute;
-    bottom: -15px;
-    left: -10px;
-    z-index: 100;
+    bottom: 25px;
+    left: 25px;
+    z-index: 200;
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid #9ca3af;
     border-radius: 50%;
