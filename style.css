@@ -399,6 +399,7 @@ html, body {
     flex-direction: column;
     align-items: center;
     gap: 5px;
+    position: relative; /* Allows positioning relative to companion block */
 }
 
 .player-profile-area img {
@@ -414,6 +415,42 @@ html, body {
     color: #111827;
     letter-spacing: 1px;
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+/* --- Exit Toggle Button Styles (Positioned on lower left, below companion) --- */
+#exit-to-welcome-btn {
+    position: absolute;
+    bottom: -15px;
+    left: -10px;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #9ca3af;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+#exit-to-welcome-btn:hover {
+    transform: scale(1.08);
+    border-color: var(--primary);
+    background-color: #ffffff;
+}
+
+#exit-to-welcome-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: #374151;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .center-grid-area {
