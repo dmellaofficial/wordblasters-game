@@ -10,12 +10,10 @@ const companionData = {
     emily: { name: 'EMILY', sprite: '3349-removebg-preview.png' }
 };
 
-// Universal touch/click listeners for mobile, tablet, and PC to unlock autoplay instantly
-['pointerdown', 'touchstart', 'click'].forEach(eventType => {
-    document.addEventListener(eventType, () => {
-        tryPlayAudio();
-    }, { once: true, passive: true });
-});
+// Instantly unlock and play audio on the very first tap, click, or key press on the Welcome Screen
+document.addEventListener('pointerdown', () => {
+    tryPlayAudio();
+}, { once: true });
 
 window.addEventListener('DOMContentLoaded', () => {
     tryPlayAudio();
@@ -29,7 +27,7 @@ function tryPlayAudio() {
         gameState.isAudioPlaying = true;
         updateAllAudioIcons(true);
     }).catch(e => {
-        console.log("Autoplay waiting for initial touch/click interaction.");
+        console.log("Autoplay waiting for initial user interaction on Welcome Screen.");
     });
 }
 
@@ -119,17 +117,3 @@ function submitPlayerAccount() {
 function startMiniGame(gameName) {
     alert(`Loading mini-game: ${gameName.toUpperCase()}! Ready to test your focus, Dia.`);
 }
-
-// --- Welcome Screen Toggle Action ---
-document.getElementById('welcomeToggle').addEventListener('change', function(e) {
-  if (this.checked) {
-    // Hide the Game Mode Selection Dashboard
-    document.getElementById('gameModeDashboard').style.display = 'none';
-    
-    // Show your Welcome Screen element
-    document.getElementById('welcomeScreen').style.display = 'block';
-    
-    // Reset the toggle switch
-    this.checked = false;
-  }
-});
