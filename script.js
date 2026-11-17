@@ -51,16 +51,24 @@ function selectCompanion(choice) {
     document.getElementById('dashboard-screen').classList.add('active');
 }
 
-// --- Exit Toggle Button Functionality ---
+// --- Exit Toggle Button & Confirmation Modal Functionality ---
 function initExitButton() {
     const exitBtn = document.getElementById('exit-to-welcome-btn');
     if (exitBtn) {
         exitBtn.addEventListener('click', () => {
-            // Hide Dashboard and return to Welcome Screen safely
-            document.getElementById('dashboard-screen').classList.remove('active');
-            document.getElementById('welcome-screen').classList.add('active');
+            document.getElementById('exit-modal').style.display = 'flex';
         });
     }
+}
+
+function closeExitModal() {
+    document.getElementById('exit-modal').style.display = 'none';
+}
+
+function confirmExit() {
+    closeExitModal();
+    document.getElementById('dashboard-screen').classList.remove('active');
+    document.getElementById('welcome-screen').classList.add('active');
 }
 
 function toggleAudio() {
