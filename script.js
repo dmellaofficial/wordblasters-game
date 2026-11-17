@@ -1,6 +1,6 @@
 let gameState = {
     companion: 'jackson',
-    isAudioPlaying: false,
+    isAudioPlaying: true,
     playerUsername: 'Dia',
     playerEmail: ''
 };
