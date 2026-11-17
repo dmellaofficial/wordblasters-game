@@ -335,7 +335,7 @@ html, body {
     width: 100vw;
     box-sizing: border-box;
     overflow-y: auto;
-    position: relative; /* Crucial: anchors absolute child elements to the dashboard screen safely */
+    position: relative;
 }
 
 #dashboard-screen.active {
@@ -417,12 +417,12 @@ html, body {
     text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
 }
 
-/* --- Exit Toggle Button Styles (Safely locked to lower-left corner) --- */
+/* --- Exit Toggle Button Styles (Fixed to viewport for all devices) --- */
 #exit-to-welcome-btn {
-    position: absolute;
+    position: fixed;
     bottom: 25px;
     left: 25px;
-    z-index: 200;
+    z-index: 99999;
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid #9ca3af;
     border-radius: 50%;
