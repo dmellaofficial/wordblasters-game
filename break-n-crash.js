@@ -256,16 +256,34 @@ const BreakNCrashGame = {
         { correct: "ZOOLOGY", misspelled: "ZOOLOOGY" }
     ],
 
+    lockZoom() {
+        let meta = document.querySelector('meta[name="viewport"]');
+        if (!meta) {
+            meta = document.createElement('meta');
+            meta.name = 'viewport';
+            document.head.appendChild(meta);
+        }
+        meta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+    },
+
+    unlockZoom() {
+        let meta = document.querySelector('meta[name="viewport"]');
+        if (meta) {
+            meta.setAttribute('content', 'width=device-width, initial-scale=1.0');
+        }
+    },
+
     init() {
         if (document.getElementById('break-n-crash-container')) return;
 
         const gameContainer = document.createElement('div');
         gameContainer.id = 'break-n-crash-container';
+        // touch-action: none completely disables pinch/double-tap zooming inside the game
         gameContainer.style.cssText = `
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #000000; z-index: 9999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #fff; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
-            touch-action: manipulation; overflow: hidden;
+            touch-action: none; overflow: hidden;
         `;
 
         gameContainer.innerHTML = `
@@ -278,7 +296,7 @@ const BreakNCrashGame = {
                     <button id="bnc-exit-btn" style="padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Exit</button>
                 </div>
             </div>
-            <div id="bnc-playfield" style="position: relative; width: 100%; height: calc(100vh - 140px); overflow: hidden; background: #000000; touch-action: manipulation;">
+            <div id="bnc-playfield" style="position: relative; width: 100%; height: calc(100vh - 140px); overflow: hidden; background: #000000; touch-action: none;">
                 <div style="position: absolute; bottom: 60px; left: 50px; display: flex; align-items: flex-end; gap: 20px;">
                     <div style="font-size: 40px;">🙇‍♂️</div>
                 </div>
@@ -293,7 +311,7 @@ const BreakNCrashGame = {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.8); z-index: 10001; display: none;
             align-items: center; justify-content: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none; -webkit-user-select: none; touch-action: manipulation;
+            user-select: none; -webkit-user-select: none; touch-action: none;
         `;
         gameOverModal.innerHTML = `
             <div style="background: #fff; color: #333; padding: 35px; border-radius: 12px; width: 400px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
@@ -311,11 +329,13 @@ const BreakNCrashGame = {
         document.getElementById('bnc-play-again-btn').addEventListener('click', () => {
             gameOverModal.style.display = 'none';
             document.getElementById('break-n-crash-container').style.display = 'block';
+            this.lockZoom();
             this.startGame();
         });
 
         document.getElementById('bnc-go-exit-btn').addEventListener('click', () => {
             gameOverModal.style.display = 'none';
+            this.unlockZoom();
         });
 
         document.getElementById('bnc-exit-btn').addEventListener('click', () => this.endGameManually());
@@ -333,7 +353,7 @@ const BreakNCrashGame = {
                 position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
                 background: rgba(0,0,0,0.7); z-index: 10000; display: flex;
                 align-items: center; justify-content: center;
-                user-select: none; -webkit-user-select: none; touch-action: manipulation;
+                user-select: none; -webkit-user-select: none; touch-action: none;
             `;
             modal.innerHTML = `
                 <div style="background: #fff; color: #333; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
@@ -356,6 +376,7 @@ const BreakNCrashGame = {
             document.getElementById('bnc-start-game-btn').addEventListener('click', () => {
                 modal.style.display = 'none';
                 document.getElementById('break-n-crash-container').style.display = 'block';
+                this.lockZoom();
                 this.startGame();
                 if (onStartCallback) onStartCallback();
             });
@@ -449,7 +470,7 @@ const BreakNCrashGame = {
                 if (randomX > playfieldWidth - 260) randomX = playfieldWidth - 260;
 
                 this.spawnSingleWord(randomX);
-            }, i * 500); // 0ms for first word, 500ms for second, 1000ms for third
+            }, i * 500);
         }
     },
 
@@ -467,7 +488,7 @@ const BreakNCrashGame = {
             background: #e74c3c; color: #fff; padding: 18px 28px;
             border-radius: 35px; font-weight: 900; font-size: 24px;
             box-shadow: 0 6px 15px rgba(231,76,60,0.5); cursor: pointer;
-            z-index: 10; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+            z-index: 10; touch-action: none; -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
         `;
 
@@ -519,7 +540,7 @@ const BreakNCrashGame = {
             border-radius: 30px; font-weight: 800; font-size: 26px;
             letter-spacing: 0.5px;
             box-shadow: 0 6px 14px rgba(0,0,0,0.3); cursor: pointer;
-            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+            touch-action: none; -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
             will-change: top;
         `;
@@ -669,6 +690,7 @@ const BreakNCrashGame = {
 
     triggerGameOver() {
         this.isGameRunning = false;
+        this.unlockZoom();
         if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
         clearInterval(this.spawnInterval);
 
@@ -689,6 +711,7 @@ const BreakNCrashGame = {
 
     endGameManually() {
         this.isGameRunning = false;
+        this.unlockZoom();
         if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
         clearInterval(this.spawnInterval);
 
