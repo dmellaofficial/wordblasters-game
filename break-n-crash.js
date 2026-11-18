@@ -198,11 +198,11 @@ const BreakNCrashGame = {
         const playfield = document.getElementById('bnc-playfield');
         
         if (this.availableWords.length === 0) {
-            this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
+            this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.75);
         }
 
         const item = this.availableWords.pop();
-        const isMisspelled = Math.random() > 0.4; 
+        const isMisspelled = Math.random() > 0.3; 
         const wordText = isMisspelled ? item.misspelled : item.correct;
 
         const node = document.createElement('div');
