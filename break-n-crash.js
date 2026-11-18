@@ -145,8 +145,8 @@ const BreakNCrashGame = {
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
                         Words rain down the screen. Eliminate the <strong>misspelled words</strong> by clicking or tapping them before they hit the bottom line! 
                         <br><br>• Each misspelled word blasted: <strong>+10 points</strong>
-                        <br><br>• Letting a misspelled word hit the bottom costs <strong>1 life</strong> (3 lives total). Clicking correct words does nothing!
-                        <br><br>• Level advances automatically every 200 points, increasing fall speed continuously!
+                        <br><br>• Letting a misspelled word hit the bottom costs <strong>1 life</strong> (3 lives total).
+                        <br><br>• Speed scales sharply, and after Level 5, multiple words rain down simultaneously to test your focus!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
                         <button id="bnc-start-game-btn" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">GAME</button>
@@ -180,7 +180,10 @@ const BreakNCrashGame = {
         this.isPaused = false;
         document.getElementById('bnc-pause-btn').textContent = 'Pause';
         
-        // Remove any old pause overlay if present
+        // Hide the main dashboard exit button while playing
+        const dashExitBtn = document.getElementById('exit-to-welcome-btn');
+        if (dashExitBtn) dashExitBtn.style.display = 'none';
+
         const pauseOverlay = document.getElementById('bnc-pause-overlay');
         if (pauseOverlay) pauseOverlay.remove();
         
@@ -193,8 +196,10 @@ const BreakNCrashGame = {
         // Spawner loop
         if (this.spawnInterval) clearInterval(this.spawnInterval);
         this.spawnInterval = setInterval(() => {
-            if (this.isGameRunning && !this.isPaused) this.spawnWord();
-        }, 1600);
+            if (this.isGameRunning && !this.isPaused) {
+                this.spawnBatchOfWords();
+            }
+        }, 1800);
 
         // Main game ticker loop
         if (this.gameInterval) clearInterval(this.gameInterval);
@@ -207,7 +212,23 @@ const BreakNCrashGame = {
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
     },
 
-    spawnWord() {
+    spawnBatchOfWords() {
+        // Determine how many words to spawn based on level rules requested:
+        // Level 1-5: 1 word at a time
+        // Level 6-7: +3 extra words = 4 words
+        // Level 8-9: +3 more = 7 words, and so on every 2 levels after Level 5.
+        let spawnCount = 1;
+        if (this.level >= 6) {
+            let extraTiers = Math.floor((this.level - 6) / 2) + 1;
+            spawnCount = 1 + (extraTiers * 3);
+        }
+
+        for (let i = 0; i < spawnCount; i++) {
+            this.spawnSingleWord();
+        }
+    },
+
+    spawnSingleWord() {
         const playfield = document.getElementById('bnc-playfield');
         
         if (this.availableWords.length === 0) {
@@ -255,7 +276,8 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            speed: (2.2 + (this.level - 1) * 0.4),
+            // Much sharper, faster speed scaling so higher levels feel intense and fast
+            speed: (3.0 + (this.level - 1) * 0.75),
             isMisspelled: isMisspelled
         });
     },
@@ -293,7 +315,6 @@ const BreakNCrashGame = {
             pauseBtn.textContent = 'Resume';
             pauseBtn.style.background = '#27ae60';
             
-            // Hide all active falling words visually and show a heavy cover overlay to prevent cheating/examining
             this.activeWords.forEach(w => w.element.style.visibility = 'hidden');
 
             let pauseOverlay = document.getElementById('bnc-pause-overlay');
@@ -315,7 +336,6 @@ const BreakNCrashGame = {
             pauseBtn.textContent = 'Pause';
             pauseBtn.style.background = '#f39c12';
             
-            // Restore visibility of falling words
             this.activeWords.forEach(w => w.element.style.visibility = 'visible');
 
             const pauseOverlay = document.getElementById('bnc-pause-overlay');
@@ -357,6 +377,10 @@ const BreakNCrashGame = {
         clearInterval(this.gameInterval);
         clearInterval(this.spawnInterval);
 
+        // Restore dashboard exit button visibility when leaving game
+        const dashExitBtn = document.getElementById('exit-to-welcome-btn');
+        if (dashExitBtn) dashExitBtn.style.display = 'block';
+
         const playfield = document.getElementById('bnc-playfield');
         if (playfield) {
             playfield.querySelectorAll('.bnc-word-node').forEach(el => el.remove());
@@ -373,6 +397,10 @@ const BreakNCrashGame = {
         this.isGameRunning = false;
         clearInterval(this.gameInterval);
         clearInterval(this.spawnInterval);
+
+        // Restore dashboard exit button visibility when leaving game
+        const dashExitBtn = document.getElementById('exit-to-welcome-btn');
+        if (dashExitBtn) dashExitBtn.style.display = 'block';
 
         const playfield = document.getElementById('bnc-playfield');
         if (playfield) {
