@@ -10,9 +10,11 @@ const BreakNCrashGame = {
     spawnInterval: null,
     activeWords: [],
     isGameRunning: false,
+    isPaused: false,
     availableWords: [],
+    usedWordsHistory: [],
 
-    // Comprehensive dictionary pair pool to prevent repetition
+    // Comprehensive dictionary pair pool
     masterWordPool: [
         { correct: "COMPLETION", misspelled: "COMPLETSHON" },
         { correct: "CONGRATULATIONS", misspelled: "CONGRADULATION" },
@@ -59,7 +61,6 @@ const BreakNCrashGame = {
         { correct: "WONDERFUL", misspelled: "WONDEFUL" }
     ],
 
-    // Initialize UI container & modals
     init() {
         if (document.getElementById('break-n-crash-container')) return;
 
@@ -73,10 +74,14 @@ const BreakNCrashGame = {
         `;
 
         gameContainer.innerHTML = `
-            <div id="bnc-hud" style="display: flex; justify-content: space-between; padding: 20px 40px; font-size: 20px; font-weight: bold; background: rgba(0,0,0,0.4);">
+            <div id="bnc-hud" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; font-size: 20px; font-weight: bold; background: rgba(0,0,0,0.4);">
                 <div id="bnc-lives">LIFE: ❤️❤️❤️</div>
                 <div id="bnc-score">SCORE: 0</div>
                 <div id="bnc-level">LEVEL: 1</div>
+                <div style="display: flex; gap: 10px;">
+                    <button id="bnc-pause-btn" style="padding: 8px 16px; background: #f39c12; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Pause</button>
+                    <button id="bnc-exit-btn" style="padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Exit</button>
+                </div>
             </div>
             <div id="bnc-playfield" style="position: relative; width: 100%; height: calc(100vh - 140px); overflow: hidden;">
                 <div style="position: absolute; bottom: 60px; left: 50px; display: flex; align-items: flex-end; gap: 20px;">
@@ -84,7 +89,6 @@ const BreakNCrashGame = {
                 </div>
                 <div style="position: absolute; bottom: 50px; left: 0; width: 100%; border-bottom: 4px solid #fff;"></div>
             </div>
-            <button id="bnc-exit-btn" style="position: absolute; bottom: 10px; right: 20px; padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Exit Game</button>
         `;
         document.body.appendChild(gameContainer);
 
@@ -109,7 +113,7 @@ const BreakNCrashGame = {
         `;
         document.body.appendChild(gameOverModal);
 
-        // Event listeners for Game Over buttons
+        // Event Listeners
         document.getElementById('bnc-play-again-btn').addEventListener('click', () => {
             gameOverModal.style.display = 'none';
             document.getElementById('break-n-crash-container').style.display = 'block';
@@ -121,9 +125,10 @@ const BreakNCrashGame = {
         });
 
         document.getElementById('bnc-exit-btn').addEventListener('click', () => this.endGameManually());
+        
+        document.getElementById('bnc-pause-btn').addEventListener('click', () => this.togglePause());
     },
 
-    // Show instruction modal
     showInstructions(onStartCallback) {
         this.init();
         
@@ -142,7 +147,7 @@ const BreakNCrashGame = {
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
                         Words rain down the screen. Eliminate the <strong>misspelled words</strong> by clicking or tapping them before they hit the bottom line! 
                         <br><br>• Each misspelled word blasted: <strong>+10 points</strong>
-                        <br><br>• Clicking a correct word or letting a misspelled word hit the bottom costs <strong>1 life</strong> (3 lives total).
+                        <br><br>• Letting a misspelled word hit the bottom costs <strong>1 life</strong> (3 lives total). Clicking correct words does nothing!
                         <br><br>• Level advances automatically every 200 points, increasing fall speed continuously!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
@@ -174,35 +179,42 @@ const BreakNCrashGame = {
         this.level = 1;
         this.activeWords = [];
         this.isGameRunning = true;
+        this.isPaused = false;
+        document.getElementById('bnc-pause-btn').textContent = 'Pause';
         
-        // Refresh and shuffle dictionary pool so words aren't repeated until the pool resets
-        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
-        
+        this.refillWordPool();
         this.updateHUD();
 
         const playfield = document.getElementById('bnc-playfield');
         playfield.querySelectorAll('.bnc-word-node').forEach(el => el.remove());
 
         // Spawner loop
+        if (this.spawnInterval) clearInterval(this.spawnInterval);
         this.spawnInterval = setInterval(() => {
-            if (this.isGameRunning) this.spawnWord();
-        }, 2000);
+            if (this.isGameRunning && !this.isPaused) this.spawnWord();
+        }, 1600);
 
         // Main game ticker loop
+        if (this.gameInterval) clearInterval(this.gameInterval);
         this.gameInterval = setInterval(() => {
-            if (this.isGameRunning) this.updateGameLoop();
+            if (this.isGameRunning && !this.isPaused) this.updateGameLoop();
         }, 30);
+    },
+
+    refillWordPool() {
+        // Fully shuffle master pool and prevent repeating recent items consecutively
+        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
     },
 
     spawnWord() {
         const playfield = document.getElementById('bnc-playfield');
         
         if (this.availableWords.length === 0) {
-            this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.75);
+            this.refillWordPool();
         }
 
         const item = this.availableWords.pop();
-        const isMisspelled = Math.random() > 0.3; 
+        const isMisspelled = Math.random() > 0.4; 
         const wordText = isMisspelled ? item.misspelled : item.correct;
 
         const node = document.createElement('div');
@@ -222,22 +234,21 @@ const BreakNCrashGame = {
 
         node.addEventListener('pointerdown', (e) => {
             e.stopPropagation();
-            if (!this.isGameRunning) return;
+            if (!this.isGameRunning || this.isPaused) return;
 
             if (isMisspelled) {
+                // Correct target hit! Blast it (+10 points)
                 this.score += 10;
                 this.createBlastEffect(node);
                 node.remove();
                 this.activeWords = this.activeWords.filter(w => w.element !== node);
                 this.level = Math.floor(this.score / 200) + 1;
+                this.updateHUD();
             } else {
-                this.loseLife();
-                node.style.background = '#e74c3c';
-                node.style.color = '#fff';
-                setTimeout(() => node.remove(), 200);
-                this.activeWords = this.activeWords.filter(w => w.element !== node);
+                // Clicking a correct word does nothing now (per your request)
+                node.style.transform = 'scale(0.95)';
+                setTimeout(() => node.style.transform = 'scale(1)', 100);
             }
-            this.updateHUD();
         });
 
         playfield.appendChild(node);
@@ -245,7 +256,8 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            speed: (1.0 + (this.level - 1) * 0.35),
+            // Snappy starting speed for Level 1 so it's not too slow
+            speed: (2.2 + (this.level - 1) * 0.4),
             isMisspelled: isMisspelled
         });
     },
@@ -271,6 +283,38 @@ const BreakNCrashGame = {
 
         if (this.lives <= 0) {
             this.triggerGameOver();
+        }
+    },
+
+    togglePause() {
+        this.isPaused = !this.isPaused;
+        const pauseBtn = document.getElementById('bnc-pause-btn');
+        const playfield = document.getElementById('bnc-playfield');
+
+        if (this.isPaused) {
+            pauseBtn.textContent = 'Resume';
+            pauseBtn.style.background = '#27ae60';
+            
+            // Show pause overlay text
+            let pauseOverlay = document.getElementById('bnc-pause-overlay');
+            if (!pauseOverlay) {
+                pauseOverlay = document.createElement('div');
+                pauseOverlay.id = 'bnc-pause-overlay';
+                pauseOverlay.style.cssText = `
+                    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                    background: rgba(0,0,0,0.5); display: flex; align-items: center;
+                    justify-content: center; font-size: 36px; font-weight: bold; color: #fff; z-index: 100;
+                `;
+                pauseOverlay.textContent = 'GAME PAUSED';
+                playfield.appendChild(pauseOverlay);
+            } else {
+                pauseOverlay.style.display = 'flex';
+            }
+        } else {
+            pauseBtn.textContent = 'Pause';
+            pauseBtn.style.background = '#f39c12';
+            const pauseOverlay = document.getElementById('bnc-pause-overlay');
+            if (pauseOverlay) pauseOverlay.style.display = 'none';
         }
     },
 
@@ -311,11 +355,11 @@ const BreakNCrashGame = {
         const playfield = document.getElementById('bnc-playfield');
         if (playfield) {
             playfield.querySelectorAll('.bnc-word-node').forEach(el => el.remove());
+            const pauseOverlay = document.getElementById('bnc-pause-overlay');
+            if (pauseOverlay) pauseOverlay.remove();
         }
 
         document.getElementById('break-n-crash-container').style.display = 'none';
-
-        // Reflect final score and show Game Over dialog box
         document.getElementById('bnc-final-score').textContent = this.score;
         document.getElementById('bnc-game-over-modal').style.display = 'flex';
     },
@@ -328,6 +372,8 @@ const BreakNCrashGame = {
         const playfield = document.getElementById('bnc-playfield');
         if (playfield) {
             playfield.querySelectorAll('.bnc-word-node').forEach(el => el.remove());
+            const pauseOverlay = document.getElementById('bnc-pause-overlay');
+            if (pauseOverlay) pauseOverlay.remove();
         }
 
         document.getElementById('break-n-crash-container').style.display = 'none';
