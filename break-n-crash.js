@@ -13,7 +13,7 @@ const BreakNCrashGame = {
     isPaused: false,
     availableWords: [],
 
-    // Massive 100+ master dictionary pair pool to prevent repetition and add challenge
+    // Massive 100+ master dictionary pair pool to prevent repetition
     masterWordPool: [
         { correct: "COMPLETION", misspelled: "COMPLETSHON" },
         { correct: "CONGRATULATIONS", misspelled: "CONGRADULATION" },
@@ -85,7 +85,6 @@ const BreakNCrashGame = {
         { correct: "EXAGGERATE", misspelled: "EXAGGERET" },
         { correct: "EXCEED", misspelled: "EXCEDE" },
         { correct: "EXISTENCE", misspelled: "EXISTANCE" },
-        { correct: "EXPERIENCE", misspelled: "EXPERIENCE" },
         { correct: "EXTREME", misspelled: "EXTREEM" },
         { correct: "FAVORITE", misspelled: "FAVOURITE" },
         { correct: "FIERCE", misspelled: "FEIRCE" },
@@ -114,7 +113,7 @@ const BreakNCrashGame = {
         { correct: "LABORATORY", misspelled: "LABRATORY" },
         { correct: "LEGITIMATE", misspelled: "LEJITIMATE" },
         { correct: "LENGTH", misspelled: "LENTH" },
-        { correct: "LIBRARY", lib: "LIBARY" },
+        { correct: "LIBRARY", misspelled: "LIBARY" },
         { correct: "LICENSE", misspelled: "LICENCE" },
         { correct: "LIGHTNING", misspelled: "LIGHTING" },
         { correct: "LONELINESS", misspelled: "LONLINESS" },
@@ -130,13 +129,11 @@ const BreakNCrashGame = {
         { correct: "MUTUAL", misspelled: "MUTCHUAL" },
         { correct: "MYSTERIOUS", misspelled: "MYSTERIUS" },
         { correct: "NATURAL", misspelled: "NATRUAL" },
-        { correct: "NECESSARY", misspelled: "NECESSARY" },
         { correct: "NEIGHBOR", misspelled: "NIEGHBOR" },
         { correct: "NEITHER", misspelled: "NIETHER" },
         { correct: "NINETEEN", misspelled: "NINETIEN" },
         { correct: "NOTICEABLE", misspelled: "NOTICABLE" },
         { correct: "OCCASION", misspelled: "OCASION" },
-        { correct: "OCCURRED", misspelled: "OCCURED" },
         { correct: "OFFICIAL", misspelled: "OFICIAL" },
         { correct: "OMISSION", misspelled: "OMISSION" },
         { correct: "OPTIMISTIC", misspelled: "OPTIMISTIK" },
@@ -180,7 +177,6 @@ const BreakNCrashGame = {
         { correct: "QUARREL", misspelled: "QUARREL" },
         { correct: "QUESTION", misspelled: "QUESTON" },
         { correct: "RECEIPT", misspelled: "RECIEPT" },
-        { correct: "RECEIVE", misspelled: "RECEIVE" },
         { correct: "RECOGNITION", misspelled: "RECOGNITON" },
         { correct: "RECOMMEND", misspelled: "RECOMMEND" },
         { correct: "REFERENCE", misspelled: "REFERANCE" },
@@ -191,12 +187,10 @@ const BreakNCrashGame = {
         { correct: "REPETITION", misspelled: "REPETTION" },
         { correct: "RESPECTIVELY", misspelled: "RESPECTIVLY" },
         { correct: "RHYTHM", misspelled: "RYTHM" },
-        { correct: "SCHEDULE", misspelled: "SCHEDULE" },
         { correct: "SCIENCE", misspelled: "SCINECE" },
         { correct: "SECRETARY", misspelled: "SECRETRY" },
         { correct: "SEIZE", misspelled: "SIECE" },
         { correct: "SENSIBLE", misspelled: "SENSABLE" },
-        { correct: "SEPARATE", misspelled: "SEPARATE" },
         { correct: "SERGEANT", misspelled: "SARGEANT" },
         { correct: "SEVERAL", misspelled: "SEVRAL" },
         { correct: "SHINING", misspelled: "SHINNING" },
@@ -215,7 +209,6 @@ const BreakNCrashGame = {
         { correct: "SUBSEQUENT", misspelled: "SUBSQUENT" },
         { correct: "SUBTLE", misspelled: "SUTLE" },
         { correct: "SUCCESS", misspelled: "SUCCES" },
-        { correct: "SUCCESSFUL", misspelled: "SUCCESSFUL" },
         { correct: "SUFFICIENT", misspelled: "SUFFICENT" },
         { correct: "SUMMARY", misspelled: "SUMMERY" },
         { correct: "SUPERSEDE", misspelled: "SUPERSEDE" },
@@ -224,7 +217,6 @@ const BreakNCrashGame = {
         { correct: "SYMMETRY", misspelled: "SIMMETRY" },
         { correct: "TECHNIQUE", misspelled: "TEKNIQUE" },
         { correct: "TEMPERAMENT", misspelled: "TEMPERMENT" },
-        { correct: "TEMPERATURE", misspelled: "TEMPRATURE" },
         { correct: "THOROUGH", misspelled: "THORROU" },
         { correct: "THRESHOLD", misspelled: "THRESHOLD" },
         { correct: "TOMORROW", misspelled: "TOMORROW" },
@@ -241,7 +233,6 @@ const BreakNCrashGame = {
         { correct: "UNFORTUNATELY", misspelled: "UNFORTUNATLY" },
         { correct: "UNUSUAL", misspelled: "UNUSAL" },
         { correct: "USEFUL", misspelled: "USEFULL" },
-        { correct: "VACUUM", misspelled: "VACUUM" },
         { correct: "VALUABLE", misspelled: "VALUABLE" },
         { correct: "VEGETABLE", misspelled: "VEGITABLE" },
         { correct: "VENGEANCE", misspelled: "VENGENCE" },
@@ -255,7 +246,6 @@ const BreakNCrashGame = {
         { correct: "WHOLE", misspelled: "WHOLL" },
         { correct: "WITHHOLD", misspelled: "WITHOLD" },
         { correct: "WITNESS", misspelled: "WITNES" },
-        { correct: "WONDERFUL", misspelled: "WONDERFUL" },
         { correct: "WRITING", misspelled: "WRITTING" },
         { correct: "YACHT", misspelled: "YATHT" },
         { correct: "YIELD", misspelled: "YEILD" },
@@ -348,7 +338,7 @@ const BreakNCrashGame = {
                         Words rain down the screen. Eliminate the <strong>misspelled words</strong> by clicking or tapping them before they hit the bottom line! 
                         <br><br>• Each misspelled word blasted: <strong>+10 points</strong>
                         <br><br>• Letting a misspelled word hit the bottom costs <strong>1 life</strong> (3 lives total).
-                        <br><br>• Speed scales intensely, and after Level 5, multiple words rain down simultaneously to create real chaos!
+                        <br><br>• Speed scales intensely, words are large and clear, and after Level 5, multiple words rain down simultaneously!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
                         <button id="bnc-start-game-btn" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">GAME</button>
@@ -394,13 +384,13 @@ const BreakNCrashGame = {
         const playfield = document.getElementById('bnc-playfield');
         playfield.querySelectorAll('.bnc-word-node').forEach(el => el.remove());
 
-        // Spawner loop
+        // Spawner loop (faster interval)
         if (this.spawnInterval) clearInterval(this.spawnInterval);
         this.spawnInterval = setInterval(() => {
             if (this.isGameRunning && !this.isPaused) {
                 this.spawnBatchOfWords();
             }
-        }, 1400);
+        }, 1100);
 
         // Main game ticker loop
         if (this.gameInterval) clearInterval(this.gameInterval);
@@ -410,14 +400,11 @@ const BreakNCrashGame = {
     },
 
     refillWordPool() {
-        // Shuffle the massive pool thoroughly so words never repeat early
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
     },
 
     spawnBatchOfWords() {
-        // Level 1-5: 1 word at a time
-        // Level 6-7: +3 extra = 4 words
-        // Level 8-9: +3 more = 7 words, and so on every 2 levels after Level 5.
+        // Guaranteed word multiplication starting at Level 6 onwards (+3 extra words per 2 levels)
         let spawnCount = 1;
         if (this.level >= 6) {
             let extraTiers = Math.floor((this.level - 6) / 2) + 1;
@@ -444,14 +431,16 @@ const BreakNCrashGame = {
         node.className = 'bnc-word-node';
         node.textContent = wordText;
 
-        const maxX = playfield.clientWidth - 160;
+        const maxX = playfield.clientWidth - 200;
         const randomX = Math.max(20, Math.floor(Math.random() * maxX));
 
+        // Larger, bolder text styling for easy readability
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
-            background: #fff; color: #2c3e50; padding: 6px 12px;
-            border-radius: 20px; font-weight: bold; font-size: 14px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1); cursor: pointer;
+            background: #fff; color: #1e293b; padding: 12px 20px;
+            border-radius: 24px; font-weight: 800; font-size: 20px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2); cursor: pointer;
             transition: transform 0.1s;
         `;
 
@@ -477,8 +466,8 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            // Drastically increased base speed and level scaling factor for high-speed action
-            speed: (4.5 + (this.level - 1) * 1.25),
+            // Extremely fast, aggressive speed scaling for high-speed action
+            speed: (5.5 + (this.level - 1) * 1.6),
             isMisspelled: isMisspelled
         });
     },
@@ -555,7 +544,7 @@ const BreakNCrashGame = {
         spark.textContent = '💥 +10';
         spark.style.cssText = `
             position: fixed; top: ${rect.top}px; left: ${rect.left}px;
-            color: #f1c40f; font-weight: bold; font-size: 18px; z-index: 10001;
+            color: #f1c40f; font-weight: bold; font-size: 22px; z-index: 10001;
             pointer-events: none; transition: transform 0.5s, opacity 0.5s;
         `;
         document.body.appendChild(spark);
