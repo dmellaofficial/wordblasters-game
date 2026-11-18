@@ -6,13 +6,14 @@ const BreakNCrashGame = {
     score: 0,
     lives: 3,
     level: 1,
-    gameInterval: null,
+    animationFrameId: null,
     spawnInterval: null,
     activeWords: [],
     isGameRunning: false,
     isPaused: false,
     availableWords: [],
     heartSpawnedThisMilestone: false,
+    lastTime: 0,
 
     // Massive 100+ master dictionary pair pool to prevent repetition
     masterWordPool: [
@@ -260,7 +261,6 @@ const BreakNCrashGame = {
     init() {
         if (document.getElementById('break-n-crash-container')) return;
 
-        // 1. Main Game Playfield Container (Solid opaque black background)
         const gameContainer = document.createElement('div');
         gameContainer.id = 'break-n-crash-container';
         gameContainer.style.cssText = `
@@ -288,7 +288,6 @@ const BreakNCrashGame = {
         `;
         document.body.appendChild(gameContainer);
 
-        // 2. Game Over Modal Container
         const gameOverModal = document.createElement('div');
         gameOverModal.id = 'bnc-game-over-modal';
         gameOverModal.style.cssText = `
@@ -309,7 +308,6 @@ const BreakNCrashGame = {
         `;
         document.body.appendChild(gameOverModal);
 
-        // Event Listeners
         document.getElementById('bnc-play-again-btn').addEventListener('click', () => {
             gameOverModal.style.display = 'none';
             document.getElementById('break-n-crash-container').style.display = 'block';
@@ -340,10 +338,10 @@ const BreakNCrashGame = {
                 <div style="background: #fff; color: #333; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
                     <h2 style="margin-top: 0; color: #2c3e50;">Break N' Crash</h2>
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
-                        Words rain down the screen. Eliminate the <strong>misspelled words</strong> by tapping them before they hit the bottom! 
+                        Words rain down smoothly. Tap the <strong>misspelled words</strong> instantly to blast them! 
                         <br><br>• Each misspelled word blasted: <strong>+10 points</strong>
-                        <br><br>• Every 5th level (Level 5, 10, 15...), a single <strong>Bonus Heart</strong> drops. Catch it to restore a lost life—or gain <strong>+100 points</strong> if your health is already full!
-                        <br><br>• Large, touch-friendly words make tapping easy on phones!
+                        <br><br>• Every 5th level (Level 5, 10, 15...), a single <strong>Bonus Heart</strong> drops. Catch it to restore a lost life—or gain <strong>+100 points</strong> if your health is full!
+                        <br><br>• Silky smooth movement with zero eye strain!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
                         <button id="bnc-start-game-btn" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">GAME</button>
@@ -397,10 +395,10 @@ const BreakNCrashGame = {
             }
         }, 1200);
 
-        if (this.gameInterval) clearInterval(this.gameInterval);
-        this.gameInterval = setInterval(() => {
-            if (this.isGameRunning && !this.isPaused) this.updateGameLoop();
-        }, 30);
+        // Switch to requestAnimationFrame loop for fluid, buttery-smooth movement
+        if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
+        this.lastTime = performance.now();
+        this.animationFrameLoop(this.lastTime);
     },
 
     refillWordPool() {
@@ -408,12 +406,10 @@ const BreakNCrashGame = {
     },
 
     spawnGameItem() {
-        // Check if we hit a 5th level milestone and haven't spawned the heart for it yet
         if (this.level % 5 === 0 && !this.heartSpawnedThisMilestone) {
             this.heartSpawnedThisMilestone = true;
             this.spawnHeartItem();
         } else {
-            // Reset milestone flag once level changes past the milestone
             if (this.level % 5 !== 0) {
                 this.heartSpawnedThisMilestone = false;
             }
@@ -435,7 +431,7 @@ const BreakNCrashGame = {
             background: #e74c3c; color: #fff; padding: 14px 22px;
             border-radius: 30px; font-weight: 900; font-size: 20px;
             box-shadow: 0 6px 15px rgba(231,76,60,0.5); cursor: pointer;
-            z-index: 10; transition: transform 0.1s;
+            z-index: 10; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
         `;
 
         node.addEventListener('pointerdown', (e) => {
@@ -482,14 +478,15 @@ const BreakNCrashGame = {
         const maxX = playfield.clientWidth - 220;
         const randomX = Math.max(20, Math.floor(Math.random() * maxX));
 
-        // Large, clear, touch-friendly words
+        // Added touch-action: manipulation to eliminate mobile touch delay and make taps instantly responsive
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #fff; color: #1e293b; padding: 14px 22px;
             border-radius: 24px; font-weight: 800; font-size: 22px;
             letter-spacing: 0.5px;
             box-shadow: 0 6px 14px rgba(0,0,0,0.3); cursor: pointer;
-            transition: transform 0.1s;
+            touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+            will-change: transform, top;
         `;
 
         node.addEventListener('pointerdown', (e) => {
@@ -520,28 +517,36 @@ const BreakNCrashGame = {
         });
     },
 
-    updateGameLoop() {
-        const playfield = document.getElementById('bnc-playfield');
-        const floorLimit = playfield.clientHeight - 80;
+    animationFrameLoop(timestamp) {
+        if (!this.isGameRunning) return;
 
-        for (let i = this.activeWords.length - 1; i >= 0; i--) {
-            let obj = this.activeWords[i];
-            obj.y += obj.speed;
-            obj.element.style.top = obj.y + 'px';
+        if (!this.isPaused) {
+            const playfield = document.getElementById('bnc-playfield');
+            const floorLimit = playfield ? playfield.clientHeight - 80 : 500;
 
-            if (obj.y >= floorLimit) {
-                if (obj.isMisspelled && !obj.isHeart) {
-                    this.loseLife();
+            for (let i = this.activeWords.length - 1; i >= 0; i--) {
+                let obj = this.activeWords[i];
+                obj.y += obj.speed;
+                // Use transform3d for hardware acceleration, getting rid of jitter and shaking completely
+                obj.element.style.transform = `translateY(${obj.y}px)`;
+
+                if (obj.y >= floorLimit) {
+                    if (obj.isMisspelled && !obj.isHeart) {
+                        this.loseLife();
+                    }
+                    obj.element.remove();
+                    this.activeWords.splice(i, 1);
+                    this.updateHUD();
                 }
-                obj.element.remove();
-                this.activeWords.splice(i, 1);
-                this.updateHUD();
+            }
+
+            if (this.lives <= 0) {
+                this.triggerGameOver();
+                return;
             }
         }
 
-        if (this.lives <= 0) {
-            this.triggerGameOver();
-        }
+        this.animationFrameId = requestAnimationFrame((ts) => this.animationFrameLoop(ts));
     },
 
     togglePause() {
@@ -629,7 +634,7 @@ const BreakNCrashGame = {
 
     triggerGameOver() {
         this.isGameRunning = false;
-        clearInterval(this.gameInterval);
+        if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
         clearInterval(this.spawnInterval);
 
         const dashExitBtn = document.getElementById('exit-to-welcome-btn');
@@ -649,7 +654,7 @@ const BreakNCrashGame = {
 
     endGameManually() {
         this.isGameRunning = false;
-        clearInterval(this.gameInterval);
+        if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
         clearInterval(this.spawnInterval);
 
         const dashExitBtn = document.getElementById('exit-to-welcome-btn');
