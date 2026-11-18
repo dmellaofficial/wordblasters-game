@@ -12,6 +12,7 @@ const BreakNCrashGame = {
     isGameRunning: false,
     isPaused: false,
     availableWords: [],
+    heartSpawnedThisMilestone: false,
 
     // Massive 100+ master dictionary pair pool to prevent repetition
     masterWordPool: [
@@ -259,12 +260,12 @@ const BreakNCrashGame = {
     init() {
         if (document.getElementById('break-n-crash-container')) return;
 
-        // 1. Main Game Playfield Container
+        // 1. Main Game Playfield Container (Solid opaque black background)
         const gameContainer = document.createElement('div');
         gameContainer.id = 'break-n-crash-container';
         gameContainer.style.cssText = `
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: rgba(0,0,0,0.85); z-index: 9999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000000; z-index: 9999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #fff; user-select: none; overflow: hidden;
         `;
 
@@ -278,7 +279,7 @@ const BreakNCrashGame = {
                     <button id="bnc-exit-btn" style="padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Exit</button>
                 </div>
             </div>
-            <div id="bnc-playfield" style="position: relative; width: 100%; height: calc(100vh - 140px); overflow: hidden;">
+            <div id="bnc-playfield" style="position: relative; width: 100%; height: calc(100vh - 140px); overflow: hidden; background: #000000;">
                 <div style="position: absolute; bottom: 60px; left: 50px; display: flex; align-items: flex-end; gap: 20px;">
                     <div style="font-size: 40px;">🙇‍♂️</div>
                 </div>
@@ -341,7 +342,7 @@ const BreakNCrashGame = {
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
                         Words rain down the screen. Eliminate the <strong>misspelled words</strong> by tapping them before they hit the bottom! 
                         <br><br>• Each misspelled word blasted: <strong>+10 points</strong>
-                        <br><br>• Every 5th level (Level 5, 10, etc.), a <strong>Bonus Heart</strong> drops! Catch it to restore a lost life—or gain <strong>+100 points</strong> if your health is already full!
+                        <br><br>• Every 5th level (Level 5, 10, 15...), a single <strong>Bonus Heart</strong> drops. Catch it to restore a lost life—or gain <strong>+100 points</strong> if your health is already full!
                         <br><br>• Large, touch-friendly words make tapping easy on phones!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
@@ -374,6 +375,7 @@ const BreakNCrashGame = {
         this.activeWords = [];
         this.isGameRunning = true;
         this.isPaused = false;
+        this.heartSpawnedThisMilestone = false;
         document.getElementById('bnc-pause-btn').textContent = 'Pause';
         
         const dashExitBtn = document.getElementById('exit-to-welcome-btn');
@@ -391,9 +393,9 @@ const BreakNCrashGame = {
         if (this.spawnInterval) clearInterval(this.spawnInterval);
         this.spawnInterval = setInterval(() => {
             if (this.isGameRunning && !this.isPaused) {
-                this.spawnBatchOfWords();
+                this.spawnGameItem();
             }
-        }, 1100);
+        }, 1200);
 
         if (this.gameInterval) clearInterval(this.gameInterval);
         this.gameInterval = setInterval(() => {
@@ -405,19 +407,16 @@ const BreakNCrashGame = {
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
     },
 
-    spawnBatchOfWords() {
-        // Every 5th level (e.g. Level 5, 10, 15...), spawn a bonus Heart item alongside regular words!
-        if (this.level % 5 === 0 && !this.activeWords.some(w => w.isHeart)) {
+    spawnGameItem() {
+        // Check if we hit a 5th level milestone and haven't spawned the heart for it yet
+        if (this.level % 5 === 0 && !this.heartSpawnedThisMilestone) {
+            this.heartSpawnedThisMilestone = true;
             this.spawnHeartItem();
-        }
-
-        let spawnCount = 1;
-        if (this.level >= 6) {
-            let extraTiers = Math.floor((this.level - 6) / 2) + 1;
-            spawnCount = 1 + (extraTiers * 3);
-        }
-
-        for (let i = 0; i < spawnCount; i++) {
+        } else {
+            // Reset milestone flag once level changes past the milestone
+            if (this.level % 5 !== 0) {
+                this.heartSpawnedThisMilestone = false;
+            }
             this.spawnSingleWord();
         }
     },
@@ -431,7 +430,6 @@ const BreakNCrashGame = {
         const maxX = playfield.clientWidth - 220;
         const randomX = Math.max(20, Math.floor(Math.random() * maxX));
 
-        // Big, vibrant styling for easy tapping on mobile
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #e74c3c; color: #fff; padding: 14px 22px;
@@ -461,7 +459,7 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            speed: 3.5, // Steady falling speed for the heart
+            speed: 4.0,
             isHeart: true
         });
     },
@@ -484,13 +482,13 @@ const BreakNCrashGame = {
         const maxX = playfield.clientWidth - 220;
         const randomX = Math.max(20, Math.floor(Math.random() * maxX));
 
-        // Much larger, bolder text styling for effortless tapping on mobile phones
+        // Large, clear, touch-friendly words
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #fff; color: #1e293b; padding: 14px 22px;
             border-radius: 24px; font-weight: 800; font-size: 22px;
             letter-spacing: 0.5px;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.25); cursor: pointer;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.3); cursor: pointer;
             transition: transform 0.1s;
         `;
 
@@ -563,7 +561,7 @@ const BreakNCrashGame = {
                 pauseOverlay.id = 'bnc-pause-overlay';
                 pauseOverlay.style.cssText = `
                     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-                    background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: flex; 
+                    background: rgba(0,0,0,0.9); backdrop-filter: blur(6px); display: flex; 
                     flex-direction: column; align-items: center; justify-content: center; 
                     font-size: 36px; font-weight: bold; color: #fff; z-index: 100; gap: 10px;
                 `;
