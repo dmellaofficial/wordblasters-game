@@ -42,7 +42,7 @@ const BreakNCrashGame = {
         { correct: "GUARANTEE", misspelled: "GARANTEE" },
         { correct: "INDEPENDENCE", misspelled: "INDEPENDANCE" },
         { correct: "KNOWLEDGE", misspelled: "KNOWEDGE" },
-        { correct: "MAINTENANCE", misspelled: "MAINTAINENCE" },
+        { correct: "MAINTENANCE", misspelled: "MAINTEINANCE" },
         { correct: "MILLENNIUM", misspelled: "MILENNIUM" },
         { correct: "OCCURRED", misspelled: "OCCURED" },
         { correct: "PARLIAMENT", misspelled: "PARLLIAMENT" },
@@ -261,7 +261,6 @@ const BreakNCrashGame = {
 
         const gameContainer = document.createElement('div');
         gameContainer.id = 'break-n-crash-container';
-        // Added touch-action: manipulation and user-select: none to eliminate zoom delay and text search pop-ups
         gameContainer.style.cssText = `
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #000000; z-index: 9999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -340,10 +339,10 @@ const BreakNCrashGame = {
                 <div style="background: #fff; color: #333; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
                     <h2 style="margin-top: 0; color: #2c3e50;">Break N' Crash</h2>
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
-                        Words rain down smoothly. Tap the <strong>misspelled words</strong> instantly to blast them! 
+                        Words rain down smoothly with staggered timing. Tap the <strong>misspelled words</strong> instantly to blast them! 
                         <br><br>• Regular word blasted: <strong>+10 points</strong>
                         <br><br>• Long word (11-12+ letters) blasted: <strong>+30 points</strong> (accelerates level progression!)
-                        <br><br>• From <strong>Level 5 onwards</strong>, multiple words rain down in separated lanes so they never stack or overlap!
+                        <br><br>• From <strong>Level 5 onwards</strong>, multiple words rain down in separated lanes with staggered 0.5s intervals so they never align or stack!
                         <br><br>• Every 5th level, a single <strong>Bonus Heart</strong> drops to restore life or award +100 points!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
@@ -396,7 +395,7 @@ const BreakNCrashGame = {
             if (this.isGameRunning && !this.isPaused) {
                 this.spawnGameBatch();
             }
-        }, 1600);
+        }, 1800);
 
         if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
         this.lastTime = performance.now();
@@ -435,17 +434,22 @@ const BreakNCrashGame = {
         }
         availableLanes.sort(() => Math.random() - 0.5);
 
+        // Stagger word spawning by 0.5 seconds so they never drop at the exact same moment
         for (let i = 0; i < spawnCount; i++) {
-            let lane = availableLanes.pop() || i;
-            let minX = 20 + (lane * itemWidth);
-            let maxX_lane = minX + (itemWidth - 240);
-            if (maxX_lane < minX) maxX_lane = minX;
-            let randomX = Math.floor(minX + Math.random() * (maxX_lane - minX));
-            
-            if (randomX < 20) randomX = 20;
-            if (randomX > playfieldWidth - 260) randomX = playfieldWidth - 260;
+            setTimeout(() => {
+                if (!this.isGameRunning || this.isPaused) return;
 
-            this.spawnSingleWord(randomX);
+                let lane = availableLanes.pop() || i;
+                let minX = 20 + (lane * itemWidth);
+                let maxX_lane = minX + (itemWidth - 240);
+                if (maxX_lane < minX) maxX_lane = minX;
+                let randomX = Math.floor(minX + Math.random() * (maxX_lane - minX));
+                
+                if (randomX < 20) randomX = 20;
+                if (randomX > playfieldWidth - 260) randomX = playfieldWidth - 260;
+
+                this.spawnSingleWord(randomX);
+            }, i * 500); // 0ms for first word, 500ms for second, 1000ms for third
         }
     },
 
