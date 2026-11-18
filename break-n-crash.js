@@ -171,34 +171,34 @@ const BreakNCrashGame = {
         { correct: "PRIVILEGE", misspelled: "PRIVILAGE" },
         { correct: "PROBABLY", misspelled: "PROBABLY" },
         { correct: "PROCEDURE", misspelled: "PROCEEDURE" },
-        { correct: "PROCEED", misspelled: "PROCEED" },
-        { correct: "PROFESSOR", misspelled: "PROFESOR" },
-        { correct: "PRONUNCIATION", misspelled: "PRONUNCIATION" },
+        { correct: "PROCEED", misspelled: "PROCCEED" },
+        { correct: "PROFESSOR", misspelled: "PROFFESOR" },
+        { correct: "PRONUNCIATION", misspelled: "PRONANCIATION" },
         { correct: "PROPHECY", misspelled: "PROPHESY" },
-        { correct: "PSYCHOLOGY", misspelled: "SICHOLOGY" },
-        { correct: "PUBLICLY", misspelled: "PUBLICLY" },
+        { correct: "PSYCHOLOGY", misspelled: "PSICHOLOGY" },
+        { correct: "PUBLICLY", misspelled: "PUBLICLLY" },
         { correct: "QUANTITY", misspelled: "QUANITY" },
-        { correct: "QUARREL", misspelled: "QUARREL" },
-        { correct: "QUESTION", misspelled: "QUESTON" },
+        { correct: "QUARREL", misspelled: "QUAREEL" },
+        { correct: "QUESTION", misspelled: "QUESTONI" },
         { correct: "RECEIPT", misspelled: "RECIEPT" },
         { correct: "RECOGNITION", misspelled: "RECOGNITON" },
-        { correct: "RECOMMEND", misspelled: "RECOMMEND" },
+        { correct: "RECOMMEND", misspelled: "RECOMENND" },
         { correct: "REFERENCE", misspelled: "REFERANCE" },
         { correct: "REFERRED", misspelled: "REFERED" },
         { correct: "RELEVANT", misspelled: "RELAVANT" },
         { correct: "RELIGIOUS", misspelled: "RELIGOUS" },
-        { correct: "REMEMBRANCE", misspelled: "REMEMBRANCE" },
+        { correct: "REMEMBRANCE", misspelled: "REMEMMBRANCE" },
         { correct: "REPETITION", misspelled: "REPETTION" },
         { correct: "RESPECTIVELY", misspelled: "RESPECTIVLY" },
-        { correct: "RHYTHM", misspelled: "RYTHM" },
+        { correct: "RHYTHM", misspelled: "RYTHMH" },
         { correct: "SCIENCE", misspelled: "SCINECE" },
         { correct: "SECRETARY", misspelled: "SECRETRY" },
         { correct: "SEIZE", misspelled: "SIECE" },
-        { correct: "SENSIBLE", misspelled: "SENSABLE" },
+        { correct: "SENSIBLE", misspelled: "SENSIIBLE" },
         { correct: "SERGEANT", misspelled: "SARGEANT" },
         { correct: "SEVERAL", misspelled: "SEVRAL" },
         { correct: "SHINING", misspelled: "SHINNING" },
-        { correct: "SHOULD", misspelled: "SHOUD" },
+        { correct: "SHOULD", misspelled: "SHLOUD" },
         { correct: "SIGNIFICANT", misspelled: "SIGNIFIKANT" },
         { correct: "SIMILAR", misspelled: "SIMILLAR" },
         { correct: "SIMPLE", misspelled: "SIMPEL" },
@@ -206,55 +206,54 @@ const BreakNCrashGame = {
         { correct: "SOVEREIGN", misspelled: "SOVRAN" },
         { correct: "SPECIFIC", misspelled: "SPECIFIK" },
         { correct: "SPECIMEN", misspelled: "SPESIMEN" },
-        { correct: "STATIONARY", misspelled: "STATIONERY" },
-        { correct: "STATUE", misspelled: "STATUTE" },
+        { correct: "STATIONARY", misspelled: "STATIONNERY" },
+        { correct: "STATUE", misspelled: "STATTUTE" },
         { correct: "STRENGTH", misspelled: "STRENGHT" },
-        { correct: "STRENUOUS", misspelled: "STRENUOUS" },
+        { correct: "STRENUOUS", misspelled: "STREANUOUS" },
         { correct: "SUBSEQUENT", misspelled: "SUBSQUENT" },
         { correct: "SUBTLE", misspelled: "SUTLE" },
-        { correct: "SUCCESS", misspelled: "SUCCES" },
+        { correct: "SUCCESS", misspelled: "SUCCEES" },
         { correct: "SUFFICIENT", misspelled: "SUFFICENT" },
         { correct: "SUMMARY", misspelled: "SUMMERY" },
-        { correct: "SUPERSEDE", misspelled: "SUPERSEDE" },
-        { correct: "SUPRISE", misspelled: "SUPRISE" },
+        { correct: "SUPERSEDE", misspelled: "SUPERCEDE" },
+        { correct: "SURPRISE", misspelled: "SUPRISE" },
         { correct: "SUSCEPTIBLE", misspelled: "SUSCEPTABLE" },
         { correct: "SYMMETRY", misspelled: "SIMMETRY" },
         { correct: "TECHNIQUE", misspelled: "TEKNIQUE" },
         { correct: "TEMPERAMENT", misspelled: "TEMPERMENT" },
         { correct: "THOROUGH", misspelled: "THORROU" },
-        { correct: "THRESHOLD", misspelled: "THRESHOLD" },
-        { correct: "TOMORROW", misspelled: "TOMORROW" },
+        { correct: "THRESHOLD", misspelled: "THRESHHOLD" },
+        { correct: "TOMORROW", misspelled: "TOMMORROW" },
         { correct: "TONGUE", misspelled: "TUNG" },
         { correct: "TRAGEDY", misspelled: "TRAGIDY" },
-        { correct: "TRANSCEND", misspelled: "TRANSCEND" },
+        { correct: "TRANSCEND", misspelled: "TRUNSCEND" },
         { correct: "TRANSFER", misspelled: "TRANSFERR" },
-        { correct: "TRIUMPH", misspelled: "TRIUMPH" },
-        { correct: "TRULY", misspelled: "TRUELY" },
+        { correct: "TRIUMPH", misspelled: "TRIUMIPH" },
+        { correct: "TRULY", misspelled: "TRUULY" },
         { correct: "TWELFTH", misspelled: "TWELVETH" },
         { correct: "TYRANNY", misspelled: "TYRANY" },
         { correct: "UNCONSCIOUS", misspelled: "UNCONSCOUS" },
-        { correct: "UNDOUBTEDLY", misspelled: "UNDOUBTEDLY" },
+        { correct: "UNDOUBTEDLY", misspelled: "UNDOUBETEDLY" },
         { correct: "UNFORTUNATELY", misspelled: "UNFORTUNATLY" },
         { correct: "UNUSUAL", misspelled: "UNUSAL" },
         { correct: "USEFUL", misspelled: "USEFULL" },
-        { correct: "VACUUM", misspelled: "VACUUM" },
-        { correct: "VALUABLE", misspelled: "VALUABLE" },
+        { correct: "VALUABLE", misspelled: "VALUAEBLE" },
         { correct: "VEGETABLE", misspelled: "VEGITABLE" },
         { correct: "VENGEANCE", misspelled: "VENGENCE" },
-        { correct: "VICINITY", misspelled: "VICINITY" },
-        { correct: "VILLAIN", misspelled: "VILLIAN" },
+        { correct: "VICINITY", misspelled: "VINICITY" },
+        { correct: "VILLAIN", misspelled: "VILIIAN" },
         { correct: "VISIBLE", misspelled: "VIZIBLE" },
         { correct: "WARRANT", misspelled: "WARRENT" },
-        { correct: "WEIRD", misspelled: "WIERD" },
-        { correct: "WELFARE", misspelled: "WELFAIR" },
-        { correct: "WHETHER", misspelled: "WEATHER" },
+        { correct: "WEIRD", misspelled: "WIIRD" },
+        { correct: "WELFARE", misspelled: "WELFARR" },
+        { correct: "WHETHER", misspelled: "WIETHER" },
         { correct: "WHOLE", misspelled: "WHOLL" },
         { correct: "WITHHOLD", misspelled: "WITHOLD" },
         { correct: "WITNESS", misspelled: "WITNES" },
         { correct: "WRITING", misspelled: "WRITTING" },
         { correct: "YACHT", misspelled: "YATHT" },
         { correct: "YIELD", misspelled: "YEILD" },
-        { correct: "ZOOLOGY", misspelled: "ZOOLOGY" }
+        { correct: "ZOOLOGY", misspelled: "ZOOLOOGY" }
     ],
 
     init() {
@@ -339,9 +338,9 @@ const BreakNCrashGame = {
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
                         Words rain down smoothly. Tap the <strong>misspelled words</strong> instantly to blast them! 
                         <br><br>• Regular word blasted: <strong>+10 points</strong>
-                        <br><br>• Long word (11-12+ letters) blasted: <strong>+30 points</strong> (speeds up level progression!)
-                        <br><br>• Every 5th level, a <strong>Bonus Heart</strong> drops to restore life or award +100 points!
-                        <br><br>• Extra-large words for effortless mobile tapping!
+                        <br><br>• Long word (11-12+ letters) blasted: <strong>+30 points</strong> (accelerates level progression!)
+                        <br><br>• From <strong>Level 5 onwards</strong>, multiple words rain down simultaneously!
+                        <br><br>• Every 5th level, a single <strong>Bonus Heart</strong> drops to restore life or award +100 points!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
                         <button id="bnc-start-game-btn" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">GAME</button>
@@ -391,7 +390,7 @@ const BreakNCrashGame = {
         if (this.spawnInterval) clearInterval(this.spawnInterval);
         this.spawnInterval = setInterval(() => {
             if (this.isGameRunning && !this.isPaused) {
-                this.spawnGameItem();
+                this.spawnGameBatch();
             }
         }, 1500);
 
@@ -404,14 +403,24 @@ const BreakNCrashGame = {
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
     },
 
-    spawnGameItem() {
+    spawnGameBatch() {
+        // 1. Check if we hit a 5th level milestone and need to drop the single bonus heart
         if (this.level % 5 === 0 && !this.heartSpawnedThisMilestone) {
             this.heartSpawnedThisMilestone = true;
             this.spawnHeartItem();
-        } else {
-            if (this.level % 5 !== 0) {
-                this.heartSpawnedThisMilestone = false;
-            }
+            return;
+        } else if (this.level % 5 !== 0) {
+            this.heartSpawnedThisMilestone = false;
+        }
+
+        // 2. Determine how many words to spawn based on level
+        // Levels 1-4: 1 word at a time. Level 5+: 2 to 3 words simultaneously.
+        let spawnCount = 1;
+        if (this.level >= 5) {
+            spawnCount = (this.level >= 10) ? 3 : 2;
+        }
+
+        for (let i = 0; i < spawnCount; i++) {
             this.spawnSingleWord();
         }
     },
@@ -493,7 +502,6 @@ const BreakNCrashGame = {
             if (!this.isGameRunning || this.isPaused) return;
 
             if (isMisspelled) {
-                // Award 30 points for 11+ letter long words, 10 points for regular words
                 const ptsEarned = isLongWord ? 30 : 10;
                 this.score += ptsEarned;
                 this.createBlastEffect(node, `💥 +${ptsEarned}`);
@@ -512,7 +520,7 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            speed: (2.4 + (this.level - 1) * 1.0),
+            speed: (2.4 + (this.level - 1) * 0.9),
             isMisspelled: isMisspelled,
             isHeart: false
         });
