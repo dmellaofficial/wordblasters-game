@@ -175,7 +175,7 @@ const BreakNCrashGame = {
         this.activeWords = [];
         this.isGameRunning = true;
         
-        // Refresh and shuffle the dictionary pool so words aren't repeated until pool resets
+        // Refresh and shuffle dictionary pool so words aren't repeated until the pool resets
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
         
         this.updateHUD();
@@ -308,13 +308,11 @@ const BreakNCrashGame = {
         clearInterval(this.gameInterval);
         clearInterval(this.spawnInterval);
 
-        // Clear remaining falling words
         const playfield = document.getElementById('bnc-playfield');
         if (playfield) {
             playfield.querySelectorAll('.bnc-word-node').forEach(el => el.remove());
         }
 
-        // Hide active game view
         document.getElementById('break-n-crash-container').style.display = 'none';
 
         // Reflect final score and show Game Over dialog box
