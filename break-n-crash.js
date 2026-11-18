@@ -25,7 +25,7 @@ const BreakNCrashGame = {
         { correct: "DICTIONARY", misspelled: "DICTIOUNARY" },
         { correct: "NECESSARY", misspelled: "NECCEESARY" },
         { correct: "DEFINITELY", misspelled: "DEFINATELY" },
-        { correct: "ACCOMMODATE", misspelled: "ACOMMODATE" },
+        { correct: "ACCOMMODATE", misspelled: "ACOMMOODATE" },
         { correct: "ACHIEVEMENT", misspelled: "ACHIEVMENT" },
         { correct: "ARGUMENT", misspelled: "ARGUEMENT" },
         { correct: "BEGINNING", misspelled: "BEGINING" },
@@ -42,12 +42,12 @@ const BreakNCrashGame = {
         { correct: "GUARANTEE", misspelled: "GARANTEE" },
         { correct: "INDEPENDENCE", misspelled: "INDEPENDANCE" },
         { correct: "KNOWLEDGE", misspelled: "KNOWEDGE" },
-        { correct: "MAINTENANCE", misspelled: "MAINTANENCE" },
+        { correct: "MAINTENANCE", misspelled: "MAINTAINENCE" },
         { correct: "MILLENNIUM", misspelled: "MILENNIUM" },
         { correct: "OCCURRED", misspelled: "OCCURED" },
         { correct: "PARLIAMENT", misspelled: "PARLLIAMENT" },
         { correct: "POSSESSION", misspelled: "POSSEESSION" },
-        { correct: "PRONUNCIATION", misspelled: "PRONUNCIATION" },
+        { correct: "PRONUNCIATION", misspelled: "PRONANCIATION" },
         { correct: "QUESTIONNAIRE", misspelled: "QUESTONAIRE" },
         { correct: "RECEIVE", misspelled: "RECIEVE" },
         { correct: "RECOMMEND", misspelled: "RECOMEND" },
@@ -64,7 +64,7 @@ const BreakNCrashGame = {
         { correct: "ACCEPT", misspelled: "AXCEPT" },
         { correct: "ACCIDENTALLY", misspelled: "ACCIDENTLY" },
         { correct: "BANQUET", misspelled: "BANQET" },
-        { correct: "BARGAIN", misspelled: "BARGAIN" },
+        { correct: "BARGAIN", misspelled: "BARGAINE" },
         { correct: "BASICALLY", misspelled: "BASICALY" },
         { correct: "BREADTH", misspelled: "BREADTH" },
         { correct: "BRILLIANT", misspelled: "BRILIANT" },
@@ -88,20 +88,20 @@ const BreakNCrashGame = {
         { correct: "EXCEED", misspelled: "EXCEDE" },
         { correct: "EXISTENCE", misspelled: "EXISTANCE" },
         { correct: "EXTREME", misspelled: "EXTREEM" },
-        { correct: "FAVORITE", misspelled: "FAVOURITE" },
+        { correct: "FAVORITE", misspelled: "FAVORIATE" },
         { correct: "FIERCE", misspelled: "FEIRCE" },
         { correct: "FORFEIT", misspelled: "FORFIET" },
-        { correct: "FOURTEEN", misspelled: "FOURTEEN" },
+        { correct: "FOURTEEN", misspelled: "FOURTHEEN" },
         { correct: "FREEDOM", misspelled: "FREEDUM" },
         { correct: "FULFILL", misspelled: "FULFIL" },
         { correct: "GENERALLY", misspelled: "GENERALY" },
-        { correct: "GLAMOROUS", misspelled: "GLAMOURUS" },
+        { correct: "GLAMOROUS", misspelled: "GLANOURUS" },
         { correct: "GRADUALLY", misspelled: "GRADUALY" },
-        { correct: "GRATEFUL", misspelled: "GREATFUL" },
+        { correct: "GRATEFUL", misspelled: "GREATEFUL" },
         { correct: "GUARANTEE", misspelled: "GURANTEE" },
         { correct: "HARASS", misspelled: "HARRASS" },
         { correct: "HEIGHT", misspelled: "HIETH" },
-        { correct: "HUMOROUS", misspelled: "HUMOROUS" },
+        { correct: "HUMOROUS", misspelled: "HUMORROUS" },
         { correct: "IGNORANCE", misspelled: "IGNORANCE" },
         { correct: "IMMEDIATE", misspelled: "IMEDIATE" },
         { correct: "INCIDENTALLY", misspelled: "INCIDENTLY" },
@@ -119,11 +119,11 @@ const BreakNCrashGame = {
         { correct: "LICENSE", misspelled: "LICENCE" },
         { correct: "LIGHTNING", misspelled: "LIGHTING" },
         { correct: "LONELINESS", misspelled: "LONLINESS" },
-        { correct: "MAINTENANCE", misspelled: "MAINTENANCE" },
+        { correct: "MAINTENANCE", misspelled: "MAINTEINANCE" },
         { correct: "MANEUVER", misspelled: "MANEUVER" },
-        { correct: "MARRIAGE", misspelled: "MARRIAGE" },
+        { correct: "MARRIAGE", misspelled: "MERRIEGE" },
         { correct: "MATHEMATICS", misspelled: "MATHMATICS" },
-        { correct: "MEANWHILE", misspelled: "MEANWHILE" },
+        { correct: "MEANWHILE", misspelled: "MEINWHILE" },
         { correct: "MEDICINE", misspelled: "MEDISIN" },
         { correct: "MINIATURE", misspelled: "MINATURE" },
         { correct: "MISCHIEVOUS", misspelled: "MISCHIEVIOUS" },
@@ -132,7 +132,7 @@ const BreakNCrashGame = {
         { correct: "MYSTERIOUS", misspelled: "MYSTERIUS" },
         { correct: "NATURAL", misspelled: "NATRUAL" },
         { correct: "NECESSARY", misspelled: "NECESSARY" },
-        { correct: "NEIGHBOR", misspelled: "NIEGHBOR" },
+        { correct: "NEIGHBOR", misspelled: "NIEHBOR" },
         { correct: "NEITHER", misspelled: "NIETHER" },
         { correct: "NINETEEN", misspelled: "NINETIEN" },
         { correct: "NOTICEABLE", misspelled: "NOTICABLE" },
@@ -152,13 +152,13 @@ const BreakNCrashGame = {
         { correct: "PECULIAR", misspelled: "PECULER" },
         { correct: "PERCEIVE", misspelled: "PERCIEVE" },
         { correct: "PERFORM", misspelled: "PERFRM" },
-        { correct: "PERHAPS", misspelled: "PERHAPS" },
-        { correct: "PERMANENT", misspelled: "PERMANENT" },
+        { correct: "PERHAPS", misspelled: "PERSHAPS" },
+        { correct: "PERMANENT", misspelled: "PERNANENT" },
         { correct: "PERSONAL", misspelled: "PERSONEL" },
         { correct: "PERSUADE", misspelled: "PERSWADE" },
         { correct: "PHYSICIAN", misspelled: "PHYSISIAN" },
         { correct: "PIECE", misspelled: "PEICE" },
-        { correct: "PLAYWRIGHT", misspelled: "PLAYWRIGHT" },
+        { correct: "PLAYWRIGHT", misspelled: "PLAYRIGHT" },
         { correct: "POSSESS", misspelled: "POSSES" },
         { correct: "POSSIBILITY", misspelled: "POSIBILTY" },
         { correct: "PRACTICAL", misspelled: "PRAKTIKAL" },
@@ -169,7 +169,7 @@ const BreakNCrashGame = {
         { correct: "PREJUDICE", misspelled: "PREJUDES" },
         { correct: "PREPARATION", misspelled: "PREPARATON" },
         { correct: "PRIVILEGE", misspelled: "PRIVILAGE" },
-        { correct: "PROBABLY", misspelled: "PROBABLY" },
+        { correct: "PROBABLY", misspelled: "PROBABBLY" },
         { correct: "PROCEDURE", misspelled: "PROCEEDURE" },
         { correct: "PROCEED", misspelled: "PROCCEED" },
         { correct: "PROFESSOR", misspelled: "PROFFESOR" },
@@ -261,10 +261,12 @@ const BreakNCrashGame = {
 
         const gameContainer = document.createElement('div');
         gameContainer.id = 'break-n-crash-container';
+        // Added touch-action: manipulation and user-select: none to eliminate zoom delay and text search pop-ups
         gameContainer.style.cssText = `
             display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: #000000; z-index: 9999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #fff; user-select: none; overflow: hidden;
+            color: #fff; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+            touch-action: manipulation; overflow: hidden;
         `;
 
         gameContainer.innerHTML = `
@@ -277,7 +279,7 @@ const BreakNCrashGame = {
                     <button id="bnc-exit-btn" style="padding: 8px 16px; background: #e74c3c; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold;">Exit</button>
                 </div>
             </div>
-            <div id="bnc-playfield" style="position: relative; width: 100%; height: calc(100vh - 140px); overflow: hidden; background: #000000;">
+            <div id="bnc-playfield" style="position: relative; width: 100%; height: calc(100vh - 140px); overflow: hidden; background: #000000; touch-action: manipulation;">
                 <div style="position: absolute; bottom: 60px; left: 50px; display: flex; align-items: flex-end; gap: 20px;">
                     <div style="font-size: 40px;">🙇‍♂️</div>
                 </div>
@@ -292,6 +294,7 @@ const BreakNCrashGame = {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.8); z-index: 10001; display: none;
             align-items: center; justify-content: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none; -webkit-user-select: none; touch-action: manipulation;
         `;
         gameOverModal.innerHTML = `
             <div style="background: #fff; color: #333; padding: 35px; border-radius: 12px; width: 400px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
@@ -331,6 +334,7 @@ const BreakNCrashGame = {
                 position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
                 background: rgba(0,0,0,0.7); z-index: 10000; display: flex;
                 align-items: center; justify-content: center;
+                user-select: none; -webkit-user-select: none; touch-action: manipulation;
             `;
             modal.innerHTML = `
                 <div style="background: #fff; color: #333; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
@@ -406,10 +410,9 @@ const BreakNCrashGame = {
     spawnGameBatch() {
         const playfield = document.getElementById('bnc-playfield');
         const playfieldWidth = playfield ? playfield.clientWidth : window.innerWidth;
-        const itemWidth = 260; // approximate width allocated per word card
+        const itemWidth = 260; 
         const maxLaneIndex = Math.floor((playfieldWidth - 40) / itemWidth);
 
-        // 1. Check if we hit a 5th level milestone and need to drop the single bonus heart
         if (this.level % 5 === 0 && !this.heartSpawnedThisMilestone) {
             this.heartSpawnedThisMilestone = true;
             this.spawnHeartItem(playfieldWidth);
@@ -418,7 +421,6 @@ const BreakNCrashGame = {
             this.heartSpawnedThisMilestone = false;
         }
 
-        // 2. Determine how many words to spawn based on level (Levels 1-4: 1 word, Level 5+: 2-3 words)
         let spawnCount = 1;
         if (this.level >= 5) {
             spawnCount = (this.level >= 10) ? 3 : 2;
@@ -427,12 +429,10 @@ const BreakNCrashGame = {
             spawnCount = maxLaneIndex;
         }
 
-        // 3. Generate non-overlapping lanes for the batch
         let availableLanes = [];
         for (let i = 0; i < maxLaneIndex; i++) {
             availableLanes.push(i);
         }
-        // Shuffle lanes
         availableLanes.sort(() => Math.random() - 0.5);
 
         for (let i = 0; i < spawnCount; i++) {
@@ -442,7 +442,6 @@ const BreakNCrashGame = {
             if (maxX_lane < minX) maxX_lane = minX;
             let randomX = Math.floor(minX + Math.random() * (maxX_lane - minX));
             
-            // Ensure bounds
             if (randomX < 20) randomX = 20;
             if (randomX > playfieldWidth - 260) randomX = playfieldWidth - 260;
 
@@ -465,6 +464,7 @@ const BreakNCrashGame = {
             border-radius: 35px; font-weight: 900; font-size: 24px;
             box-shadow: 0 6px 15px rgba(231,76,60,0.5); cursor: pointer;
             z-index: 10; touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+            user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
         `;
 
         node.addEventListener('pointerdown', (e) => {
@@ -516,6 +516,7 @@ const BreakNCrashGame = {
             letter-spacing: 0.5px;
             box-shadow: 0 6px 14px rgba(0,0,0,0.3); cursor: pointer;
             touch-action: manipulation; -webkit-tap-highlight-color: transparent;
+            user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
             will-change: top;
         `;
 
