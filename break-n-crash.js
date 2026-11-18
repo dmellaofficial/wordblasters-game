@@ -129,11 +129,13 @@ const BreakNCrashGame = {
         { correct: "MUTUAL", misspelled: "MUTCHUAL" },
         { correct: "MYSTERIOUS", misspelled: "MYSTERIUS" },
         { correct: "NATURAL", misspelled: "NATRUAL" },
+        { correct: "NECESSARY", misspelled: "NECESSARY" },
         { correct: "NEIGHBOR", misspelled: "NIEGHBOR" },
         { correct: "NEITHER", misspelled: "NIETHER" },
         { correct: "NINETEEN", misspelled: "NINETIEN" },
         { correct: "NOTICEABLE", misspelled: "NOTICABLE" },
         { correct: "OCCASION", misspelled: "OCASION" },
+        { correct: "OCCURRED", misspelled: "OCCURED" },
         { correct: "OFFICIAL", misspelled: "OFICIAL" },
         { correct: "OMISSION", misspelled: "OMISSION" },
         { correct: "OPTIMISTIC", misspelled: "OPTIMISTIK" },
@@ -191,6 +193,7 @@ const BreakNCrashGame = {
         { correct: "SECRETARY", misspelled: "SECRETRY" },
         { correct: "SEIZE", misspelled: "SIECE" },
         { correct: "SENSIBLE", misspelled: "SENSABLE" },
+        { correct: "SEPARATE", misspelled: "SEPARATE" },
         { correct: "SERGEANT", misspelled: "SARGEANT" },
         { correct: "SEVERAL", misspelled: "SEVRAL" },
         { correct: "SHINING", misspelled: "SHINNING" },
@@ -233,6 +236,7 @@ const BreakNCrashGame = {
         { correct: "UNFORTUNATELY", misspelled: "UNFORTUNATLY" },
         { correct: "UNUSUAL", misspelled: "UNUSAL" },
         { correct: "USEFUL", misspelled: "USEFULL" },
+        { correct: "VACUUM", misspelled: "VACUUM" },
         { correct: "VALUABLE", misspelled: "VALUABLE" },
         { correct: "VEGETABLE", misspelled: "VEGITABLE" },
         { correct: "VENGEANCE", misspelled: "VENGENCE" },
@@ -335,10 +339,10 @@ const BreakNCrashGame = {
                 <div style="background: #fff; color: #333; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
                     <h2 style="margin-top: 0; color: #2c3e50;">Break N' Crash</h2>
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
-                        Words rain down the screen. Eliminate the <strong>misspelled words</strong> by clicking or tapping them before they hit the bottom line! 
+                        Words rain down the screen. Eliminate the <strong>misspelled words</strong> by tapping them before they hit the bottom! 
                         <br><br>• Each misspelled word blasted: <strong>+10 points</strong>
-                        <br><br>• Letting a misspelled word hit the bottom costs <strong>1 life</strong> (3 lives total).
-                        <br><br>• Speed scales intensely, words are large and clear, and after Level 5, multiple words rain down simultaneously!
+                        <br><br>• Every 5th level (Level 5, 10, etc.), a <strong>Bonus Heart</strong> drops! Catch it to restore a lost life—or gain <strong>+100 points</strong> if your health is already full!
+                        <br><br>• Large, touch-friendly words make tapping easy on phones!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
                         <button id="bnc-start-game-btn" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">GAME</button>
@@ -384,7 +388,6 @@ const BreakNCrashGame = {
         const playfield = document.getElementById('bnc-playfield');
         playfield.querySelectorAll('.bnc-word-node').forEach(el => el.remove());
 
-        // Spawner loop (faster interval)
         if (this.spawnInterval) clearInterval(this.spawnInterval);
         this.spawnInterval = setInterval(() => {
             if (this.isGameRunning && !this.isPaused) {
@@ -392,7 +395,6 @@ const BreakNCrashGame = {
             }
         }, 1100);
 
-        // Main game ticker loop
         if (this.gameInterval) clearInterval(this.gameInterval);
         this.gameInterval = setInterval(() => {
             if (this.isGameRunning && !this.isPaused) this.updateGameLoop();
@@ -404,7 +406,11 @@ const BreakNCrashGame = {
     },
 
     spawnBatchOfWords() {
-        // Guaranteed word multiplication starting at Level 6 onwards (+3 extra words per 2 levels)
+        // Every 5th level (e.g. Level 5, 10, 15...), spawn a bonus Heart item alongside regular words!
+        if (this.level % 5 === 0 && !this.activeWords.some(w => w.isHeart)) {
+            this.spawnHeartItem();
+        }
+
         let spawnCount = 1;
         if (this.level >= 6) {
             let extraTiers = Math.floor((this.level - 6) / 2) + 1;
@@ -414,6 +420,50 @@ const BreakNCrashGame = {
         for (let i = 0; i < spawnCount; i++) {
             this.spawnSingleWord();
         }
+    },
+
+    spawnHeartItem() {
+        const playfield = document.getElementById('bnc-playfield');
+        const node = document.createElement('div');
+        node.className = 'bnc-word-node';
+        node.textContent = '❤️ BONUS HEART';
+
+        const maxX = playfield.clientWidth - 220;
+        const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+
+        // Big, vibrant styling for easy tapping on mobile
+        node.style.cssText = `
+            position: absolute; top: 0px; left: ${randomX}px;
+            background: #e74c3c; color: #fff; padding: 14px 22px;
+            border-radius: 30px; font-weight: 900; font-size: 20px;
+            box-shadow: 0 6px 15px rgba(231,76,60,0.5); cursor: pointer;
+            z-index: 10; transition: transform 0.1s;
+        `;
+
+        node.addEventListener('pointerdown', (e) => {
+            e.stopPropagation();
+            if (!this.isGameRunning || this.isPaused) return;
+
+            if (this.lives < 3) {
+                this.lives++;
+                this.createHeartEffect(node, '+1 LIFE ❤️');
+            } else {
+                this.score += 100;
+                this.createHeartEffect(node, '+100 PTS 🌟');
+            }
+            node.remove();
+            this.activeWords = this.activeWords.filter(w => w.element !== node);
+            this.updateHUD();
+        });
+
+        playfield.appendChild(node);
+
+        this.activeWords.push({
+            element: node,
+            y: 0,
+            speed: 3.5, // Steady falling speed for the heart
+            isHeart: true
+        });
     },
 
     spawnSingleWord() {
@@ -431,16 +481,16 @@ const BreakNCrashGame = {
         node.className = 'bnc-word-node';
         node.textContent = wordText;
 
-        const maxX = playfield.clientWidth - 200;
+        const maxX = playfield.clientWidth - 220;
         const randomX = Math.max(20, Math.floor(Math.random() * maxX));
 
-        // Larger, bolder text styling for easy readability
+        // Much larger, bolder text styling for effortless tapping on mobile phones
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
-            background: #fff; color: #1e293b; padding: 12px 20px;
-            border-radius: 24px; font-weight: 800; font-size: 20px;
+            background: #fff; color: #1e293b; padding: 14px 22px;
+            border-radius: 24px; font-weight: 800; font-size: 22px;
             letter-spacing: 0.5px;
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2); cursor: pointer;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.25); cursor: pointer;
             transition: transform 0.1s;
         `;
 
@@ -466,9 +516,9 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            // Extremely fast, aggressive speed scaling for high-speed action
             speed: (5.5 + (this.level - 1) * 1.6),
-            isMisspelled: isMisspelled
+            isMisspelled: isMisspelled,
+            isHeart: false
         });
     },
 
@@ -482,7 +532,7 @@ const BreakNCrashGame = {
             obj.element.style.top = obj.y + 'px';
 
             if (obj.y >= floorLimit) {
-                if (obj.isMisspelled) {
+                if (obj.isMisspelled && !obj.isHeart) {
                     this.loseLife();
                 }
                 obj.element.remove();
@@ -553,6 +603,23 @@ const BreakNCrashGame = {
             spark.style.opacity = '0';
         }, 20);
         setTimeout(() => spark.remove(), 500);
+    },
+
+    createHeartEffect(node, textMsg) {
+        const rect = node.getBoundingClientRect();
+        const spark = document.createElement('div');
+        spark.textContent = textMsg;
+        spark.style.cssText = `
+            position: fixed; top: ${rect.top}px; left: ${rect.left}px;
+            color: #2ecc71; font-weight: bold; font-size: 24px; z-index: 10001;
+            pointer-events: none; transition: transform 0.6s, opacity 0.6s;
+        `;
+        document.body.appendChild(spark);
+        setTimeout(() => {
+            spark.style.transform = 'translateY(-40px) scale(1.4)';
+            spark.style.opacity = '0';
+        }, 20);
+        setTimeout(() => spark.remove(), 600);
     },
 
     updateHUD() {
