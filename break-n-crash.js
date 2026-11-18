@@ -341,7 +341,7 @@ const BreakNCrashGame = {
                         Words rain down smoothly. Tap the <strong>misspelled words</strong> instantly to blast them! 
                         <br><br>• Each misspelled word blasted: <strong>+10 points</strong>
                         <br><br>• Every 5th level (Level 5, 10, 15...), a single <strong>Bonus Heart</strong> drops. Catch it to restore a lost life—or gain <strong>+100 points</strong> if your health is full!
-                        <br><br>• Silky smooth movement with zero eye strain!
+                        <br><br>• Comfortable starting speed and instant touch response!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
                         <button id="bnc-start-game-btn" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">GAME</button>
@@ -393,9 +393,8 @@ const BreakNCrashGame = {
             if (this.isGameRunning && !this.isPaused) {
                 this.spawnGameItem();
             }
-        }, 1200);
+        }, 1400);
 
-        // Switch to requestAnimationFrame loop for fluid, buttery-smooth movement
         if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
         this.lastTime = performance.now();
         this.animationFrameLoop(this.lastTime);
@@ -455,7 +454,7 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            speed: 4.0,
+            speed: 2.5,
             isHeart: true
         });
     },
@@ -478,7 +477,6 @@ const BreakNCrashGame = {
         const maxX = playfield.clientWidth - 220;
         const randomX = Math.max(20, Math.floor(Math.random() * maxX));
 
-        // Added touch-action: manipulation to eliminate mobile touch delay and make taps instantly responsive
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #fff; color: #1e293b; padding: 14px 22px;
@@ -486,7 +484,7 @@ const BreakNCrashGame = {
             letter-spacing: 0.5px;
             box-shadow: 0 6px 14px rgba(0,0,0,0.3); cursor: pointer;
             touch-action: manipulation; -webkit-tap-highlight-color: transparent;
-            will-change: transform, top;
+            will-change: top;
         `;
 
         node.addEventListener('pointerdown', (e) => {
@@ -511,7 +509,8 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            speed: (5.5 + (this.level - 1) * 1.6),
+            // Lowered Level 1 starting speed to 2.8, scaling smoothly with level progression
+            speed: (2.8 + (this.level - 1) * 1.1),
             isMisspelled: isMisspelled,
             isHeart: false
         });
@@ -527,8 +526,8 @@ const BreakNCrashGame = {
             for (let i = this.activeWords.length - 1; i >= 0; i--) {
                 let obj = this.activeWords[i];
                 obj.y += obj.speed;
-                // Use transform3d for hardware acceleration, getting rid of jitter and shaking completely
-                obj.element.style.transform = `translateY(${obj.y}px)`;
+                // Update top coordinate directly for 100% precise touch hit-boxes and butter-smooth motion
+                obj.element.style.top = obj.y + 'px';
 
                 if (obj.y >= floorLimit) {
                     if (obj.isMisspelled && !obj.isHeart) {
