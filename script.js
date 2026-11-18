@@ -136,5 +136,9 @@ function submitPlayerAccount() {
 }
 
 function startMiniGame(gameName) {
-    alert(`Loading mini-game: ${gameName.toUpperCase()}! Ready to test your focus, Dia.`);
+    if (gameName === 'break-n-crash') {
+        BreakNCrashGame.showInstructions();
+    } else {
+        alert(`Loading mini-game: ${gameName.toUpperCase()}! Ready to test your focus, Dia.`);
+    }
 }
