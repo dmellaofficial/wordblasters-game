@@ -195,7 +195,6 @@ const BreakNCrashGame = {
         { correct: "SECRETARY", misspelled: "SECRETRY" },
         { correct: "SEIZE", misspelled: "SIECE" },
         { correct: "SENSIBLE", misspelled: "SENSABLE" },
-        { correct: "SEPARATE", misspelled: "SEPARATE" },
         { correct: "SERGEANT", misspelled: "SARGEANT" },
         { correct: "SEVERAL", misspelled: "SEVRAL" },
         { correct: "SHINING", misspelled: "SHINNING" },
@@ -339,8 +338,9 @@ const BreakNCrashGame = {
                     <h2 style="margin-top: 0; color: #2c3e50;">Break N' Crash</h2>
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
                         Words rain down smoothly. Tap the <strong>misspelled words</strong> instantly to blast them! 
-                        <br><br>• Each misspelled word blasted: <strong>+10 points</strong>
-                        <br><br>• Every 5th level (Level 5, 10, 15...), a single <strong>Bonus Heart</strong> drops. Catch it to restore a lost life—or gain <strong>+100 points</strong> if your health is full!
+                        <br><br>• Regular word blasted: <strong>+10 points</strong>
+                        <br><br>• Long word (11-12+ letters) blasted: <strong>+30 points</strong> (speeds up level progression!)
+                        <br><br>• Every 5th level, a <strong>Bonus Heart</strong> drops to restore life or award +100 points!
                         <br><br>• Extra-large words for effortless mobile tapping!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
@@ -425,7 +425,6 @@ const BreakNCrashGame = {
         const maxX = playfield.clientWidth - 260;
         const randomX = Math.max(20, Math.floor(Math.random() * maxX));
 
-        // Much larger touch target for the bonus heart
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #e74c3c; color: #fff; padding: 18px 28px;
@@ -440,10 +439,10 @@ const BreakNCrashGame = {
 
             if (this.lives < 3) {
                 this.lives++;
-                this.createHeartEffect(node, '+1 LIFE ❤️');
+                this.createHeartEffect(node, '+1 LIFE ❤️', '#2ecc71');
             } else {
                 this.score += 100;
-                this.createHeartEffect(node, '+100 PTS 🌟');
+                this.createHeartEffect(node, '+100 PTS 🌟', '#f1c40f');
             }
             node.remove();
             this.activeWords = this.activeWords.filter(w => w.element !== node);
@@ -470,6 +469,7 @@ const BreakNCrashGame = {
         const item = this.availableWords.pop();
         const isMisspelled = Math.random() > 0.4; 
         const wordText = isMisspelled ? item.misspelled : item.correct;
+        const isLongWord = wordText.length >= 11;
 
         const node = document.createElement('div');
         node.className = 'bnc-word-node';
@@ -478,7 +478,6 @@ const BreakNCrashGame = {
         const maxX = playfield.clientWidth - 260;
         const randomX = Math.max(20, Math.floor(Math.random() * maxX));
 
-        // Significantly larger font size and padding so words are wide, clear, and easy to tap on phones
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #fff; color: #1e293b; padding: 18px 28px;
@@ -494,8 +493,10 @@ const BreakNCrashGame = {
             if (!this.isGameRunning || this.isPaused) return;
 
             if (isMisspelled) {
-                this.score += 10;
-                this.createBlastEffect(node);
+                // Award 30 points for 11+ letter long words, 10 points for regular words
+                const ptsEarned = isLongWord ? 30 : 10;
+                this.score += ptsEarned;
+                this.createBlastEffect(node, `💥 +${ptsEarned}`);
                 node.remove();
                 this.activeWords = this.activeWords.filter(w => w.element !== node);
                 this.level = Math.floor(this.score / 200) + 1;
@@ -511,7 +512,6 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            // Even gentler starting speed at Level 1 (2.4), scaling smoothly as level increases
             speed: (2.4 + (this.level - 1) * 1.0),
             isMisspelled: isMisspelled,
             isHeart: false
@@ -591,10 +591,10 @@ const BreakNCrashGame = {
         if (this.lives < 0) this.lives = 0;
     },
 
-    createBlastEffect(node) {
+    createBlastEffect(node, textMsg) {
         const rect = node.getBoundingClientRect();
         const spark = document.createElement('div');
-        spark.textContent = '💥 +10';
+        spark.textContent = textMsg;
         spark.style.cssText = `
             position: fixed; top: ${rect.top}px; left: ${rect.left}px;
             color: #f1c40f; font-weight: bold; font-size: 24px; z-index: 10001;
@@ -608,13 +608,13 @@ const BreakNCrashGame = {
         setTimeout(() => spark.remove(), 500);
     },
 
-    createHeartEffect(node, textMsg) {
+    createHeartEffect(node, textMsg, colorHex) {
         const rect = node.getBoundingClientRect();
         const spark = document.createElement('div');
         spark.textContent = textMsg;
         spark.style.cssText = `
             position: fixed; top: ${rect.top}px; left: ${rect.left}px;
-            color: #2ecc71; font-weight: bold; font-size: 26px; z-index: 10001;
+            color: ${colorHex}; font-weight: bold; font-size: 26px; z-index: 10001;
             pointer-events: none; transition: transform 0.6s, opacity 0.6s;
         `;
         document.body.appendChild(spark);
