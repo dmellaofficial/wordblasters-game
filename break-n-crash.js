@@ -12,7 +12,6 @@ const BreakNCrashGame = {
     isGameRunning: false,
     isPaused: false,
     availableWords: [],
-    usedWordsHistory: [],
 
     // Comprehensive dictionary pair pool
     masterWordPool: [
@@ -125,7 +124,6 @@ const BreakNCrashGame = {
         });
 
         document.getElementById('bnc-exit-btn').addEventListener('click', () => this.endGameManually());
-        
         document.getElementById('bnc-pause-btn').addEventListener('click', () => this.togglePause());
     },
 
@@ -182,6 +180,10 @@ const BreakNCrashGame = {
         this.isPaused = false;
         document.getElementById('bnc-pause-btn').textContent = 'Pause';
         
+        // Remove any old pause overlay if present
+        const pauseOverlay = document.getElementById('bnc-pause-overlay');
+        if (pauseOverlay) pauseOverlay.remove();
+        
         this.refillWordPool();
         this.updateHUD();
 
@@ -202,7 +204,6 @@ const BreakNCrashGame = {
     },
 
     refillWordPool() {
-        // Fully shuffle master pool and prevent repeating recent items consecutively
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
     },
 
@@ -237,7 +238,6 @@ const BreakNCrashGame = {
             if (!this.isGameRunning || this.isPaused) return;
 
             if (isMisspelled) {
-                // Correct target hit! Blast it (+10 points)
                 this.score += 10;
                 this.createBlastEffect(node);
                 node.remove();
@@ -245,7 +245,6 @@ const BreakNCrashGame = {
                 this.level = Math.floor(this.score / 200) + 1;
                 this.updateHUD();
             } else {
-                // Clicking a correct word does nothing now (per your request)
                 node.style.transform = 'scale(0.95)';
                 setTimeout(() => node.style.transform = 'scale(1)', 100);
             }
@@ -256,7 +255,6 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            // Snappy starting speed for Level 1 so it's not too slow
             speed: (2.2 + (this.level - 1) * 0.4),
             isMisspelled: isMisspelled
         });
@@ -295,17 +293,20 @@ const BreakNCrashGame = {
             pauseBtn.textContent = 'Resume';
             pauseBtn.style.background = '#27ae60';
             
-            // Show pause overlay text
+            // Hide all active falling words visually and show a heavy cover overlay to prevent cheating/examining
+            this.activeWords.forEach(w => w.element.style.visibility = 'hidden');
+
             let pauseOverlay = document.getElementById('bnc-pause-overlay');
             if (!pauseOverlay) {
                 pauseOverlay = document.createElement('div');
                 pauseOverlay.id = 'bnc-pause-overlay';
                 pauseOverlay.style.cssText = `
                     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-                    background: rgba(0,0,0,0.5); display: flex; align-items: center;
-                    justify-content: center; font-size: 36px; font-weight: bold; color: #fff; z-index: 100;
+                    background: rgba(0,0,0,0.85); backdrop-filter: blur(6px); display: flex; 
+                    flex-direction: column; align-items: center; justify-content: center; 
+                    font-size: 36px; font-weight: bold; color: #fff; z-index: 100; gap: 10px;
                 `;
-                pauseOverlay.textContent = 'GAME PAUSED';
+                pauseOverlay.innerHTML = `<div>GAME PAUSED</div><div style="font-size: 16px; font-weight: normal; color: #aaa;">Words are hidden to prevent peeking!</div>`;
                 playfield.appendChild(pauseOverlay);
             } else {
                 pauseOverlay.style.display = 'flex';
@@ -313,6 +314,10 @@ const BreakNCrashGame = {
         } else {
             pauseBtn.textContent = 'Pause';
             pauseBtn.style.background = '#f39c12';
+            
+            // Restore visibility of falling words
+            this.activeWords.forEach(w => w.element.style.visibility = 'visible');
+
             const pauseOverlay = document.getElementById('bnc-pause-overlay');
             if (pauseOverlay) pauseOverlay.style.display = 'none';
         }
