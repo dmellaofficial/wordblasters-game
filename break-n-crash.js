@@ -13,7 +13,7 @@ const BreakNCrashGame = {
     isPaused: false,
     availableWords: [],
 
-    // Comprehensive dictionary pair pool
+    // Massive 100+ master dictionary pair pool to prevent repetition and add challenge
     masterWordPool: [
         { correct: "COMPLETION", misspelled: "COMPLETSHON" },
         { correct: "CONGRATULATIONS", misspelled: "CONGRADULATION" },
@@ -57,7 +57,209 @@ const BreakNCrashGame = {
         { correct: "TOMORROW", misspelled: "TOMORROW" },
         { correct: "UNFORGETTABLE", misspelled: "UNFORGETABLE" },
         { correct: "VACUUM", misspelled: "VACCUM" },
-        { correct: "WONDERFUL", misspelled: "WONDEFUL" }
+        { correct: "WONDERFUL", misspelled: "WONDEFUL" },
+        { correct: "ABSENCE", misspelled: "ABSENCEE" },
+        { correct: "ACCEPT", misspelled: "AXCEPT" },
+        { correct: "ACCIDENTALLY", misspelled: "ACCIDENTLY" },
+        { correct: "BANQUET", misspelled: "BANQET" },
+        { correct: "BARGAIN", misspelled: "BARGAIN" },
+        { correct: "BASICALLY", misspelled: "BASICALY" },
+        { correct: "BREADTH", misspelled: "BREADTH" },
+        { correct: "BRILLIANT", misspelled: "BRILIANT" },
+        { correct: "BUREAU", misspelled: "BURROU" },
+        { correct: "BUSINESS", misspelled: "BUSINES" },
+        { correct: "CEMETERY", misspelled: "CEMETARY" },
+        { correct: "CHALLENGE", misspelled: "CHALLANGE" },
+        { correct: "CHANGEABLE", misspelled: "CHANGABLE" },
+        { correct: "COLONEL", misspelled: "KERNAL" },
+        { correct: "COMPARISON", misspelled: "COMPARRISON" },
+        { correct: "CONTROLLED", misspelled: "CONTROLED" },
+        { correct: "COOPERATE", misspelled: "COOPRATE" },
+        { correct: "CRITICISM", misspelled: "CRITICISUM" },
+        { correct: "DECEIVE", misspelled: "DECIEVE" },
+        { correct: "DESCRIBE", misspelled: "DISCRIBE" },
+        { correct: "DISEASE", misspelled: "DIZEASE" },
+        { correct: "ECSTASY", misspelled: "ECSTACY" },
+        { correct: "EMBARRASS", misspelled: "EMBARASS" },
+        { correct: "EQUIPMENT", misspelled: "EQUIPMENTH" },
+        { correct: "EXAGGERATE", misspelled: "EXAGGERET" },
+        { correct: "EXCEED", misspelled: "EXCEDE" },
+        { correct: "EXISTENCE", misspelled: "EXISTANCE" },
+        { correct: "EXPERIENCE", misspelled: "EXPERIENCE" },
+        { correct: "EXTREME", misspelled: "EXTREEM" },
+        { correct: "FAVORITE", misspelled: "FAVOURITE" },
+        { correct: "FIERCE", misspelled: "FEIRCE" },
+        { correct: "FORFEIT", misspelled: "FORFIET" },
+        { correct: "FOURTEEN", misspelled: "FOURTEEN" },
+        { correct: "FREEDOM", misspelled: "FREEDUM" },
+        { correct: "FULFILL", misspelled: "FULFIL" },
+        { correct: "GENERALLY", misspelled: "GENERALY" },
+        { correct: "GLAMOROUS", misspelled: "GLAMOURUS" },
+        { correct: "GRADUALLY", misspelled: "GRADUALY" },
+        { correct: "GRATEFUL", misspelled: "GREATFUL" },
+        { correct: "GUARANTEE", misspelled: "GURANTEE" },
+        { correct: "HARASS", misspelled: "HARRASS" },
+        { correct: "HEIGHT", misspelled: "HIETH" },
+        { correct: "HUMOROUS", misspelled: "HUMOROUS" },
+        { correct: "IGNORANCE", misspelled: "IGNORANCE" },
+        { correct: "IMMEDIATE", misspelled: "IMEDIATE" },
+        { correct: "INCIDENTALLY", misspelled: "INCIDENTLY" },
+        { correct: "INCREDIBLE", misspelled: "INCREDABLE" },
+        { correct: "INFLUENCE", misspelled: "INFLUANCE" },
+        { correct: "INITIAL", misspelled: "INISHIAL" },
+        { correct: "INTEREST", misspelled: "INTREST" },
+        { correct: "INTERFERE", misspelled: "INTERFER" },
+        { correct: "JEALOUS", misspelled: "JALOUS" },
+        { correct: "JUDGMENT", misspelled: "JUDGEMENT" },
+        { correct: "LABORATORY", misspelled: "LABRATORY" },
+        { correct: "LEGITIMATE", misspelled: "LEJITIMATE" },
+        { correct: "LENGTH", misspelled: "LENTH" },
+        { correct: "LIBRARY", lib: "LIBARY" },
+        { correct: "LICENSE", misspelled: "LICENCE" },
+        { correct: "LIGHTNING", misspelled: "LIGHTING" },
+        { correct: "LONELINESS", misspelled: "LONLINESS" },
+        { correct: "MAINTENANCE", misspelled: "MAINTENANCE" },
+        { correct: "MANEUVER", misspelled: "MANEUVER" },
+        { correct: "MARRIAGE", misspelled: "MARRIAGE" },
+        { correct: "MATHEMATICS", misspelled: "MATHMATICS" },
+        { correct: "MEANWHILE", misspelled: "MEANWHILE" },
+        { correct: "MEDICINE", misspelled: "MEDISIN" },
+        { correct: "MINIATURE", misspelled: "MINATURE" },
+        { correct: "MISCHIEVOUS", misspelled: "MISCHIEVIOUS" },
+        { correct: "MR", misspelled: "MR" },
+        { correct: "MUTUAL", misspelled: "MUTCHUAL" },
+        { correct: "MYSTERIOUS", misspelled: "MYSTERIUS" },
+        { correct: "NATURAL", misspelled: "NATRUAL" },
+        { correct: "NECESSARY", misspelled: "NECESSARY" },
+        { correct: "NEIGHBOR", misspelled: "NIEGHBOR" },
+        { correct: "NEITHER", misspelled: "NIETHER" },
+        { correct: "NINETEEN", misspelled: "NINETIEN" },
+        { correct: "NOTICEABLE", misspelled: "NOTICABLE" },
+        { correct: "OCCASION", misspelled: "OCASION" },
+        { correct: "OCCURRED", misspelled: "OCCURED" },
+        { correct: "OFFICIAL", misspelled: "OFICIAL" },
+        { correct: "OMISSION", misspelled: "OMISSION" },
+        { correct: "OPTIMISTIC", misspelled: "OPTIMISTIK" },
+        { correct: "ORIGINAL", misspelled: "ORGINAL" },
+        { correct: "OUTRAGEOUS", misspelled: "OUTRAGIOUS" },
+        { correct: "PAID", misspelled: "PAYED" },
+        { correct: "PANIC", misspelled: "PANICK" },
+        { correct: "PARALLEL", misspelled: "PARALLER" },
+        { correct: "PARTICULAR", misspelled: "PARTICULAR" },
+        { correct: "PASTIME", misspelled: "PASTTIME" },
+        { correct: "PEACE", misspelled: "PEASE" },
+        { correct: "PECULIAR", misspelled: "PECULER" },
+        { correct: "PERCEIVE", misspelled: "PERCIEVE" },
+        { correct: "PERFORM", misspelled: "PERFRM" },
+        { correct: "PERHAPS", misspelled: "PERHAPS" },
+        { correct: "PERMANENT", misspelled: "PERMANENT" },
+        { correct: "PERSONAL", misspelled: "PERSONEL" },
+        { correct: "PERSUADE", misspelled: "PERSWADE" },
+        { correct: "PHYSICIAN", misspelled: "PHYSISIAN" },
+        { correct: "PIECE", misspelled: "PEICE" },
+        { correct: "PLAYWRIGHT", misspelled: "PLAYWRIGHT" },
+        { correct: "POSSESS", misspelled: "POSSES" },
+        { correct: "POSSIBILITY", misspelled: "POSIBILTY" },
+        { correct: "PRACTICAL", misspelled: "PRAKTIKAL" },
+        { correct: "PRACTICE", misspelled: "PRAKTIS" },
+        { correct: "PRECEED", misspelled: "PRECEDE" },
+        { correct: "PREFERENCE", misspelled: "PREFERANCE" },
+        { correct: "PREFERRED", misspelled: "PREFERED" },
+        { correct: "PREJUDICE", misspelled: "PREJUDES" },
+        { correct: "PREPARATION", misspelled: "PREPARATON" },
+        { correct: "PRIVILEGE", misspelled: "PRIVILAGE" },
+        { correct: "PROBABLY", misspelled: "PROBABLY" },
+        { correct: "PROCEDURE", misspelled: "PROCEEDURE" },
+        { correct: "PROCEED", misspelled: "PROCEED" },
+        { correct: "PROFESSOR", misspelled: "PROFESOR" },
+        { correct: "PRONUNCIATION", misspelled: "PRONUNCIATION" },
+        { correct: "PROPHECY", misspelled: "PROPHESY" },
+        { correct: "PSYCHOLOGY", misspelled: "SICHOLOGY" },
+        { correct: "PUBLICLY", misspelled: "PUBLICLY" },
+        { correct: "QUANTITY", misspelled: "QUANITY" },
+        { correct: "QUARREL", misspelled: "QUARREL" },
+        { correct: "QUESTION", misspelled: "QUESTON" },
+        { correct: "RECEIPT", misspelled: "RECIEPT" },
+        { correct: "RECEIVE", misspelled: "RECEIVE" },
+        { correct: "RECOGNITION", misspelled: "RECOGNITON" },
+        { correct: "RECOMMEND", misspelled: "RECOMMEND" },
+        { correct: "REFERENCE", misspelled: "REFERANCE" },
+        { correct: "REFERRED", misspelled: "REFERED" },
+        { correct: "RELEVANT", misspelled: "RELAVANT" },
+        { correct: "RELIGIOUS", misspelled: "RELIGOUS" },
+        { correct: "REMEMBRANCE", misspelled: "REMEMBRANCE" },
+        { correct: "REPETITION", misspelled: "REPETTION" },
+        { correct: "RESPECTIVELY", misspelled: "RESPECTIVLY" },
+        { correct: "RHYTHM", misspelled: "RYTHM" },
+        { correct: "SCHEDULE", misspelled: "SCHEDULE" },
+        { correct: "SCIENCE", misspelled: "SCINECE" },
+        { correct: "SECRETARY", misspelled: "SECRETRY" },
+        { correct: "SEIZE", misspelled: "SIECE" },
+        { correct: "SENSIBLE", misspelled: "SENSABLE" },
+        { correct: "SEPARATE", misspelled: "SEPARATE" },
+        { correct: "SERGEANT", misspelled: "SARGEANT" },
+        { correct: "SEVERAL", misspelled: "SEVRAL" },
+        { correct: "SHINING", misspelled: "SHINNING" },
+        { correct: "SHOULD", misspelled: "SHOUD" },
+        { correct: "SIGNIFICANT", misspelled: "SIGNIFIKANT" },
+        { correct: "SIMILAR", misspelled: "SIMILLAR" },
+        { correct: "SIMPLE", misspelled: "SIMPEL" },
+        { correct: "SINCERE", misspelled: "SINSEER" },
+        { correct: "SOVEREIGN", misspelled: "SOVRAN" },
+        { correct: "SPECIFIC", misspelled: "SPECIFIK" },
+        { correct: "SPECIMEN", misspelled: "SPESIMEN" },
+        { correct: "STATIONARY", misspelled: "STATIONERY" },
+        { correct: "STATUE", misspelled: "STATUTE" },
+        { correct: "STRENGTH", misspelled: "STRENGHT" },
+        { correct: "STRENUOUS", misspelled: "STRENUOUS" },
+        { correct: "SUBSEQUENT", misspelled: "SUBSQUENT" },
+        { correct: "SUBTLE", misspelled: "SUTLE" },
+        { correct: "SUCCESS", misspelled: "SUCCES" },
+        { correct: "SUCCESSFUL", misspelled: "SUCCESSFUL" },
+        { correct: "SUFFICIENT", misspelled: "SUFFICENT" },
+        { correct: "SUMMARY", misspelled: "SUMMERY" },
+        { correct: "SUPERSEDE", misspelled: "SUPERSEDE" },
+        { correct: "SUPRISE", misspelled: "SUPRISE" },
+        { correct: "SUSCEPTIBLE", misspelled: "SUSCEPTABLE" },
+        { correct: "SYMMETRY", misspelled: "SIMMETRY" },
+        { correct: "TECHNIQUE", misspelled: "TEKNIQUE" },
+        { correct: "TEMPERAMENT", misspelled: "TEMPERMENT" },
+        { correct: "TEMPERATURE", misspelled: "TEMPRATURE" },
+        { correct: "THOROUGH", misspelled: "THORROU" },
+        { correct: "THRESHOLD", misspelled: "THRESHOLD" },
+        { correct: "TOMORROW", misspelled: "TOMORROW" },
+        { correct: "TONGUE", misspelled: "TUNG" },
+        { correct: "TRAGEDY", misspelled: "TRAGIDY" },
+        { correct: "TRANSCEND", misspelled: "TRANSCEND" },
+        { correct: "TRANSFER", misspelled: "TRANSFERR" },
+        { correct: "TRIUMPH", misspelled: "TRIUMPH" },
+        { correct: "TRULY", misspelled: "TRUELY" },
+        { correct: "TWELFTH", misspelled: "TWELVETH" },
+        { correct: "TYRANNY", misspelled: "TYRANY" },
+        { correct: "UNCONSCIOUS", misspelled: "UNCONSCOUS" },
+        { correct: "UNDOUBTEDLY", misspelled: "UNDOUBTEDLY" },
+        { correct: "UNFORTUNATELY", misspelled: "UNFORTUNATLY" },
+        { correct: "UNUSUAL", misspelled: "UNUSAL" },
+        { correct: "USEFUL", misspelled: "USEFULL" },
+        { correct: "VACUUM", misspelled: "VACUUM" },
+        { correct: "VALUABLE", misspelled: "VALUABLE" },
+        { correct: "VEGETABLE", misspelled: "VEGITABLE" },
+        { correct: "VENGEANCE", misspelled: "VENGENCE" },
+        { correct: "VICINITY", misspelled: "VICINITY" },
+        { correct: "VILLAIN", misspelled: "VILLIAN" },
+        { correct: "VISIBLE", misspelled: "VIZIBLE" },
+        { correct: "WARRANT", misspelled: "WARRENT" },
+        { correct: "WEIRD", misspelled: "WIERD" },
+        { correct: "WELFARE", misspelled: "WELFAIR" },
+        { correct: "WHETHER", misspelled: "WEATHER" },
+        { correct: "WHOLE", misspelled: "WHOLL" },
+        { correct: "WITHHOLD", misspelled: "WITHOLD" },
+        { correct: "WITNESS", misspelled: "WITNES" },
+        { correct: "WONDERFUL", misspelled: "WONDERFUL" },
+        { correct: "WRITING", misspelled: "WRITTING" },
+        { correct: "YACHT", misspelled: "YATHT" },
+        { correct: "YIELD", misspelled: "YEILD" },
+        { correct: "ZOOLOGY", misspelled: "ZOOLOGY" }
     ],
 
     init() {
@@ -146,7 +348,7 @@ const BreakNCrashGame = {
                         Words rain down the screen. Eliminate the <strong>misspelled words</strong> by clicking or tapping them before they hit the bottom line! 
                         <br><br>• Each misspelled word blasted: <strong>+10 points</strong>
                         <br><br>• Letting a misspelled word hit the bottom costs <strong>1 life</strong> (3 lives total).
-                        <br><br>• Speed scales sharply, and after Level 5, multiple words rain down simultaneously to test your focus!
+                        <br><br>• Speed scales intensely, and after Level 5, multiple words rain down simultaneously to create real chaos!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
                         <button id="bnc-start-game-btn" style="padding: 10px 25px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">GAME</button>
@@ -180,7 +382,6 @@ const BreakNCrashGame = {
         this.isPaused = false;
         document.getElementById('bnc-pause-btn').textContent = 'Pause';
         
-        // Hide the main dashboard exit button while playing
         const dashExitBtn = document.getElementById('exit-to-welcome-btn');
         if (dashExitBtn) dashExitBtn.style.display = 'none';
 
@@ -199,7 +400,7 @@ const BreakNCrashGame = {
             if (this.isGameRunning && !this.isPaused) {
                 this.spawnBatchOfWords();
             }
-        }, 1800);
+        }, 1400);
 
         // Main game ticker loop
         if (this.gameInterval) clearInterval(this.gameInterval);
@@ -209,13 +410,13 @@ const BreakNCrashGame = {
     },
 
     refillWordPool() {
+        // Shuffle the massive pool thoroughly so words never repeat early
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
     },
 
     spawnBatchOfWords() {
-        // Determine how many words to spawn based on level rules requested:
         // Level 1-5: 1 word at a time
-        // Level 6-7: +3 extra words = 4 words
+        // Level 6-7: +3 extra = 4 words
         // Level 8-9: +3 more = 7 words, and so on every 2 levels after Level 5.
         let spawnCount = 1;
         if (this.level >= 6) {
@@ -276,8 +477,8 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            // Much sharper, faster speed scaling so higher levels feel intense and fast
-            speed: (3.0 + (this.level - 1) * 0.75),
+            // Drastically increased base speed and level scaling factor for high-speed action
+            speed: (4.5 + (this.level - 1) * 1.25),
             isMisspelled: isMisspelled
         });
     },
@@ -377,7 +578,6 @@ const BreakNCrashGame = {
         clearInterval(this.gameInterval);
         clearInterval(this.spawnInterval);
 
-        // Restore dashboard exit button visibility when leaving game
         const dashExitBtn = document.getElementById('exit-to-welcome-btn');
         if (dashExitBtn) dashExitBtn.style.display = 'block';
 
@@ -398,7 +598,6 @@ const BreakNCrashGame = {
         clearInterval(this.gameInterval);
         clearInterval(this.spawnInterval);
 
-        // Restore dashboard exit button visibility when leaving game
         const dashExitBtn = document.getElementById('exit-to-welcome-btn');
         if (dashExitBtn) dashExitBtn.style.display = 'block';
 
