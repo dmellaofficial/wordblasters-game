@@ -339,7 +339,7 @@ const BreakNCrashGame = {
                         Words rain down smoothly. Tap the <strong>misspelled words</strong> instantly to blast them! 
                         <br><br>• Regular word blasted: <strong>+10 points</strong>
                         <br><br>• Long word (11-12+ letters) blasted: <strong>+30 points</strong> (accelerates level progression!)
-                        <br><br>• From <strong>Level 5 onwards</strong>, multiple words rain down simultaneously!
+                        <br><br>• From <strong>Level 5 onwards</strong>, multiple words rain down in separated lanes so they never stack or overlap!
                         <br><br>• Every 5th level, a single <strong>Bonus Heart</strong> drops to restore life or award +100 points!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
@@ -392,7 +392,7 @@ const BreakNCrashGame = {
             if (this.isGameRunning && !this.isPaused) {
                 this.spawnGameBatch();
             }
-        }, 1500);
+        }, 1600);
 
         if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
         this.lastTime = performance.now();
@@ -404,34 +404,59 @@ const BreakNCrashGame = {
     },
 
     spawnGameBatch() {
+        const playfield = document.getElementById('bnc-playfield');
+        const playfieldWidth = playfield ? playfield.clientWidth : window.innerWidth;
+        const itemWidth = 260; // approximate width allocated per word card
+        const maxLaneIndex = Math.floor((playfieldWidth - 40) / itemWidth);
+
         // 1. Check if we hit a 5th level milestone and need to drop the single bonus heart
         if (this.level % 5 === 0 && !this.heartSpawnedThisMilestone) {
             this.heartSpawnedThisMilestone = true;
-            this.spawnHeartItem();
+            this.spawnHeartItem(playfieldWidth);
             return;
         } else if (this.level % 5 !== 0) {
             this.heartSpawnedThisMilestone = false;
         }
 
-        // 2. Determine how many words to spawn based on level
-        // Levels 1-4: 1 word at a time. Level 5+: 2 to 3 words simultaneously.
+        // 2. Determine how many words to spawn based on level (Levels 1-4: 1 word, Level 5+: 2-3 words)
         let spawnCount = 1;
         if (this.level >= 5) {
             spawnCount = (this.level >= 10) ? 3 : 2;
         }
+        if (spawnCount > maxLaneIndex && maxLaneIndex > 0) {
+            spawnCount = maxLaneIndex;
+        }
+
+        // 3. Generate non-overlapping lanes for the batch
+        let availableLanes = [];
+        for (let i = 0; i < maxLaneIndex; i++) {
+            availableLanes.push(i);
+        }
+        // Shuffle lanes
+        availableLanes.sort(() => Math.random() - 0.5);
 
         for (let i = 0; i < spawnCount; i++) {
-            this.spawnSingleWord();
+            let lane = availableLanes.pop() || i;
+            let minX = 20 + (lane * itemWidth);
+            let maxX_lane = minX + (itemWidth - 240);
+            if (maxX_lane < minX) maxX_lane = minX;
+            let randomX = Math.floor(minX + Math.random() * (maxX_lane - minX));
+            
+            // Ensure bounds
+            if (randomX < 20) randomX = 20;
+            if (randomX > playfieldWidth - 260) randomX = playfieldWidth - 260;
+
+            this.spawnSingleWord(randomX);
         }
     },
 
-    spawnHeartItem() {
+    spawnHeartItem(playfieldWidth) {
         const playfield = document.getElementById('bnc-playfield');
         const node = document.createElement('div');
         node.className = 'bnc-word-node';
         node.textContent = '❤️ BONUS HEART';
 
-        const maxX = playfield.clientWidth - 260;
+        const maxX = playfieldWidth - 260;
         const randomX = Math.max(20, Math.floor(Math.random() * maxX));
 
         node.style.cssText = `
@@ -468,7 +493,7 @@ const BreakNCrashGame = {
         });
     },
 
-    spawnSingleWord() {
+    spawnSingleWord(fixedX) {
         const playfield = document.getElementById('bnc-playfield');
         
         if (this.availableWords.length === 0) {
@@ -484,11 +509,8 @@ const BreakNCrashGame = {
         node.className = 'bnc-word-node';
         node.textContent = wordText;
 
-        const maxX = playfield.clientWidth - 260;
-        const randomX = Math.max(20, Math.floor(Math.random() * maxX));
-
         node.style.cssText = `
-            position: absolute; top: 0px; left: ${randomX}px;
+            position: absolute; top: 0px; left: ${fixedX}px;
             background: #fff; color: #1e293b; padding: 18px 28px;
             border-radius: 30px; font-weight: 800; font-size: 26px;
             letter-spacing: 0.5px;
