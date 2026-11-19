@@ -503,7 +503,7 @@ const BreakNCrashGame = {
         for (let i = 0; i < laneCount; i++) {
             availableLanes.push(i);
         }
-        availableLanes.sort(() => Math.random() - 0.5);
+        availableLanes.sort(() => Math.random() - 0.4);
 
         const staggerDelays = [0, 100, 200];
 
@@ -592,7 +592,7 @@ const BreakNCrashGame = {
         }
 
         const item = this.availableWords.pop();
-        const isMisspelled = Math.random() > 0.5; 
+        const isMisspelled = Math.random() > 0.4; 
         const wordText = isMisspelled ? item.misspelled : item.correct;
         const isLongWord = wordText.length >= 11;
 
