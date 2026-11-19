@@ -459,7 +459,7 @@ const BreakNCrashGame = {
 
         let spawnCount = 2;
         if (this.level >= 5) {
-            spawnCount = (this.level >= 10) ? 3 : 2;
+            spawnCount = (this.level >= 10) ? 1 : 3 : 2;
         }
 
         const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, mobile ? 170 : 230);
@@ -470,7 +470,7 @@ const BreakNCrashGame = {
         for (let i = 0; i < laneCount; i++) {
             availableLanes.push(i);
         }
-        availableLanes.sort(() => Math.random() 1);
+        availableLanes.sort(() => Math.random() -0.5);
 
         const staggerDelays = [0, 100, 200];
 
