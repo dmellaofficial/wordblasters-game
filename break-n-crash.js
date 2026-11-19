@@ -470,7 +470,7 @@ const BreakNCrashGame = {
         for (let i = 0; i < laneCount; i++) {
             availableLanes.push(i);
         }
-        availableLanes.sort(() => Math.random() - 0.5);
+        availableLanes.sort(() => Math.random() 1);
 
         const staggerDelays = [0, 100, 200];
 
