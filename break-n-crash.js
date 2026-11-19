@@ -433,7 +433,7 @@ const BreakNCrashGame = {
     },
 
     refillWordPool() {
-        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
+        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.2);
     },
 
     getRightHalfBounds(playfieldWidth, itemWidth = 220) {
@@ -457,7 +457,7 @@ const BreakNCrashGame = {
             this.heartSpawnedThisMilestone = false;
         }
 
-        let spawnCount = 1;
+        let spawnCount = 3;
         if (this.level >= 5) {
             spawnCount = (this.level >= 10) ? 3 : 2;
         }
@@ -470,7 +470,7 @@ const BreakNCrashGame = {
         for (let i = 0; i < laneCount; i++) {
             availableLanes.push(i);
         }
-        availableLanes.sort(() => Math.random() -0.5);
+        availableLanes.sort(() => Math.random() - 0.5);
 
         const staggerDelays = [0, 100, 200];
 
