@@ -256,9 +256,6 @@ const BreakNCrashGame = {
         { correct: "ZOOLOGY", misspelled: "ZOOLOOGY" }
     ],
 
-    // 50% extra tap sensitivity margin around word pills
-    tapSensitivityMultiplier: 1.5,
-
     isMobile() {
         return window.innerWidth <= 650;
     },
@@ -304,8 +301,8 @@ const BreakNCrashGame = {
                 <div id="bnc-score" style="white-space: nowrap;">SCORE: 0</div>
                 <div id="bnc-level" style="white-space: nowrap;">LVL: 1</div>
                 <div style="display: flex; gap: 6px;">
-                    <button id="bnc-pause-btn" style="padding: ${btnPadding}; font-size: ${btnFontSize}; background: #f39c12; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; touch-action: none;">Pause</button>
-                    <button id="bnc-exit-btn" style="padding: ${btnPadding}; font-size: ${btnFontSize}; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; touch-action: none;">Exit</button>
+                    <button id="bnc-pause-btn" style="padding: ${btnPadding}; font-size: ${btnFontSize}; background: #f39c12; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; touch-action: manipulation;">Pause</button>
+                    <button id="bnc-exit-btn" style="padding: ${btnPadding}; font-size: ${btnFontSize}; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; touch-action: manipulation;">Exit</button>
                 </div>
             </div>
             <div id="bnc-playfield" style="position: relative; width: 100%; height: calc(100vh - ${mobile ? '65px' : '90px'}); overflow: hidden; background: #000000; touch-action: none;">
@@ -317,43 +314,13 @@ const BreakNCrashGame = {
         `;
         document.body.appendChild(gameContainer);
 
-        // 50% expanded touch proximity assistance on the playfield so near-edge taps still hit misspelled words or hearts
-        const playfield = document.getElementById('bnc-playfield');
-        const handlePlayfieldAssist = (e) => {
-            if (!this.isGameRunning || this.isPaused) return;
-            const point = e.touches && e.touches[0] ? e.touches[0] : e;
-            if (!point || typeof point.clientX !== 'number' || typeof point.clientY !== 'number') return;
-
-            for (let i = 0; i < this.activeWords.length; i++) {
-                const w = this.activeWords[i];
-                if (!w.isMisspelled && !w.isHeart) continue;
-                const rect = w.element.getBoundingClientRect();
-                const padX = rect.width * 0.25;  // +50% total horizontal reach (25% each side)
-                const padY = rect.height * 0.25; // +50% total vertical reach (25% top/bottom)
-
-                if (
-                    point.clientX >= rect.left - padX &&
-                    point.clientX <= rect.right + padX &&
-                    point.clientY >= rect.top - padY &&
-                    point.clientY <= rect.bottom + padY
-                ) {
-                    if (e.cancelable) e.preventDefault();
-                    e.stopPropagation();
-                    w.onTap(w.element);
-                    break;
-                }
-            }
-        };
-        playfield.addEventListener('touchstart', handlePlayfieldAssist, { passive: false });
-        playfield.addEventListener('pointerdown', handlePlayfieldAssist);
-
         const gameOverModal = document.createElement('div');
         gameOverModal.id = 'bnc-game-over-modal';
         gameOverModal.style.cssText = `
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0,0,0,0.8); z-index: 10001; display: none;
             align-items: center; justify-content: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            user-select: none; -webkit-user-select: none; touch-action: none;
+            user-select: none; -webkit-user-select: none; touch-action: manipulation;
         `;
         gameOverModal.innerHTML = `
             <div style="background: #fff; color: #333; padding: 35px; border-radius: 12px; width: 400px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
@@ -395,7 +362,7 @@ const BreakNCrashGame = {
                 position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
                 background: rgba(0,0,0,0.7); z-index: 10000; display: flex;
                 align-items: center; justify-content: center;
-                user-select: none; -webkit-user-select: none; touch-action: none;
+                user-select: none; -webkit-user-select: none; touch-action: manipulation;
             `;
             modal.innerHTML = `
                 <div style="background: #fff; color: #333; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
@@ -518,20 +485,15 @@ const BreakNCrashGame = {
         }
     },
 
-    bindInstantTap(node, callback) {
-        let triggered = false;
-        const handleTap = (e) => {
-            if (e && e.cancelable) e.preventDefault();
-            if (e && e.stopPropagation) e.stopPropagation();
-            if (triggered || !this.isGameRunning || this.isPaused) return;
-            triggered = true;
+    bindSinglePointerTap(node, callback) {
+        let locked = false;
+        node.addEventListener('pointerdown', (e) => {
+            e.stopPropagation();
+            if (locked || !this.isGameRunning || this.isPaused) return;
+            locked = true;
             callback(node);
-            setTimeout(() => { triggered = false; }, 120);
-        };
-
-        node.addEventListener('touchstart', handleTap, { passive: false });
-        node.addEventListener('pointerdown', handleTap);
-        return handleTap;
+            setTimeout(() => { locked = false; }, 100);
+        });
     },
 
     spawnHeartItem(playfieldWidth) {
@@ -557,7 +519,7 @@ const BreakNCrashGame = {
             white-space: nowrap;
         `;
 
-        const onTapAction = (el) => {
+        this.bindSinglePointerTap(node, (el) => {
             if (this.lives < 3) {
                 this.lives++;
                 this.createHeartEffect(el, '+1 LIFE ❤️', '#2ecc71');
@@ -568,9 +530,7 @@ const BreakNCrashGame = {
             el.remove();
             this.activeWords = this.activeWords.filter(w => w.element !== el);
             this.updateHUD();
-        };
-
-        const tapFn = this.bindInstantTap(node, onTapAction);
+        });
 
         playfield.appendChild(node);
 
@@ -578,8 +538,7 @@ const BreakNCrashGame = {
             element: node,
             y: 0,
             speed: 2.2,
-            isHeart: true,
-            onTap: () => tapFn(null)
+            isHeart: true
         });
     },
 
@@ -601,7 +560,7 @@ const BreakNCrashGame = {
         node.textContent = wordText;
 
         const fontSize = mobile ? (wordText.length >= 12 ? 19 : 22) : 26;
-        // ~50% boost to touch target padding for effortless mobile tapping
+        // ~50% boost to touch target padding for easier mobile tapping
         const padV = mobile ? 22 : 24;
         const padH = mobile ? 26 : 36;
 
@@ -634,7 +593,7 @@ const BreakNCrashGame = {
         finalX = Math.max(zoneStartX, Math.min(finalX, playfieldWidth - actualWidth - rightMargin));
         node.style.left = finalX + 'px';
 
-        const onTapAction = (el) => {
+        this.bindSinglePointerTap(node, (el) => {
             if (isMisspelled) {
                 const ptsEarned = isLongWord ? 30 : 10;
                 this.score += ptsEarned;
@@ -649,17 +608,14 @@ const BreakNCrashGame = {
                     if (el) el.style.transform = 'scale(1)';
                 }, 100);
             }
-        };
-
-        const tapFn = this.bindInstantTap(node, onTapAction);
+        });
         
         this.activeWords.push({
             element: node,
             y: 0,
             speed: (2.4 + (this.level - 1) * 0.9),
             isMisspelled: isMisspelled,
-            isHeart: false,
-            onTap: () => tapFn(null)
+            isHeart: false
         });
     },
 
