@@ -143,7 +143,7 @@ const BreakNCrashGame = {
         { correct: "OPTIMISTIC", misspelled: "OPTIMISTIK" },
         { correct: "ORIGINAL", misspelled: "ORGINAL" },
         { correct: "OUTRAGEOUS", misspelled: "OUTRAGIOUS" },
-        { correct: "PAID", misspelled: "PAIED" },
+        { correct: "PAID", misspelled: "PAYED" },
         { correct: "PANIC", misspelled: "PANICK" },
         { correct: "PARALLEL", misspelled: "PARALLER" },
         { correct: "PARTICULAR", misspelled: "PARTICULAR" },
@@ -314,6 +314,32 @@ const BreakNCrashGame = {
         `;
         document.body.appendChild(gameContainer);
 
+        // ~50% expanded touch proximity assist around misspelled words / hearts
+        const playfield = document.getElementById('bnc-playfield');
+        playfield.addEventListener('pointerdown', (e) => {
+            if (!this.isGameRunning || this.isPaused) return;
+            if (typeof e.clientX !== 'number' || typeof e.clientY !== 'number') return;
+
+            for (let i = 0; i < this.activeWords.length; i++) {
+                const w = this.activeWords[i];
+                if (!w.isMisspelled && !w.isHeart) continue;
+                const rect = w.element.getBoundingClientRect();
+                const padX = rect.width * 0.25;
+                const padY = rect.height * 0.25;
+
+                if (
+                    e.clientX >= rect.left - padX &&
+                    e.clientX <= rect.right + padX &&
+                    e.clientY >= rect.top - padY &&
+                    e.clientY <= rect.bottom + padY
+                ) {
+                    e.stopPropagation();
+                    if (typeof w.triggerTap === 'function') w.triggerTap();
+                    break;
+                }
+            }
+        });
+
         const gameOverModal = document.createElement('div');
         gameOverModal.id = 'bnc-game-over-modal';
         gameOverModal.style.cssText = `
@@ -368,10 +394,10 @@ const BreakNCrashGame = {
                 <div style="background: #fff; color: #333; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
                     <h2 style="margin-top: 0; color: #2c3e50;">Break N' Crash</h2>
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
-                        Words rain down smoothly with staggered timing in the middle and right lanes. Tap the <strong>misspelled words</strong> once to blast them! 
+                        Words pour down in a steady, rhythmic rain across the middle and right lanes. Tap the <strong>misspelled words</strong> once to blast them! 
                         <br><br>• Regular word blasted: <strong>+10 points</strong>
                         <br><br>• Long word (11+ letters) blasted: <strong>+30 points</strong> (accelerates level progression!)
-                        <br><br>• From <strong>Level 5 onwards</strong>, multiple words rain down in separated lanes with staggered intervals so they never align or stack!
+                        <br><br>• Words flow continuously like a marching cadence—never stopping into long empty gaps!
                         <br><br>• Every 5th level, a single <strong>Bonus Heart</strong> drops to restore life or award +100 points!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
@@ -420,12 +446,16 @@ const BreakNCrashGame = {
         const playfield = document.getElementById('bnc-playfield');
         playfield.querySelectorAll('.bnc-word-node').forEach(el => el.remove());
 
+        // Spawn first beat immediately so the rain starts right away
+        this.spawnGameBatch();
+
         if (this.spawnInterval) clearInterval(this.spawnInterval);
+        // Steady marching/processional beat (750ms) for a continuous rain downpour without empty pauses
         this.spawnInterval = setInterval(() => {
             if (this.isGameRunning && !this.isPaused) {
                 this.spawnGameBatch();
             }
-        }, 1450);
+        }, 750);
 
         if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
         this.lastTime = performance.now();
@@ -433,7 +463,7 @@ const BreakNCrashGame = {
     },
 
     refillWordPool() {
-        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.4);
+        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.2);
     },
 
     getRightHalfBounds(playfieldWidth, itemWidth = 220) {
@@ -457,10 +487,8 @@ const BreakNCrashGame = {
             this.heartSpawnedThisMilestone = false;
         }
 
-        let spawnCount = 2;
-        if (this.level >= 5) {
-            spawnCount = (this.level >= 10) ? 3 : 2;
-        }
+        // Steady rain flow: 1-2 words per beat on early levels, 2-3 on higher levels
+        let spawnCount = this.level >= 5 ? (this.level >= 10 ? 3 : 2) : (Math.random() > 0.45 ? 2 : 1);
 
         const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, mobile ? 170 : 230);
         const zoneWidth = Math.max(80, maxX - minX);
@@ -472,10 +500,11 @@ const BreakNCrashGame = {
         }
         availableLanes.sort(() => Math.random() - 0.5);
 
-        const staggerDelays = [0, 100, 250];
+        // Tight marching/rain stagger (0ms, 150ms, 300ms) so drops fall like continuous rain
+        const staggerDelays = [0, 150, 300];
 
         for (let i = 0; i < spawnCount; i++) {
-            const delay = staggerDelays[i] !== undefined ? staggerDelays[i] : i * 100;
+            const delay = staggerDelays[i] !== undefined ? staggerDelays[i] : i * 150;
             const lane = availableLanes[i % availableLanes.length];
 
             setTimeout(() => {
@@ -487,13 +516,15 @@ const BreakNCrashGame = {
 
     bindSinglePointerTap(node, callback) {
         let locked = false;
-        node.addEventListener('pointerdown', (e) => {
-            e.stopPropagation();
+        const fire = (e) => {
+            if (e && e.stopPropagation) e.stopPropagation();
             if (locked || !this.isGameRunning || this.isPaused) return;
             locked = true;
             callback(node);
             setTimeout(() => { locked = false; }, 100);
-        });
+        };
+        node.addEventListener('pointerdown', fire);
+        return () => fire(null);
     },
 
     spawnHeartItem(playfieldWidth) {
@@ -519,7 +550,7 @@ const BreakNCrashGame = {
             white-space: nowrap;
         `;
 
-        this.bindSinglePointerTap(node, (el) => {
+        const triggerTap = this.bindSinglePointerTap(node, (el) => {
             if (this.lives < 3) {
                 this.lives++;
                 this.createHeartEffect(el, '+1 LIFE ❤️', '#2ecc71');
@@ -537,8 +568,9 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            speed: 2,
-            isHeart: true
+            speed: 2.3,
+            isHeart: true,
+            triggerTap
         });
     },
 
@@ -560,7 +592,6 @@ const BreakNCrashGame = {
         node.textContent = wordText;
 
         const fontSize = mobile ? (wordText.length >= 12 ? 19 : 22) : 26;
-        // ~50% boost to touch target padding for easier mobile tapping
         const padV = mobile ? 22 : 24;
         const padH = mobile ? 26 : 36;
 
@@ -593,7 +624,7 @@ const BreakNCrashGame = {
         finalX = Math.max(zoneStartX, Math.min(finalX, playfieldWidth - actualWidth - rightMargin));
         node.style.left = finalX + 'px';
 
-        this.bindSinglePointerTap(node, (el) => {
+        const triggerTap = this.bindSinglePointerTap(node, (el) => {
             if (isMisspelled) {
                 const ptsEarned = isLongWord ? 30 : 10;
                 this.score += ptsEarned;
@@ -613,9 +644,10 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            speed: (2.4 + (this.level - 1) * 0.9),
+            speed: (2.5 + (this.level - 1) * 0.85),
             isMisspelled: isMisspelled,
-            isHeart: false
+            isHeart: false,
+            triggerTap
         });
     },
 
