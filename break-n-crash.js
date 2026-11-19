@@ -433,7 +433,7 @@ const BreakNCrashGame = {
     },
 
     refillWordPool() {
-        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.2);
+        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
     },
 
     getRightHalfBounds(playfieldWidth, itemWidth = 220) {
