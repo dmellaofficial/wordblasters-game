@@ -457,9 +457,9 @@ const BreakNCrashGame = {
             this.heartSpawnedThisMilestone = false;
         }
 
-        let spawnCount = 2;
+        let spawnCount = 1;
         if (this.level >= 5) {
-            spawnCount = (this.level >= 10) ? 1 : 3 : 2;
+            spawnCount = (this.level >= 10) ? 3 : 2;
         }
 
         const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, mobile ? 170 : 230);
