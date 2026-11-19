@@ -143,7 +143,7 @@ const BreakNCrashGame = {
         { correct: "OPTIMISTIC", misspelled: "OPTIMISTIK" },
         { correct: "ORIGINAL", misspelled: "ORGINAL" },
         { correct: "OUTRAGEOUS", misspelled: "OUTRAGIOUS" },
-        { correct: "PAID", misspelled: "PAYED" },
+        { correct: "PAID", misspelled: "PAIED" },
         { correct: "PANIC", misspelled: "PANICK" },
         { correct: "PARALLEL", misspelled: "PARALLER" },
         { correct: "PARTICULAR", misspelled: "PARTICULAR" },
@@ -472,7 +472,7 @@ const BreakNCrashGame = {
         }
         availableLanes.sort(() => Math.random() - 0.5);
 
-        const staggerDelays = [0, 100, 200];
+        const staggerDelays = [0, 100, 250];
 
         for (let i = 0; i < spawnCount; i++) {
             const delay = staggerDelays[i] !== undefined ? staggerDelays[i] : i * 100;
@@ -537,7 +537,7 @@ const BreakNCrashGame = {
         this.activeWords.push({
             element: node,
             y: 0,
-            speed: 2.2,
+            speed: 2,
             isHeart: true
         });
     },
