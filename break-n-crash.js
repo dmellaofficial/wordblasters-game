@@ -1,4 +1,4 @@
- z// ==========================================
+// ==========================================
 // BREAK N' CRASH - Mini Game Module
 // ==========================================
 
@@ -503,7 +503,7 @@ const BreakNCrashGame = {
         for (let i = 0; i < laneCount; i++) {
             availableLanes.push(i);
         }
-        availableLanes.sort(() => Math.random() - 0.4);
+        availableLanes.sort(() => Math.random() - 0.5);
 
         const staggerDelays = [0, 100, 200];
 
