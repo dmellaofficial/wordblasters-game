@@ -457,7 +457,7 @@ const BreakNCrashGame = {
             this.heartSpawnedThisMilestone = false;
         }
 
-        let spawnCount = 3;
+        let spawnCount = 2;
         if (this.level >= 5) {
             spawnCount = (this.level >= 10) ? 3 : 2;
         }
