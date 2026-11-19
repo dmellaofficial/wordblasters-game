@@ -127,7 +127,7 @@ const BreakNCrashGame = {
         { correct: "MEDICINE", misspelled: "MEDISIN" },
         { correct: "MINIATURE", misspelled: "MINATURE" },
         { correct: "MISCHIEVOUS", misspelled: "MISCHIEVIOUS" },
-        { correct: "MR", misspelled: "MR" },
+        { correct: "MEMORANDUM", misspelled: "MEMORANDAM" },
         { correct: "MUTUAL", misspelled: "MUTCHUAL" },
         { correct: "MYSTERIOUS", misspelled: "MYSTERIUS" },
         { correct: "NATURAL", misspelled: "NATRUAL" },
@@ -424,14 +424,14 @@ const BreakNCrashGame = {
     },
 
     refillWordPool() {
-        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.5);
+        this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.2);
     },
 
     spawnGameBatch() {
         const playfield = document.getElementById('bnc-playfield');
         const playfieldWidth = playfield ? playfield.clientWidth : window.innerWidth;
         const itemWidth = 260; 
-        const maxLaneIndex = Math.floor((playfieldWidth - 40) / itemWidth);
+        const maxLaneIndex = Math.floor((playfieldWidth - 30) / itemWidth);
 
         if (this.level % 5 === 0 && !this.heartSpawnedThisMilestone) {
             this.heartSpawnedThisMilestone = true;
@@ -441,7 +441,7 @@ const BreakNCrashGame = {
             this.heartSpawnedThisMilestone = false;
         }
 
-        let spawnCount = 1;
+        let spawnCount = 3;
         if (this.level >= 5) {
             spawnCount = (this.level >= 10) ? 3 : 2;
         }
