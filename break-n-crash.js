@@ -314,7 +314,7 @@ const BreakNCrashGame = {
         `;
         document.body.appendChild(gameContainer);
 
-        // ~50% expanded touch proximity assist around misspelled words / hearts
+        // ~50% expanded invisible touch proximity assist around sleek oblong capsules
         const playfield = document.getElementById('bnc-playfield');
         playfield.addEventListener('pointerdown', (e) => {
             if (!this.isGameRunning || this.isPaused) return;
@@ -325,7 +325,7 @@ const BreakNCrashGame = {
                 if (!w.isMisspelled && !w.isHeart) continue;
                 const rect = w.element.getBoundingClientRect();
                 const padX = rect.width * 0.25;
-                const padY = rect.height * 0.25;
+                const padY = rect.height * 0.35;
 
                 if (
                     e.clientX >= rect.left - padX &&
@@ -446,11 +446,9 @@ const BreakNCrashGame = {
         const playfield = document.getElementById('bnc-playfield');
         playfield.querySelectorAll('.bnc-word-node').forEach(el => el.remove());
 
-        // Spawn first beat immediately so the rain starts right away
         this.spawnGameBatch();
 
         if (this.spawnInterval) clearInterval(this.spawnInterval);
-        // Steady marching/processional beat (750ms) for a continuous rain downpour without empty pauses
         this.spawnInterval = setInterval(() => {
             if (this.isGameRunning && !this.isPaused) {
                 this.spawnGameBatch();
@@ -466,7 +464,7 @@ const BreakNCrashGame = {
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.2);
     },
 
-    getRightHalfBounds(playfieldWidth, itemWidth = 220) {
+    getRightHalfBounds(playfieldWidth, itemWidth = 180) {
         const mobile = this.isMobile();
         const minX = Math.floor(playfieldWidth * (mobile ? 0.36 : 0.42));
         const rightMargin = mobile ? 10 : 20;
@@ -487,12 +485,11 @@ const BreakNCrashGame = {
             this.heartSpawnedThisMilestone = false;
         }
 
-        // Steady rain flow: 1-2 words per beat on early levels, 2-3 on higher levels
         let spawnCount = this.level >= 5 ? (this.level >= 10 ? 3 : 2) : (Math.random() > 0.45 ? 2 : 1);
 
-        const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, mobile ? 170 : 230);
+        const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, mobile ? 150 : 200);
         const zoneWidth = Math.max(80, maxX - minX);
-        const laneCount = mobile ? Math.min(spawnCount, 2) : Math.max(2, Math.min(spawnCount, Math.floor(zoneWidth / 170)));
+        const laneCount = mobile ? Math.min(spawnCount, 2) : Math.max(2, Math.min(spawnCount, Math.floor(zoneWidth / 155)));
 
         let availableLanes = [];
         for (let i = 0; i < laneCount; i++) {
@@ -500,7 +497,6 @@ const BreakNCrashGame = {
         }
         availableLanes.sort(() => Math.random() - 0.5);
 
-        // Tight marching/rain stagger (0ms, 150ms, 300ms) so drops fall like continuous rain
         const staggerDelays = [0, 150, 300];
 
         for (let i = 0; i < spawnCount; i++) {
@@ -527,27 +523,52 @@ const BreakNCrashGame = {
         return () => fire(null);
     },
 
+    findNonOverlappingX(preferredX, nodeWidth, nodeHeight, zoneStartX, maxAllowedX) {
+        let candidateX = preferredX;
+        const gap = 12;
+
+        // Check active words near the top spawn zone (y < nodeHeight + 36) to prevent overlapping/colliding
+        const topWords = this.activeWords.filter(w => w.y < nodeHeight + 36);
+        if (topWords.length === 0) return candidateX;
+
+        for (let attempt = 0; attempt < 8; attempt++) {
+            let overlaps = false;
+            for (const w of topWords) {
+                const wLeft = w.x;
+                const wRight = w.x + w.width;
+                if (candidateX < wRight + gap && candidateX + nodeWidth + gap > wLeft) {
+                    overlaps = true;
+                    break;
+                }
+            }
+            if (!overlaps) return candidateX;
+            candidateX = Math.floor(zoneStartX + Math.random() * Math.max(1, maxAllowedX - zoneStartX));
+        }
+        return candidateX;
+    },
+
     spawnHeartItem(playfieldWidth) {
         const playfield = document.getElementById('bnc-playfield');
         const mobile = this.isMobile();
         const node = document.createElement('div');
         node.className = 'bnc-word-node';
-        node.textContent = '❤️ BONUS HEART';
+        node.textContent = '❤️ +1 LIFE';
 
-        const estWidth = mobile ? 185 : 230;
+        const estWidth = mobile ? 145 : 185;
         const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, estWidth);
         const randomX = Math.floor(minX + Math.random() * Math.max(1, maxX - minX));
 
+        // Sleek, compact oblong capsule shape (border-radius: 999px)
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #e74c3c; color: #fff;
-            padding: ${mobile ? '20px 26px' : '22px 32px'};
-            border-radius: 35px; font-weight: 900;
-            font-size: ${mobile ? '20px' : '24px'};
-            box-shadow: 0 6px 15px rgba(231,76,60,0.5); cursor: pointer;
+            padding: ${mobile ? '11px 22px' : '13px 28px'};
+            border-radius: 999px; font-weight: 900;
+            font-size: ${mobile ? '18px' : '22px'};
+            box-shadow: 0 4px 12px rgba(231,76,60,0.5); cursor: pointer;
             z-index: 10; touch-action: none; -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
-            white-space: nowrap;
+            white-space: nowrap; display: inline-flex; align-items: center; justify-content: center;
         `;
 
         const triggerTap = this.bindSinglePointerTap(node, (el) => {
@@ -564,10 +585,15 @@ const BreakNCrashGame = {
         });
 
         playfield.appendChild(node);
+        const actualWidth = node.offsetWidth || estWidth;
+        const actualHeight = node.offsetHeight || 46;
 
         this.activeWords.push({
             element: node,
+            x: randomX,
             y: 0,
+            width: actualWidth,
+            height: actualHeight,
             speed: 2.3,
             isHeart: true,
             triggerTap
@@ -591,26 +617,29 @@ const BreakNCrashGame = {
         node.className = 'bnc-word-node';
         node.textContent = wordText;
 
-        const fontSize = mobile ? (wordText.length >= 12 ? 19 : 22) : 26;
-        const padV = mobile ? 22 : 24;
-        const padH = mobile ? 26 : 36;
+        const fontSize = mobile ? (wordText.length >= 12 ? 17 : 20) : 24;
+        // Sleek, non-bulky oblong capsule padding so pills look smooth & oval without colliding
+        const padV = mobile ? 11 : 13;
+        const padH = mobile ? 20 : 28;
 
         node.style.cssText = `
             position: absolute; top: 0px; left: 0px;
             background: #fff; color: #1e293b;
             padding: ${padV}px ${padH}px;
-            border-radius: 32px; font-weight: 800;
+            border-radius: 999px; font-weight: 800;
             font-size: ${fontSize}px;
             letter-spacing: 0.5px;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.3); cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer;
             touch-action: none; -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
             white-space: nowrap; will-change: top;
+            display: inline-flex; align-items: center; justify-content: center;
         `;
 
         playfield.appendChild(node);
 
-        const actualWidth = node.offsetWidth || 180;
+        const actualWidth = node.offsetWidth || 150;
+        const actualHeight = node.offsetHeight || 44;
         const rightMargin = mobile ? 10 : 20;
         const zoneStartX = Math.floor(playfieldWidth * (mobile ? 0.36 : 0.42));
         const zoneEndX = Math.max(zoneStartX + 40, playfieldWidth - rightMargin);
@@ -621,7 +650,9 @@ const BreakNCrashGame = {
         const laneMaxX = Math.max(laneMinX, laneMinX + laneWidth - actualWidth);
         let finalX = Math.floor(laneMinX + Math.random() * Math.max(1, laneMaxX - laneMinX));
 
-        finalX = Math.max(zoneStartX, Math.min(finalX, playfieldWidth - actualWidth - rightMargin));
+        const maxAllowedX = Math.max(zoneStartX, playfieldWidth - actualWidth - rightMargin);
+        finalX = Math.max(zoneStartX, Math.min(finalX, maxAllowedX));
+        finalX = this.findNonOverlappingX(finalX, actualWidth, actualHeight, zoneStartX, maxAllowedX);
         node.style.left = finalX + 'px';
 
         const triggerTap = this.bindSinglePointerTap(node, (el) => {
@@ -643,7 +674,10 @@ const BreakNCrashGame = {
         
         this.activeWords.push({
             element: node,
+            x: finalX,
             y: 0,
+            width: actualWidth,
+            height: actualHeight,
             speed: (2.5 + (this.level - 1) * 0.85),
             isMisspelled: isMisspelled,
             isHeart: false,
