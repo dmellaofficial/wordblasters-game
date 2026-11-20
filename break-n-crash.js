@@ -290,8 +290,9 @@ const BreakNCrashGame = {
             touch-action: none; overflow: hidden;
         `;
 
-        const hudPadding = mobile ? '12px 14px' : '20px 40px';
-        const hudFontSize = mobile ? '16px' : '22px';
+        // Left padding clears the top-left sidebar toggle button cleanly
+        const hudPadding = mobile ? '12px 14px 12px 66px' : '20px 40px 20px 76px';
+        const hudFontSize = mobile ? '15px' : '22px';
         const btnPadding = mobile ? '8px 12px' : '10px 18px';
         const btnFontSize = mobile ? '14px' : '16px';
 
@@ -314,29 +315,57 @@ const BreakNCrashGame = {
         `;
         document.body.appendChild(gameContainer);
 
-        // ~50% expanded invisible touch proximity assist around sleek oblong capsules
+        // Single, unified pointerdown handler powered by the Sidebar Sensitivity slider (0% - 100%)
         const playfield = document.getElementById('bnc-playfield');
         playfield.addEventListener('pointerdown', (e) => {
             if (!this.isGameRunning || this.isPaused) return;
             if (typeof e.clientX !== 'number' || typeof e.clientY !== 'number') return;
 
+            let bestTarget = null;
+            let bestDistance = Infinity;
+            let fallbackCorrectWord = null;
+
             for (let i = 0; i < this.activeWords.length; i++) {
                 const w = this.activeWords[i];
-                if (!w.isMisspelled && !w.isHeart) continue;
-                const rect = w.element.getBoundingClientRect();
-                const padX = rect.width * 0.25;
-                const padY = rect.height * 0.35;
+                if (w.blasted) continue;
 
-                if (
+                const rect = w.element.getBoundingClientRect();
+                const { padX, padY } = (typeof GameSettings !== 'undefined' && GameSettings.getSensitivityPadding)
+                    ? GameSettings.getSensitivityPadding(rect)
+                    : { padX: rect.width * 0.25, padY: rect.height * 0.35 };
+
+                const inExpandedHitBox =
                     e.clientX >= rect.left - padX &&
                     e.clientX <= rect.right + padX &&
                     e.clientY >= rect.top - padY &&
-                    e.clientY <= rect.bottom + padY
+                    e.clientY <= rect.bottom + padY;
+
+                if (inExpandedHitBox && (w.isMisspelled || w.isHeart)) {
+                    const centerX = (rect.left + rect.right) / 2;
+                    const centerY = (rect.top + rect.bottom) / 2;
+                    const dist = Math.hypot(e.clientX - centerX, e.clientY - centerY);
+                    if (dist < bestDistance) {
+                        bestDistance = dist;
+                        bestTarget = w;
+                    }
+                } else if (
+                    !w.isMisspelled &&
+                    !w.isHeart &&
+                    e.clientX >= rect.left &&
+                    e.clientX <= rect.right &&
+                    e.clientY >= rect.top &&
+                    e.clientY <= rect.bottom
                 ) {
-                    e.stopPropagation();
-                    if (typeof w.triggerTap === 'function') w.triggerTap();
-                    break;
+                    fallbackCorrectWord = w;
                 }
+            }
+
+            if (bestTarget && typeof bestTarget.triggerTap === 'function') {
+                e.preventDefault();
+                e.stopPropagation();
+                bestTarget.triggerTap();
+            } else if (fallbackCorrectWord && typeof fallbackCorrectWord.triggerTap === 'function') {
+                fallbackCorrectWord.triggerTap();
             }
         });
 
@@ -397,7 +426,7 @@ const BreakNCrashGame = {
                         Words pour down in a steady, rhythmic rain across the middle and right lanes. Tap the <strong>misspelled words</strong> once to blast them! 
                         <br><br>• Regular word blasted: <strong>+10 points</strong>
                         <br><br>• Long word (11+ letters) blasted: <strong>+30 points</strong> (accelerates level progression!)
-                        <br><br>• Words flow continuously like a marching cadence—never stopping into long empty gaps!
+                        <br><br>• Need easier tapping? Open the <strong>☰ Sidebar</strong> anytime to adjust <strong>Tap Sensitivity (0%–100%)</strong>!
                         <br><br>• Every 5th level, a single <strong>Bonus Heart</strong> drops to restore life or award +100 points!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
@@ -510,24 +539,10 @@ const BreakNCrashGame = {
         }
     },
 
-    bindSinglePointerTap(node, callback) {
-        let locked = false;
-        const fire = (e) => {
-            if (e && e.stopPropagation) e.stopPropagation();
-            if (locked || !this.isGameRunning || this.isPaused) return;
-            locked = true;
-            callback(node);
-            setTimeout(() => { locked = false; }, 100);
-        };
-        node.addEventListener('pointerdown', fire);
-        return () => fire(null);
-    },
-
     findNonOverlappingX(preferredX, nodeWidth, nodeHeight, zoneStartX, maxAllowedX) {
         let candidateX = preferredX;
         const gap = 12;
 
-        // Check active words near the top spawn zone (y < nodeHeight + 36) to prevent overlapping/colliding
         const topWords = this.activeWords.filter(w => w.y < nodeHeight + 36);
         if (topWords.length === 0) return candidateX;
 
@@ -558,7 +573,6 @@ const BreakNCrashGame = {
         const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, estWidth);
         const randomX = Math.floor(minX + Math.random() * Math.max(1, maxX - minX));
 
-        // Sleek, compact oblong capsule shape (border-radius: 999px)
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #e74c3c; color: #fff;
@@ -571,33 +585,35 @@ const BreakNCrashGame = {
             white-space: nowrap; display: inline-flex; align-items: center; justify-content: center;
         `;
 
-        const triggerTap = this.bindSinglePointerTap(node, (el) => {
-            if (this.lives < 3) {
-                this.lives++;
-                this.createHeartEffect(el, '+1 LIFE ❤️', '#2ecc71');
-            } else {
-                this.score += 100;
-                this.createHeartEffect(el, '+100 PTS 🌟', '#f1c40f');
-            }
-            el.remove();
-            this.activeWords = this.activeWords.filter(w => w.element !== el);
-            this.updateHUD();
-        });
-
-        playfield.appendChild(node);
-        const actualWidth = node.offsetWidth || estWidth;
-        const actualHeight = node.offsetHeight || 46;
-
-        this.activeWords.push({
+        const wordObj = {
             element: node,
             x: randomX,
             y: 0,
-            width: actualWidth,
-            height: actualHeight,
+            width: estWidth,
+            height: 46,
             speed: 2.3,
             isHeart: true,
-            triggerTap
-        });
+            blasted: false,
+            triggerTap: () => {
+                if (wordObj.blasted) return;
+                wordObj.blasted = true;
+                if (this.lives < 3) {
+                    this.lives++;
+                    this.createHeartEffect(node, '+1 LIFE ❤️', '#2ecc71');
+                } else {
+                    this.score += 100;
+                    this.createHeartEffect(node, '+100 PTS 🌟', '#f1c40f');
+                }
+                node.remove();
+                this.activeWords = this.activeWords.filter(w => w !== wordObj);
+                this.updateHUD();
+            }
+        };
+
+        playfield.appendChild(node);
+        wordObj.width = node.offsetWidth || estWidth;
+        wordObj.height = node.offsetHeight || 46;
+        this.activeWords.push(wordObj);
     },
 
     spawnSingleWord(laneIndex, totalLanes, playfieldWidth) {
@@ -618,7 +634,6 @@ const BreakNCrashGame = {
         node.textContent = wordText;
 
         const fontSize = mobile ? (wordText.length >= 12 ? 17 : 20) : 24;
-        // Sleek, non-bulky oblong capsule padding so pills look smooth & oval without colliding
         const padV = mobile ? 11 : 13;
         const padH = mobile ? 20 : 28;
 
@@ -655,24 +670,7 @@ const BreakNCrashGame = {
         finalX = this.findNonOverlappingX(finalX, actualWidth, actualHeight, zoneStartX, maxAllowedX);
         node.style.left = finalX + 'px';
 
-        const triggerTap = this.bindSinglePointerTap(node, (el) => {
-            if (isMisspelled) {
-                const ptsEarned = isLongWord ? 30 : 10;
-                this.score += ptsEarned;
-                this.createBlastEffect(el, `💥 +${ptsEarned}`);
-                el.remove();
-                this.activeWords = this.activeWords.filter(w => w.element !== el);
-                this.level = Math.floor(this.score / 200) + 1;
-                this.updateHUD();
-            } else {
-                el.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    if (el) el.style.transform = 'scale(1)';
-                }, 100);
-            }
-        });
-        
-        this.activeWords.push({
+        const wordObj = {
             element: node,
             x: finalX,
             y: 0,
@@ -681,8 +679,28 @@ const BreakNCrashGame = {
             speed: (2.5 + (this.level - 1) * 0.85),
             isMisspelled: isMisspelled,
             isHeart: false,
-            triggerTap
-        });
+            blasted: false,
+            triggerTap: () => {
+                if (wordObj.blasted) return;
+                if (isMisspelled) {
+                    wordObj.blasted = true;
+                    const ptsEarned = isLongWord ? 30 : 10;
+                    this.score += ptsEarned;
+                    this.createBlastEffect(node, `💥 +${ptsEarned}`);
+                    node.remove();
+                    this.activeWords = this.activeWords.filter(w => w !== wordObj);
+                    this.level = Math.floor(this.score / 200) + 1;
+                    this.updateHUD();
+                } else {
+                    node.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        if (node) node.style.transform = 'scale(1)';
+                    }, 100);
+                }
+            }
+        };
+
+        this.activeWords.push(wordObj);
     },
 
     animationFrameLoop(timestamp) {
@@ -699,7 +717,7 @@ const BreakNCrashGame = {
                 obj.element.style.top = obj.y + 'px';
 
                 if (obj.y >= floorLimit) {
-                    if (obj.isMisspelled && !obj.isHeart) {
+                    if (obj.isMisspelled && !obj.isHeart && !obj.blasted) {
                         this.loseLife();
                     }
                     obj.element.remove();
