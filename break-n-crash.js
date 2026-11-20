@@ -330,7 +330,7 @@ const BreakNCrashGame = {
                 const rect = w.element.getBoundingClientRect();
                 const { padX, padY } = (typeof GameSettings !== 'undefined' && GameSettings.getSensitivityPadding)
                     ? GameSettings.getSensitivityPadding(rect)
-                    : { padX: rect.width * 0.35, padY: rect.height * 0.45 };
+                    : { padX: rect.width * 0.3, padY: rect.height * 0.4 };
 
                 const inExpandedHitBox =
                     e.clientX >= rect.left - padX &&
@@ -491,7 +491,7 @@ const BreakNCrashGame = {
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.2);
     },
 
-    getRightHalfBounds(playfieldWidth, itemWidth = 190) {
+    getRightHalfBounds(playfieldWidth, itemWidth = 160) {
         const mobile = this.isMobile();
         const minX = Math.floor(playfieldWidth * (mobile ? 0.36 : 0.42));
         const rightMargin = mobile ? 10 : 20;
@@ -514,9 +514,9 @@ const BreakNCrashGame = {
 
         let spawnCount = this.level >= 5 ? (this.level >= 10 ? 3 : 2) : (Math.random() > 0.45 ? 2 : 1);
 
-        const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, mobile ? 160 : 210);
+        const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, mobile ? 135 : 175);
         const zoneWidth = Math.max(80, maxX - minX);
-        const laneCount = mobile ? Math.min(spawnCount, 2) : Math.max(2, Math.min(spawnCount, Math.floor(zoneWidth / 165)));
+        const laneCount = mobile ? Math.min(spawnCount, 2) : Math.max(2, Math.min(spawnCount, Math.floor(zoneWidth / 150)));
 
         let availableLanes = [];
         for (let i = 0; i < laneCount; i++) {
@@ -524,10 +524,10 @@ const BreakNCrashGame = {
         }
         availableLanes.sort(() => Math.random() - 0.5);
 
-        const staggerDelays = [0, 150, 300];
+        const staggerDelays = [0, 160, 320];
 
         for (let i = 0; i < spawnCount; i++) {
-            const delay = staggerDelays[i] !== undefined ? staggerDelays[i] : i * 150;
+            const delay = staggerDelays[i] !== undefined ? staggerDelays[i] : i * 160;
             const lane = availableLanes[i % availableLanes.length];
 
             setTimeout(() => {
@@ -539,13 +539,13 @@ const BreakNCrashGame = {
 
     findNonOverlappingX(preferredX, nodeWidth, nodeHeight, zoneStartX, maxAllowedX) {
         let candidateX = preferredX;
-        const gap = 20;
+        const gap = 24;
 
-        // Wider vertical check so plump ovals never overlap newly spawned or nearby words
-        const nearbyWords = this.activeWords.filter(w => w.y < nodeHeight + 75);
+        // Check active words further down the upper fall zone so newly spawned ovals clear them cleanly
+        const nearbyWords = this.activeWords.filter(w => w.y < nodeHeight + 105);
         if (nearbyWords.length === 0) return candidateX;
 
-        for (let attempt = 0; attempt < 14; attempt++) {
+        for (let attempt = 0; attempt < 18; attempt++) {
             let overlaps = false;
             for (const w of nearbyWords) {
                 const wLeft = w.x;
@@ -568,20 +568,20 @@ const BreakNCrashGame = {
         node.className = 'bnc-word-node';
         node.textContent = '❤️ +1 LIFE';
 
-        const estWidth = mobile ? 165 : 205;
+        const estWidth = mobile ? 132 : 165;
         const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, estWidth);
         const randomX = Math.floor(minX + Math.random() * Math.max(1, maxX - minX));
 
-        // Plump, rounded oval heart container
+        // Compact, slightly rounded oval heart container
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #e74c3c; color: #fff;
-            min-width: ${mobile ? '148px' : '180px'};
-            min-height: ${mobile ? '64px' : '74px'};
-            padding: ${mobile ? '18px 34px' : '22px 42px'};
+            min-width: ${mobile ? '118px' : '142px'};
+            min-height: ${mobile ? '48px' : '56px'};
+            padding: ${mobile ? '12px 24px' : '14px 30px'};
             border-radius: 50%; font-weight: 900;
-            font-size: ${mobile ? '18px' : '22px'};
-            box-shadow: 0 5px 15px rgba(231,76,60,0.55); cursor: pointer;
+            font-size: ${mobile ? '16px' : '20px'};
+            box-shadow: 0 4px 12px rgba(231,76,60,0.5); cursor: pointer;
             z-index: 10; touch-action: none; -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
             white-space: nowrap; display: inline-flex; align-items: center; justify-content: center;
@@ -592,7 +592,7 @@ const BreakNCrashGame = {
             x: randomX,
             y: 0,
             width: estWidth,
-            height: mobile ? 64 : 74,
+            height: mobile ? 48 : 56,
             speed: 2.3,
             isHeart: true,
             blasted: false,
@@ -614,7 +614,7 @@ const BreakNCrashGame = {
 
         playfield.appendChild(node);
         wordObj.width = node.offsetWidth || estWidth;
-        wordObj.height = node.offsetHeight || (mobile ? 64 : 74);
+        wordObj.height = node.offsetHeight || (mobile ? 48 : 56);
         this.activeWords.push(wordObj);
     },
 
@@ -635,12 +635,12 @@ const BreakNCrashGame = {
         node.className = 'bnc-word-node';
         node.textContent = wordText;
 
-        const fontSize = mobile ? (wordText.length >= 12 ? 17 : 20) : 24;
-        // Full, plump ("pregnant") oval proportions with generous vertical & horizontal belly
-        const padV = mobile ? 20 : 24;
-        const padH = mobile ? 32 : 44;
-        const minOvalWidth = mobile ? 142 : 176;
-        const minOvalHeight = mobile ? 64 : 76;
+        const fontSize = mobile ? (wordText.length >= 12 ? 15 : 17) : 21;
+        // Balanced, moderately rounded oval so words stay readable, spacious, and non-overlapping
+        const padV = mobile ? 13 : 16;
+        const padH = mobile ? 22 : 30;
+        const minOvalWidth = mobile ? 112 : 136;
+        const minOvalHeight = mobile ? 46 : 54;
 
         node.style.cssText = `
             position: absolute; top: 0px; left: 0px;
@@ -650,8 +650,8 @@ const BreakNCrashGame = {
             padding: ${padV}px ${padH}px;
             border-radius: 50%; font-weight: 800;
             font-size: ${fontSize}px;
-            letter-spacing: 0.5px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.35); cursor: pointer;
+            letter-spacing: 0.4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer;
             touch-action: none; -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
             white-space: nowrap; will-change: top;
