@@ -421,7 +421,7 @@ const BreakNCrashGame = {
                 <div style="background: #fff; color: #333; padding: 30px; border-radius: 12px; width: 450px; max-width: 90%; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3);">
                     <h2 style="margin-top: 0; color: #2c3e50;">Break N' Crash</h2>
                     <p style="font-size: 14px; line-height: 1.5; color: #555; text-align: left;">
-                        Words pour down in a steady, rhythmic rain across the middle and right lanes. Tap the <strong>misspelled words</strong> once to blast them! 
+                        Words pour down in a steady, rhythmic rain across the middle and right lanes. Tap the <strong>misspelled words</strong> once to break them in half! 
                         <br><br>• Regular word blasted: <strong>+10 points</strong>
                         <br><br>• Long word (11+ letters) blasted: <strong>+30 points</strong> (accelerates level progression!)
                         <br><br>• Need easier tapping? Open the <strong>☰ Sidebar</strong> anytime to adjust <strong>Tap Sensitivity (0%–100%)</strong>!
@@ -541,7 +541,6 @@ const BreakNCrashGame = {
         let candidateX = preferredX;
         const gap = 24;
 
-        // Check active words further down the upper fall zone so newly spawned ovals clear them cleanly
         const nearbyWords = this.activeWords.filter(w => w.y < nodeHeight + 105);
         if (nearbyWords.length === 0) return candidateX;
 
@@ -572,7 +571,6 @@ const BreakNCrashGame = {
         const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, estWidth);
         const randomX = Math.floor(minX + Math.random() * Math.max(1, maxX - minX));
 
-        // Compact, slightly rounded oval heart container
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #e74c3c; color: #fff;
@@ -599,6 +597,7 @@ const BreakNCrashGame = {
             triggerTap: () => {
                 if (wordObj.blasted) return;
                 wordObj.blasted = true;
+                this.createSplitBreakEffect(node);
                 if (this.lives < 3) {
                     this.lives++;
                     this.createHeartEffect(node, '+1 LIFE ❤️', '#2ecc71');
@@ -636,7 +635,6 @@ const BreakNCrashGame = {
         node.textContent = wordText;
 
         const fontSize = mobile ? (wordText.length >= 12 ? 15 : 17) : 21;
-        // Balanced, moderately rounded oval so words stay readable, spacious, and non-overlapping
         const padV = mobile ? 13 : 16;
         const padH = mobile ? 22 : 30;
         const minOvalWidth = mobile ? 112 : 136;
@@ -693,6 +691,7 @@ const BreakNCrashGame = {
                     wordObj.blasted = true;
                     const ptsEarned = isLongWord ? 30 : 10;
                     this.score += ptsEarned;
+                    this.createSplitBreakEffect(node);
                     this.createBlastEffect(node, `💥 +${ptsEarned}`);
                     node.remove();
                     this.activeWords = this.activeWords.filter(w => w !== wordObj);
@@ -708,6 +707,54 @@ const BreakNCrashGame = {
         };
 
         this.activeWords.push(wordObj);
+    },
+
+    // Splits the hit word oval cleanly into left and right halves that tilt, drop, and fade out
+    createSplitBreakEffect(node) {
+        const rect = node.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+
+        const createHalf = (side) => {
+            const half = node.cloneNode(true);
+            half.className = 'bnc-split-shard';
+            half.style.position = 'fixed';
+            half.style.top = `${rect.top}px`;
+            half.style.left = `${rect.left}px`;
+            half.style.width = `${rect.width}px`;
+            half.style.height = `${rect.height}px`;
+            half.style.boxSizing = 'border-box';
+            half.style.margin = '0';
+            half.style.zIndex = '10000';
+            half.style.pointerEvents = 'none';
+            half.style.willChange = 'transform, opacity';
+
+            if (side === 'left') {
+                half.style.clipPath = 'polygon(0% 0%, 52% 0%, 48% 100%, 0% 100%)';
+                half.style.transformOrigin = '45% 65%';
+            } else {
+                half.style.clipPath = 'polygon(52% 0%, 100% 0%, 100% 100%, 48% 100%)';
+                half.style.transformOrigin = '55% 65%';
+            }
+
+            half.style.transition = 'transform 0.38s cubic-bezier(0.22, 0.85, 0.36, 1), opacity 0.38s ease-out';
+            document.body.appendChild(half);
+
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    if (side === 'left') {
+                        half.style.transform = 'translate(-22px, 28px) rotate(-18deg) scale(0.92)';
+                    } else {
+                        half.style.transform = 'translate(22px, 28px) rotate(18deg) scale(0.92)';
+                    }
+                    half.style.opacity = '0';
+                });
+            });
+
+            setTimeout(() => half.remove(), 400);
+        };
+
+        createHalf('left');
+        createHalf('right');
     },
 
     animationFrameLoop(timestamp) {
