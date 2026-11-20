@@ -314,7 +314,6 @@ const BreakNCrashGame = {
         `;
         document.body.appendChild(gameContainer);
 
-        // Single, unified pointerdown handler powered by the Sidebar Sensitivity slider (0% - 100%)
         const playfield = document.getElementById('bnc-playfield');
         playfield.addEventListener('pointerdown', (e) => {
             if (!this.isGameRunning || this.isPaused) return;
@@ -331,7 +330,7 @@ const BreakNCrashGame = {
                 const rect = w.element.getBoundingClientRect();
                 const { padX, padY } = (typeof GameSettings !== 'undefined' && GameSettings.getSensitivityPadding)
                     ? GameSettings.getSensitivityPadding(rect)
-                    : { padX: rect.width * 0.25, padY: rect.height * 0.35 };
+                    : { padX: rect.width * 0.35, padY: rect.height * 0.45 };
 
                 const inExpandedHitBox =
                     e.clientX >= rect.left - padX &&
@@ -492,7 +491,7 @@ const BreakNCrashGame = {
         this.availableWords = [...this.masterWordPool].sort(() => Math.random() - 0.2);
     },
 
-    getRightHalfBounds(playfieldWidth, itemWidth = 180) {
+    getRightHalfBounds(playfieldWidth, itemWidth = 190) {
         const mobile = this.isMobile();
         const minX = Math.floor(playfieldWidth * (mobile ? 0.36 : 0.42));
         const rightMargin = mobile ? 10 : 20;
@@ -515,9 +514,9 @@ const BreakNCrashGame = {
 
         let spawnCount = this.level >= 5 ? (this.level >= 10 ? 3 : 2) : (Math.random() > 0.45 ? 2 : 1);
 
-        const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, mobile ? 150 : 200);
+        const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, mobile ? 160 : 210);
         const zoneWidth = Math.max(80, maxX - minX);
-        const laneCount = mobile ? Math.min(spawnCount, 2) : Math.max(2, Math.min(spawnCount, Math.floor(zoneWidth / 155)));
+        const laneCount = mobile ? Math.min(spawnCount, 2) : Math.max(2, Math.min(spawnCount, Math.floor(zoneWidth / 165)));
 
         let availableLanes = [];
         for (let i = 0; i < laneCount; i++) {
@@ -540,13 +539,13 @@ const BreakNCrashGame = {
 
     findNonOverlappingX(preferredX, nodeWidth, nodeHeight, zoneStartX, maxAllowedX) {
         let candidateX = preferredX;
-        const gap = 14;
+        const gap = 20;
 
-        // Check active words near the top and upper fall zone so ovals never overlap
-        const nearbyWords = this.activeWords.filter(w => w.y < nodeHeight + 54);
+        // Wider vertical check so plump ovals never overlap newly spawned or nearby words
+        const nearbyWords = this.activeWords.filter(w => w.y < nodeHeight + 75);
         if (nearbyWords.length === 0) return candidateX;
 
-        for (let attempt = 0; attempt < 12; attempt++) {
+        for (let attempt = 0; attempt < 14; attempt++) {
             let overlaps = false;
             for (const w of nearbyWords) {
                 const wLeft = w.x;
@@ -569,18 +568,20 @@ const BreakNCrashGame = {
         node.className = 'bnc-word-node';
         node.textContent = '❤️ +1 LIFE';
 
-        const estWidth = mobile ? 155 : 195;
+        const estWidth = mobile ? 165 : 205;
         const { minX, maxX } = this.getRightHalfBounds(playfieldWidth, estWidth);
         const randomX = Math.floor(minX + Math.random() * Math.max(1, maxX - minX));
 
-        // Oval shape (50% border-radius)
+        // Plump, rounded oval heart container
         node.style.cssText = `
             position: absolute; top: 0px; left: ${randomX}px;
             background: #e74c3c; color: #fff;
-            padding: ${mobile ? '14px 28px' : '16px 34px'};
+            min-width: ${mobile ? '148px' : '180px'};
+            min-height: ${mobile ? '64px' : '74px'};
+            padding: ${mobile ? '18px 34px' : '22px 42px'};
             border-radius: 50%; font-weight: 900;
             font-size: ${mobile ? '18px' : '22px'};
-            box-shadow: 0 4px 12px rgba(231,76,60,0.5); cursor: pointer;
+            box-shadow: 0 5px 15px rgba(231,76,60,0.55); cursor: pointer;
             z-index: 10; touch-action: none; -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
             white-space: nowrap; display: inline-flex; align-items: center; justify-content: center;
@@ -591,7 +592,7 @@ const BreakNCrashGame = {
             x: randomX,
             y: 0,
             width: estWidth,
-            height: 52,
+            height: mobile ? 64 : 74,
             speed: 2.3,
             isHeart: true,
             blasted: false,
@@ -613,7 +614,7 @@ const BreakNCrashGame = {
 
         playfield.appendChild(node);
         wordObj.width = node.offsetWidth || estWidth;
-        wordObj.height = node.offsetHeight || 52;
+        wordObj.height = node.offsetHeight || (mobile ? 64 : 74);
         this.activeWords.push(wordObj);
     },
 
@@ -635,18 +636,22 @@ const BreakNCrashGame = {
         node.textContent = wordText;
 
         const fontSize = mobile ? (wordText.length >= 12 ? 17 : 20) : 24;
-        // True oval proportions using border-radius: 50% and balanced horizontal/vertical padding
-        const padV = mobile ? 14 : 16;
-        const padH = mobile ? 26 : 36;
+        // Full, plump ("pregnant") oval proportions with generous vertical & horizontal belly
+        const padV = mobile ? 20 : 24;
+        const padH = mobile ? 32 : 44;
+        const minOvalWidth = mobile ? 142 : 176;
+        const minOvalHeight = mobile ? 64 : 76;
 
         node.style.cssText = `
             position: absolute; top: 0px; left: 0px;
             background: #fff; color: #1e293b;
+            min-width: ${minOvalWidth}px;
+            min-height: ${minOvalHeight}px;
             padding: ${padV}px ${padH}px;
             border-radius: 50%; font-weight: 800;
             font-size: ${fontSize}px;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3); cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.35); cursor: pointer;
             touch-action: none; -webkit-tap-highlight-color: transparent;
             user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
             white-space: nowrap; will-change: top;
@@ -655,8 +660,8 @@ const BreakNCrashGame = {
 
         playfield.appendChild(node);
 
-        const actualWidth = node.offsetWidth || 150;
-        const actualHeight = node.offsetHeight || 50;
+        const actualWidth = node.offsetWidth || minOvalWidth;
+        const actualHeight = node.offsetHeight || minOvalHeight;
         const rightMargin = mobile ? 10 : 20;
         const zoneStartX = Math.floor(playfieldWidth * (mobile ? 0.36 : 0.42));
         const zoneEndX = Math.max(zoneStartX + 40, playfieldWidth - rightMargin);
