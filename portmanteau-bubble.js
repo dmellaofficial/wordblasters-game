@@ -40,7 +40,6 @@ const PortmanteauGame = {
     ],
 
     // Stage 2: Big Bubble + Small Bubble -> Eliminate! (+20 pts)
-    // Purpose, location, or elemental counter
     bigEliminations: {
         "whiteboard": ["school", "classroom", "pen", "chalk"],
         "ballpen": ["paper", "notebook", "ink", "school", "pad"],
@@ -109,7 +108,7 @@ const PortmanteauGame = {
         const container = document.createElement('div');
         container.id = 'portmanteau-container';
         container.style.cssText = `
-            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
             background: #f8fafc; z-index: 9999; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             color: #1e293b; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
             touch-action: none; overflow: hidden;
@@ -132,22 +131,41 @@ const PortmanteauGame = {
                     <button id="pbb-exit-btn" style="padding: ${btnPadding}; font-size: ${btnFontSize}; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; touch-action: manipulation;">Exit</button>
                 </div>
             </div>
-            <div id="pbb-playfield" style="position: relative; width: 100%; height: calc(100vh - ${mobile ? '62px' : '78px'}); overflow: hidden; background: #ffffff; touch-action: none;">
+            <div id="pbb-playfield" style="position: relative; width: 100%; height: calc(100dvh - ${mobile ? '62px' : '78px'}); overflow: hidden; background: #ffffff; touch-action: none;">
                 <!-- Top Danger Line -->
-                <div id="pbb-danger-line" style="position: absolute; top: ${mobile ? '72px' : '90px'}; left: ${mobile ? '18%' : '22%'}; right: ${mobile ? '4%' : '5%'}; border-top: 3px solid #1e293b; pointer-events: none; z-index: 5; transition: border-color 0.2s;">
+                <div id="pbb-danger-line" style="position: absolute; top: ${mobile ? '66px' : '86px'}; left: ${mobile ? '18%' : '22%'}; right: ${mobile ? '4%' : '5%'}; border-top: 3px solid #1e293b; pointer-events: none; z-index: 5; transition: border-color 0.2s;">
                     <span style="position: absolute; right: 0; top: -20px; font-size: 11px; font-weight: 800; color: #64748b; letter-spacing: 0.5px;">DANGER LINE</span>
                 </div>
 
-                <!-- Left Character Sprite Zone (ready for custom chibi sprite later) -->
-                <div id="pbb-mascot-zone" style="position: absolute; bottom: ${mobile ? '24px' : '36px'}; left: ${mobile ? '10px' : '34px'}; width: ${mobile ? '72px' : '140px'}; display: flex; flex-direction: column; align-items: center; pointer-events: none; z-index: 4;">
-                    <div id="pbb-mascot-emoji" style="font-size: ${mobile ? '48px' : '74px'}; transition: transform 0.2s;">👩‍🏫</div>
+                <!-- Left Character Sprite Zone -->
+                <div id="pbb-mascot-zone" style="position: absolute; bottom: ${mobile ? '104px' : '72px'}; left: ${mobile ? '8px' : '34px'}; width: ${mobile ? '68px' : '140px'}; display: flex; flex-direction: column; align-items: center; pointer-events: none; z-index: 4;">
+                    <div id="pbb-mascot-emoji" style="font-size: ${mobile ? '44px' : '74px'}; transition: transform 0.2s;">👩‍🏫</div>
                 </div>
 
-                <!-- Ground Floor -->
-                <div id="pbb-floor" style="position: absolute; bottom: 0; left: 0; width: 100%; height: ${mobile ? '20px' : '28px'}; background: #cbd5e1; border-top: 3px solid #94a3b8; pointer-events: none; z-index: 4;"></div>
+                <!-- Visible Ground Platform (raised above mobile bottom/nav bars so bubbles never sink out of view) -->
+                <div id="pbb-floor" style="position: absolute; bottom: ${mobile ? '84px' : '48px'}; left: ${mobile ? '14%' : '20%'}; right: ${mobile ? '3%' : '4%'}; height: ${mobile ? '14px' : '16px'}; background: linear-gradient(180deg, #94a3b8 0%, #475569 100%); border-top: 3px solid #1e293b; border-radius: 8px; box-shadow: 0 4px 10px rgba(15, 23, 42, 0.16); pointer-events: none; z-index: 4;"></div>
             </div>
         `;
         document.body.appendChild(container);
+
+        // Inject keyframe wiggle animation once
+        if (!document.getElementById('pbb-wiggle-style')) {
+            const style = document.createElement('style');
+            style.id = 'pbb-wiggle-style';
+            style.textContent = `
+                @keyframes pbbBubbleWiggle {
+                    0%   { transform: scale(1.12, 0.86); }
+                    25%  { transform: scale(0.92, 1.09) rotate(-3deg); }
+                    50%  { transform: scale(1.06, 0.94) rotate(3deg); }
+                    75%  { transform: scale(0.98, 1.02) rotate(-1.5deg); }
+                    100% { transform: scale(1, 1) rotate(0deg); }
+                }
+                .pbb-wiggle-anim {
+                    animation: pbbBubbleWiggle 0.42s ease-out;
+                }
+            `;
+            document.head.appendChild(style);
+        }
 
         // Unified pointerdown handler using Sidebar Sensitivity Slider (0% - 100%)
         const playfield = document.getElementById('pbb-playfield');
@@ -190,7 +208,7 @@ const PortmanteauGame = {
         const gameOverModal = document.createElement('div');
         gameOverModal.id = 'pbb-game-over-modal';
         gameOverModal.style.cssText = `
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
             background: rgba(0,0,0,0.8); z-index: 10001; display: none;
             align-items: center; justify-content: center; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             user-select: none; -webkit-user-select: none; touch-action: manipulation;
@@ -232,7 +250,7 @@ const PortmanteauGame = {
             modal = document.createElement('div');
             modal.id = 'pbb-modal';
             modal.style.cssText = `
-                position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+                position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh;
                 background: rgba(0,0,0,0.7); z-index: 10000; display: flex;
                 align-items: center; justify-content: center;
                 user-select: none; -webkit-user-select: none; touch-action: manipulation;
@@ -245,7 +263,7 @@ const PortmanteauGame = {
                         <br><br>• <strong>Small + Small = Big Bubble (+10 pts):</strong> Combine two base words (e.g., <em>white + board = whiteboard</em>, <em>earth + fire = lava</em>).
                         <br>• <strong>Big + Small = Burst! (+20 pts):</strong> Pair a Big Bubble with its purpose, place, or counter (e.g., <em>whiteboard + school</em>, <em>ice + fire</em>).
                         <br>• <strong>Big + Big = Mega Burst! (+50 pts):</strong> Combine two compatible Big Bubbles to blast both at once!
-                        <br>• Bubbles cannot be combined while still falling in mid-air. Level advances every <strong>200 points</strong>!
+                        <br>• Bubbles float gently down and can only be combined once they land on the platform or stack. Level advances every <strong>200 points</strong>!
                     </p>
                     <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
                         <button id="pbb-start-game-btn" style="padding: 10px 26px; background: #27ae60; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">GAME</button>
@@ -295,8 +313,6 @@ const PortmanteauGame = {
 
         this.updateHUD();
         this.updateHint("Tap settled bubbles");
-
-        // Seed initial starter bubbles so the player can immediately make a combo
         this.seedStarterBubbles();
 
         if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
@@ -309,49 +325,55 @@ const PortmanteauGame = {
         const mobile = this.isMobile();
         const w = playfield ? playfield.clientWidth : window.innerWidth;
         const h = playfield ? playfield.clientHeight : window.innerHeight - 70;
-        const leftBound = Math.floor(w * (mobile ? 0.20 : 0.23));
-        const rightBound = Math.floor(w * (mobile ? 0.96 : 0.95));
-        const floorY = h - (mobile ? 20 : 28);
-        this.dangerLineY = mobile ? 72 : 90;
+        const leftBound = Math.floor(w * (mobile ? 0.14 : 0.20));
+        const rightBound = Math.floor(w * (mobile ? 0.97 : 0.96));
+        // Platform sits cleanly above mobile nav/browser bars so bubbles never sink out of sight
+        const floorY = h - (mobile ? 84 : 48);
+        this.dangerLineY = mobile ? 66 : 86;
         return { leftBound, rightBound, floorY, width: w, height: h };
     },
 
     getSmallRadius() {
-        return this.isMobile() ? 27 : 34;
+        return this.isMobile() ? 25 : 33;
     },
 
     getBigRadius() {
-        return this.isMobile() ? 42 : 52;
+        return this.isMobile() ? 39 : 50;
     },
 
     seedStarterBubbles() {
-        const { leftBound, rightBound } = this.getPlayZoneBounds();
+        const { leftBound, rightBound, floorY } = this.getPlayZoneBounds();
         const r = this.getSmallRadius();
         const starterWords = ["wind", "lock", "tissue", "ball", "napkin", "board", "white"];
-        const usableW = rightBound - leftBound - r * 2;
+        const usableW = Math.max(60, rightBound - leftBound - r * 2);
         const step = usableW / Math.max(1, starterWords.length - 1);
 
         starterWords.forEach((word, idx) => {
             const x = leftBound + r + idx * step;
-            const y = this.dangerLineY + r + 8 + (idx % 2) * 18;
-            this.createBubble(word, false, x, y);
+            const y = floorY - r - (idx % 2 === 0 ? 1 : 12);
+            const b = this.createBubble(word, false, x, y);
+            b.settled = true;
+            this.triggerBubbleWiggle(b);
         });
     },
 
+    triggerBubbleWiggle(bubble) {
+        if (!bubble || !bubble.element) return;
+        bubble.element.classList.remove('pbb-wiggle-anim');
+        void bubble.element.offsetWidth; // restart animation cleanly
+        bubble.element.classList.add('pbb-wiggle-anim');
+    },
+
     pickSmartNextWord() {
-        // Look at current settled/active bubbles so the player regularly receives useful pairing pieces
         const smallOnBoard = this.bubbles.filter(b => !b.isBig).map(b => b.word);
         const bigOnBoard = this.bubbles.filter(b => b.isBig).map(b => b.word);
-
         const candidatePool = [];
 
-        // 1. Add words that can eliminate existing Big Bubbles
         bigOnBoard.forEach(bigWord => {
             const counters = this.bigEliminations[bigWord] || [];
             counters.forEach(c => candidatePool.push(c, c));
         });
 
-        // 2. Add partners for existing Small Bubbles
         smallOnBoard.forEach(smallWord => {
             this.smallRecipes.forEach(rec => {
                 if (rec.a === smallWord) candidatePool.push(rec.b);
@@ -359,7 +381,6 @@ const PortmanteauGame = {
             });
         });
 
-        // 3. Add fresh recipe ingredients
         const randomRecipe = this.smallRecipes[Math.floor(Math.random() * this.smallRecipes.length)];
         candidatePool.push(randomRecipe.a, randomRecipe.b);
 
@@ -373,17 +394,18 @@ const PortmanteauGame = {
         const maxX = Math.max(minX + 10, rightBound - r - 6);
 
         let spawnX = minX + Math.random() * (maxX - minX);
-        const spawnY = this.dangerLineY - r - 6;
+        const spawnY = this.dangerLineY - r - 8;
 
-        // Avoid spawning directly overlapping another bubble near the top
         for (let attempt = 0; attempt < 10; attempt++) {
-            const tooClose = this.bubbles.some(b => Math.hypot(b.x - spawnX, b.y - spawnY) < (b.radius + r + 10));
+            const tooClose = this.bubbles.some(b => Math.hypot(b.x - spawnX, b.y - spawnY) < (b.radius + r + 12));
             if (!tooClose) break;
             spawnX = minX + Math.random() * (maxX - minX);
         }
 
         const word = this.pickSmartNextWord();
-        this.createBubble(word, false, spawnX, spawnY);
+        const b = this.createBubble(word, false, spawnX, spawnY);
+        // Gentle initial float speed like a real soap/air bubble
+        b.vy = 0.65;
     },
 
     getWordAccentColor(word, isBig) {
@@ -407,8 +429,8 @@ const PortmanteauGame = {
         el.textContent = word;
 
         const baseFontSize = isBig
-            ? (word.length >= 11 ? (this.isMobile() ? 12 : 14) : (this.isMobile() ? 14 : 17))
-            : (word.length >= 7 ? (this.isMobile() ? 11 : 13) : (this.isMobile() ? 13 : 15));
+            ? (word.length >= 11 ? (this.isMobile() ? 11 : 14) : (this.isMobile() ? 13 : 17))
+            : (word.length >= 7 ? (this.isMobile() ? 10 : 13) : (this.isMobile() ? 12 : 15));
 
         el.style.cssText = `
             position: absolute;
@@ -417,8 +439,8 @@ const PortmanteauGame = {
             left: ${x - radius}px;
             top: ${y - radius}px;
             border-radius: 50%;
-            background: ${isBig ? '#f0f9ff' : '#ffffff'};
-            border: ${isBig ? '3.5px' : '2.5px'} solid #1e293b;
+            background: ${isBig ? 'radial-gradient(circle at 30% 28%, #ffffff 0%, #e0f2fe 70%, #bae6fd 100%)' : 'radial-gradient(circle at 30% 28%, #ffffff 0%, #f8fafc 75%, #e2e8f0 100%)'};
+            border: ${isBig ? '3px' : '2.2px'} solid #1e293b;
             color: ${textColor};
             font-weight: 800;
             font-size: ${baseFontSize}px;
@@ -429,10 +451,9 @@ const PortmanteauGame = {
             padding: 4px;
             box-sizing: border-box;
             line-height: 1.1;
-            box-shadow: 0 3px 8px rgba(15, 23, 42, 0.14);
+            box-shadow: inset 0 3px 6px rgba(255,255,255,0.85), 0 4px 10px rgba(15, 23, 42, 0.14);
             cursor: pointer;
             z-index: ${isBig ? 7 : 6};
-            transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
         `;
 
         playfield.appendChild(el);
@@ -448,6 +469,9 @@ const PortmanteauGame = {
             radius: radius,
             settled: false,
             settledFrames: 0,
+            swayPhase: Math.random() * Math.PI * 2,
+            swaySpeed: 0.035 + Math.random() * 0.015,
+            swayAmp: 0.42 + Math.random() * 0.25,
             element: el
         };
 
@@ -456,7 +480,6 @@ const PortmanteauGame = {
     },
 
     handleBubbleTap(bubble) {
-        // Rule: Players can only burst/combine bubbles once they hit the ground/stack (not in mid-air)
         if (!bubble.settled) {
             this.shakeBubble(bubble);
             this.updateHint("Wait until it lands!");
@@ -475,15 +498,12 @@ const PortmanteauGame = {
 
         const first = this.selectedBubble;
         const second = bubble;
-
-        // Evaluate combination rules
         const matchResult = this.evaluateCombination(first, second);
 
         if (matchResult) {
             this.clearSelection();
             this.executeCombination(first, second, matchResult);
         } else {
-            // Smoothly switch selection if invalid pair so gameplay stays fast
             this.shakeBubble(second);
             this.selectBubble(second);
             this.updateHint(`No match — selected "${second.word}"`);
@@ -502,7 +522,7 @@ const PortmanteauGame = {
     clearSelection() {
         if (this.selectedBubble && this.selectedBubble.element) {
             this.selectedBubble.element.style.borderColor = '#1e293b';
-            this.selectedBubble.element.style.boxShadow = '0 3px 8px rgba(15, 23, 42, 0.14)';
+            this.selectedBubble.element.style.boxShadow = 'inset 0 3px 6px rgba(255,255,255,0.85), 0 4px 10px rgba(15, 23, 42, 0.14)';
             this.selectedBubble.element.style.transform = 'scale(1)';
         }
         this.selectedBubble = null;
@@ -525,7 +545,6 @@ const PortmanteauGame = {
     },
 
     evaluateCombination(b1, b2) {
-        // Case A: Small + Small -> Big Bubble (+10 pts)
         if (!b1.isBig && !b2.isBig) {
             const recipe = this.smallRecipes.find(r =>
                 (r.a === b1.word && r.b === b2.word) ||
@@ -537,7 +556,6 @@ const PortmanteauGame = {
             return null;
         }
 
-        // Case B: Big + Small -> Eliminate Both! (+20 pts)
         if (b1.isBig !== b2.isBig) {
             const bigB = b1.isBig ? b1 : b2;
             const smallB = b1.isBig ? b2 : b1;
@@ -548,7 +566,6 @@ const PortmanteauGame = {
             return null;
         }
 
-        // Case C: Big + Big -> Double Burst! (+50 pts)
         if (b1.isBig && b2.isBig) {
             const isCombo = this.bigComboPairs.some(([w1, w2]) =>
                 (w1 === b1.word && w2 === b2.word) ||
@@ -572,18 +589,14 @@ const PortmanteauGame = {
         this.updateHUD();
         this.celebrateMascot();
 
-        // Remove both consumed bubbles
         this.removeBubble(b1);
         this.removeBubble(b2);
 
         if (result.type === 'MERGE_TO_BIG') {
             this.createFloatingPop(targetX, targetY - 20, `${result.newWord.toUpperCase()}! +10`, '#2563eb');
-            const bigBubble = this.createBubble(result.newWord, true, targetX, targetY - 12);
+            const bigBubble = this.createBubble(result.newWord, true, targetX, targetY - 10);
             bigBubble.settled = true;
-            bigBubble.element.style.transform = 'scale(1.18)';
-            setTimeout(() => {
-                if (bigBubble.element) bigBubble.element.style.transform = 'scale(1)';
-            }, 160);
+            this.triggerBubbleWiggle(bigBubble);
         } else if (result.type === 'ELIMINATE_BIG_SMALL') {
             this.createBurstRing(targetX, targetY, '#10b981');
             this.createFloatingPop(targetX, targetY - 24, `BLAST! +20`, '#059669');
@@ -592,7 +605,6 @@ const PortmanteauGame = {
             this.createFloatingPop(targetX, targetY - 28, `MEGA BLAST! +50`, '#d97706');
         }
 
-        // Wake up any bubbles stacked above so gravity settles them naturally
         this.bubbles.forEach(b => {
             b.settled = false;
             b.settledFrames = 0;
@@ -660,25 +672,34 @@ const PortmanteauGame = {
 
     stepPhysics() {
         const { leftBound, rightBound, floorY } = this.getPlayZoneBounds();
-        const gravity = 0.28 + Math.min(0.18, (this.level - 1) * 0.03);
+        // Slow, floaty real-bubble descent with air drag and gentle side-to-side sway
+        const maxFloatSpeed = Math.min(2.1, 1.05 + (this.level - 1) * 0.12);
+        const floatAccel = 0.045 + Math.min(0.04, (this.level - 1) * 0.006);
 
-        // Apply gravity and floor/wall bounds
         for (let i = 0; i < this.bubbles.length; i++) {
             const b = this.bubbles[i];
             const prevX = b.x;
             const prevY = b.y;
 
-            b.vy = Math.min(b.vy + gravity, 6.5);
-            b.x += b.vx;
-            b.y += b.vy;
-            b.vx *= 0.85;
+            if (!b.settled) {
+                b.swayPhase += b.swaySpeed;
+                const airDriftX = Math.cos(b.swayPhase) * b.swayAmp;
+                b.vy = Math.min(b.vy + floatAccel, maxFloatSpeed);
+                b.x += b.vx + airDriftX;
+                b.y += b.vy;
+            } else {
+                b.x += b.vx;
+                b.y += b.vy;
+            }
+
+            b.vx *= 0.82;
 
             if (b.x - b.radius < leftBound) {
                 b.x = leftBound + b.radius;
-                b.vx = 0;
+                b.vx = Math.abs(airDriftX || 0.2);
             } else if (b.x + b.radius > rightBound) {
                 b.x = rightBound - b.radius;
-                b.vx = 0;
+                b.vx = -Math.abs(airDriftX || 0.2);
             }
 
             if (b.y + b.radius >= floorY) {
@@ -690,7 +711,7 @@ const PortmanteauGame = {
             b._prevY = prevY;
         }
 
-        // Iterative circle-circle relaxation so bubbles stack organically without overlapping
+        // Circle-circle collision stacking
         for (let iter = 0; iter < 4; iter++) {
             for (let i = 0; i < this.bubbles.length; i++) {
                 for (let j = i + 1; j < this.bubbles.length; j++) {
@@ -711,14 +732,12 @@ const PortmanteauGame = {
                         b.x += nx * overlap;
                         b.y += ny * overlap;
 
-                        // Dampen downward velocity when resting on another bubble
-                        if (a.y < b.y && a.vy > 0) a.vy *= 0.35;
-                        if (b.y < a.y && b.vy > 0) b.vy *= 0.35;
+                        if (a.y < b.y && a.vy > 0) a.vy *= 0.3;
+                        if (b.y < a.y && b.vy > 0) b.vy *= 0.3;
                     }
                 }
             }
 
-            // Re-clamp to walls and floor after relaxation
             for (let i = 0; i < this.bubbles.length; i++) {
                 const b = this.bubbles[i];
                 if (b.x - b.radius < leftBound) b.x = leftBound + b.radius;
@@ -730,16 +749,16 @@ const PortmanteauGame = {
             }
         }
 
-        // Update DOM positions and determine settled state
         let anyOverDangerLine = false;
 
         for (let i = 0; i < this.bubbles.length; i++) {
             const b = this.bubbles[i];
             const movedDist = Math.hypot(b.x - b._prevX, b.y - b._prevY);
+            const wasSettled = b.settled;
 
-            if (movedDist < 0.65 && Math.abs(b.vy) < 0.8) {
+            if (movedDist < 0.7 && Math.abs(b.vy) < 0.65) {
                 b.settledFrames++;
-                if (b.settledFrames >= 6) {
+                if (b.settledFrames >= 5) {
                     b.settled = true;
                 }
             } else {
@@ -747,13 +766,15 @@ const PortmanteauGame = {
                 b.settled = false;
             }
 
+            // Wiggle once when newly landed on the platform or bubble stack
+            if (!wasSettled && b.settled) {
+                this.triggerBubbleWiggle(b);
+            }
+
             b.element.style.left = `${b.x - b.radius}px`;
             b.element.style.top = `${b.y - b.radius}px`;
+            b.element.style.opacity = b.settled ? '1' : '0.84';
 
-            // Subtle visual cue: mid-air bubbles are slightly translucent; settled bubbles are crisp & ready
-            b.element.style.opacity = b.settled ? '1' : '0.78';
-
-            // Check if a settled bubble stack reaches or crosses the top danger line
             if (b.settled && (b.y - b.radius) <= this.dangerLineY) {
                 anyOverDangerLine = true;
             }
@@ -780,7 +801,7 @@ const PortmanteauGame = {
 
         if (!this.isPaused) {
             this.spawnTimer += dt;
-            const spawnIntervalMs = Math.max(1350, 2500 - (this.level - 1) * 140);
+            const spawnIntervalMs = Math.max(1700, 3100 - (this.level - 1) * 140);
 
             if (this.spawnTimer >= spawnIntervalMs) {
                 this.spawnTimer = 0;
