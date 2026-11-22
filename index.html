@@ -250,8 +250,8 @@
                     <div class="minigame-card" onclick="startMiniGame('break-n-crash')" title="Break N' Crash">
                         <img src="4.png" alt="Break N' Crash">
                     </div>
-                    <div class="minigame-card" onclick="openPortmanteauGame()" title="Portmanteau Bubble Blast University">
-                        <img src="5.png" alt="Portmanteau Bubble Blast University">
+                    <div class="minigame-card" onclick="openCombimentalGame()" title="Combimental Bubble Blast University">
+                        <img src="9.png" alt="Combimental Bubble Blast University">
                     </div>
                     <div class="minigame-card" onclick="startMiniGame('make-a-guess')" title="Make A Guess">
                         <img src="6.png" alt="Make A Guess">
@@ -461,11 +461,11 @@
             }
         }
 
-        function openPortmanteauGame() {
-            if (typeof PortmanteauGame !== 'undefined' && typeof PortmanteauGame.showInstructions === 'function') {
-                PortmanteauGame.showInstructions();
+        function openCombimentalGame() {
+            if (typeof CombimentalGame !== 'undefined' && typeof CombimentalGame.showInstructions === 'function') {
+                CombimentalGame.showInstructions();
             } else if (typeof startMiniGame === 'function') {
-                startMiniGame('portmanteau');
+                startMiniGame('combimental');
             }
         }
 
@@ -478,7 +478,7 @@
 
     <!-- Mini Game Scripts -->
     <script src="break-n-crash.js"></script>
-    <script src="portmanteau-bubble.js"></script>
+    <script src="combimental-bubble.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
